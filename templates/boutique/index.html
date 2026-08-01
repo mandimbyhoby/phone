@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Store</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <section class="page-title">
+        <h1>LANDING PAGE TEMPLATE</h1>
+        <p>E-Commerce</p>
+    </section>
+
+    <section class="hero-wrapper">
+
+        <!-- 🔥 BACKGROUND ANIMATIONS -->
+        <div class="bg-circle"></div>
+        <div class="bg-circle small"></div>
+
+        <div class="particles">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="hero-box">
+
+            <!-- décorations existantes -->
+            <div class="dots-top-left">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+            </div>
+
+            <div class="top-right-lines"></div>
+            <div class="left-arc"></div>
+            <div class="left-dot"></div>
+            <div class="right-circle"></div>
+            <div class="bottom-rings"></div>
+            <div class="dots-bottom-right"></div>
+
+            <!-- NAVBAR -->
+            <header class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h2>ONLINE<br>SHOP</h2>
+                        <p>E-COMMERCE</p>
+                    </div>
+                </div>
+
+                <nav class="nav-menu">
+                    <a href="#" class="active">Home</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Service</a>
+                    <a href="#">Shop</a>
+                </nav>
+
+                <form class="search-box">
+                    <input type="text" placeholder="Find Something...">
+                    <button type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </header>
+
+            <!-- HERO CONTENT -->
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>
+                        Make Paying<br>
+                        Easier With<br>
+                        E-Wallet
+                    </h1>
+
+                    <div class="hero-line"></div>
+
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="#products" class="btn-primary">Read More</a>
+                        <a href="#" class="btn-link">Redeem Voucher</a>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <div class="triangle-stack">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                    <img src="{% static 'images/hero3.png' %}" alt="Hero Image">
+                </div>
+            </div>
+
+            <!-- SOCIAL -->
+            <div class="social-strip">
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <div class="section-header">
+            <h2>Nos téléphones</h2>
+            <p>Choisissez le modèle qui vous convient</p>
+        </div>
+
+        <main class="container">
+            <div class="products-grid">
+                {% for produit in produits %}
+                <div class="product-card">
+
+                    {% if produit.prix_promo %}
+                    <span class="promo-badge">Promo</span>
+                    {% endif %}
+
+                    <div class="product-image">
+                        {% if produit.image %}
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                        {% else %}
+                        <img src="{% static 'images/iphone.jpg' %}" alt="Image par défaut">
+                        {% endif %}
+                    </div>
+
+                    <div class="product-info">
+                        <h3>{{ produit.nom }}</h3>
+                        <p class="brand">{{ produit.marque }}</p>
+
+                        {% if produit.prix_promo %}
+                        <p class="price-box">
+                            <span class="old-price">{{ produit.prix }} Ar</span>
+                            <span class="price">{{ produit.prix_promo }} Ar</span>
+                        </p>
+                        {% else %}
+                        <p class="price">{{ produit.prix }} Ar</p>
+                        {% endif %}
+
+                        <p class="stock">
+                            {% if produit.stock > 0 %}
+                            <span class="in-stock">✔ En stock ({{ produit.stock }})</span>
+                            {% else %}
+                            <span class="out-stock">❌ Rupture de stock</span>
+                            {% endif %}
+                        </p>
+
+                        <a href="{% url 'detail_produit' produit.id %}" class="product-btn">Voir détails</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="empty-message">Aucun téléphone disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+        </main>
+    </section>
+
+</body>
+
+</html>

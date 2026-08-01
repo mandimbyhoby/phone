@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ produit.nom }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <section class="detail-page">
+
+        <!-- décorations fond global -->
+        <div class="detail-circle-1"></div>
+        <div class="detail-circle-2"></div>
+        <div class="detail-dots"></div>
+        <div class="detail-circle"></div>
+        <div class="detail-lines"></div>
+
+        <div class="detail-box">
+            <!-- 🔥 décoration derrière les 2 blocs -->
+            <div class="detail-circle-bg"></div>
+
+            <div class="detail-container">
+
+                <!-- IMAGE -->
+                <div class="detail-gallery">
+                    <div class="detail-main-image">
+                        {% if produit.image %}
+                        <img id="main-product-image" src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                        {% else %}
+                        <img id="main-product-image" src="{% static 'images/iphone.jpg' %}" alt="{{ produit.nom }}">
+                        {% endif %}
+                    </div>
+
+                    <div class="detail-thumbs">
+                        {% if produit.image %}
+                        <div class="thumb active">
+                            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                        </div>
+                        {% endif %}
+
+                        {% if produit.image_2 %}
+                        <div class="thumb">
+                            <img src="{{ produit.image_2.url }}" alt="{{ produit.nom }}">
+                        </div>
+                        {% endif %}
+
+                        {% if produit.image_3 %}
+                        <div class="thumb">
+                            <img src="{{ produit.image_3.url }}" alt="{{ produit.nom }}">
+                        </div>
+                        {% endif %}
+
+                        {% if produit.image_4 %}
+                        <div class="thumb">
+                            <img src="{{ produit.image_4.url }}" alt="{{ produit.nom }}">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- INFO -->
+                <div class="detail-info">
+                    <span class="detail-badge">{{ produit.marque }}</span>
+
+                    <h1 class="detail-title">{{ produit.nom }}</h1>
+
+                    <div class="detail-rating">
+                        <span>★★★★★</span>
+                        <small>Très apprécié</small>
+                    </div>
+
+                    <div class="detail-price-box">
+                        {% if produit.prix_promo %}
+                        <span class="detail-old-price">{{ produit.prix }} Ar</span>
+                        <span class="detail-price">{{ produit.prix_promo }} Ar</span>
+                        {% else %}
+                        <span class="detail-price">{{ produit.prix }} Ar</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="detail-stock">
+                        {% if produit.stock > 0 %}
+                        <span class="in-stock">✔ En stock ({{ produit.stock }})</span>
+                        {% else %}
+                        <span class="out-stock">❌ Rupture de stock</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="detail-description-box">
+                        <h3>Description</h3>
+                        <p>{{ produit.description }}</p>
+                    </div>
+
+                    <div class="detail-actions">
+                        <a href="#" class="buy-btn">Ajouter au panier</a>
+                        <a href="{% url 'accueil' %}" class="back-btn">Retour</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+   <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const mainImage = document.getElementById("main-product-image");
+    const thumbs = document.querySelectorAll(".thumb");
+
+    thumbs.forEach((thumb) => {
+        thumb.addEventListener("click", function () {
+            const thumbImage = this.querySelector("img");
+
+            if (thumbImage && mainImage) {
+                mainImage.src = thumbImage.src;
+                mainImage.alt = thumbImage.alt;
+            }
+
+            thumbs.forEach((item) => item.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
+});
+</script>
+</body>
+
+</html>
