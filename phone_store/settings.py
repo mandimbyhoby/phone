@@ -21,12 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lv*uf*b$kgqqr1yxx^$vawk2ygx7b8so@4&kbu(r_w&m_4-jqn'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-lv*uf*b$kgqqr1yxx^$vawk2ygx7b8so@4&kbu(r_w&m_4-jqn'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+# Hôtes autorisés : en production, définissez DJANGO_ALLOWED_HOSTS
+# (ex. "votre-nom.pythonanywhere.com,www.exemple.mg")
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS if h.strip()]
 
 
 # Application definition
@@ -38,11 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
     'boutique.apps.BoutiqueConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -127,15 +135,7 @@ LOGOUT_REDIRECT_URL = 'accueil'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'Phone Store <no-reply@phonestore.mg>'
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    ]
+# Media (fichiers uploadés : produits, vidéos, photos de profil)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -170,3 +170,30 @@ ORANGE_MONEY_BASE_URL = os.environ.get('ORANGE_MONEY_BASE_URL', 'https://api.ora
 # L'Ariary (MGA) n'est pas accepté par Stripe/PayPal : le montant est converti
 # en EUR pour les cartes et PayPal. Ajustez le taux selon le cours du jour.
 PAIEMENT_TAUX_EUR = float(os.environ.get('PAIEMENT_TAUX_EUR', '5000'))  # 1 EUR = 5000 Ar
+
+# ============================================================
+# P R O D U C T I O N  (statiques + sécurité)
+# ============================================================
+# Les fichiers statiques sont collectés dans staticfiles/ puis servis
+# par WhiteNoise (aucun serveur externe requis).
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# Sécurité renforcée en production
+if not DEBUG:
+    CSRF_COOKIE_SECURE = os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False') == 'True'
+    SESSION_COOKIE_SECURE = os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False') == 'True'
+    SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False') == 'True'
