@@ -1,0 +1,86 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Créer un compte — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section auth-page">
+    <div class="container">
+        <div class="auth-box auth-box-wide" data-aos="zoom-in">
+            <div class="auth-head">
+                <div class="auth-logo"><i class="fa-solid fa-user-plus"></i></div>
+                <h1>Créer mon compte</h1>
+                <p>Inscrivez-vous pour commander et suivre vos achats</p>
+            </div>
+
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="form-error form-error-box">{{ form.non_field_errors|striptags }}</div>
+                {% endif %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        {% if form.username.errors %}<small class="form-error">{{ form.username.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.nom_complet.label_tag }}
+                        {{ form.nom_complet }}
+                        {% if form.nom_complet.errors %}<small class="form-error">{{ form.nom_complet.errors|striptags }}</small>{% endif %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}<small class="form-error">{{ form.email.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.telephone.label_tag }}
+                        {{ form.telephone }}
+                        {% if form.telephone.errors %}<small class="form-error">{{ form.telephone.errors|striptags }}</small>{% endif %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.ville.label_tag }}
+                        {{ form.ville }}
+                        {% if form.ville.errors %}<small class="form-error">{{ form.ville.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.adresse.label_tag }}
+                        {{ form.adresse }}
+                        {% if form.adresse.errors %}<small class="form-error">{{ form.adresse.errors|striptags }}</small>{% endif %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form.password1.label_tag }}
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}<small class="form-error">{{ form.password1.errors|striptags }}</small>{% endif %}
+                        <small class="form-hint">{{ form.password1.help_text }}</small>
+                    </div>
+                    <div class="form-group">
+                        {{ form.password2.label_tag }}
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}<small class="form-error">{{ form.password2.errors|striptags }}</small>{% endif %}
+                    </div>
+                </div>
+
+                <button type="submit" class="buy-btn submit-order">
+                    <i class="fa-solid fa-user-check"></i> Créer mon compte
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Déjà inscrit ? <a href="{% url 'connexion' %}">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

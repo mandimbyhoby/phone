@@ -1,0 +1,61 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Commande confirmée — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section success-page">
+    <div class="container">
+        <div class="success-box" data-aos="zoom-in">
+            <div class="success-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h1>Merci, {{ commande.nom }} !</h1>
+            <p>Votre commande <strong>#{{ commande.id }}</strong> a bien été enregistrée.</p>
+            <p>Nous vous contacterons au <strong>{{ commande.telephone }}</strong> pour confirmer la livraison.</p>
+
+            <div class="success-details">
+                <div class="success-line">
+                    <span>Référence</span>
+                    <strong>#{{ commande.id }}</strong>
+                </div>
+                <div class="success-line">
+                    <span>Total</span>
+                    <strong>{{ commande.total }} Ar</strong>
+                </div>
+                <div class="success-line">
+                    <span>Adresse de livraison</span>
+                    <strong>{{ commande.adresse }}, {{ commande.ville }}</strong>
+                </div>
+                <div class="success-line">
+                    <span>Mode de paiement</span>
+                    <strong>
+                        {% if commande.paiement %}
+                        {{ commande.paiement.get_methode_display }}
+                        {% else %}À la livraison{% endif %}
+                    </strong>
+                </div>
+                {% if commande.paiement and commande.paiement.methode != 'especes' %}
+                <div class="success-line">
+                    <span>Statut du paiement</span>
+                    <strong class="{% if commande.paiement.statut == 'paye' %}pay-ok{% else %}pay-wait{% endif %}">
+                        {% if commande.paiement.statut == 'paye' %}✔ Payé{% elif commande.paiement.statut == 'echoue' %}✘ Échoué{% else %}En attente{% endif %}
+                    </strong>
+                </div>
+                {% if commande.paiement.reference %}
+                <div class="success-line">
+                    <span>Référence paiement</span>
+                    <strong>{{ commande.paiement.reference }}</strong>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="success-actions">
+                <a href="{% url 'accueil' %}" class="btn-primary"><i class="fa-solid fa-house"></i> Retour à l'accueil</a>
+                <a href="{% url 'accueil' %}#products" class="continue-link">Continuer mes achats</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

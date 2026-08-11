@@ -1,112 +1,224 @@
+{% extends 'boutique/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ produit.nom }}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
+{% block title %}{{ produit.nom }} — Phone Store{% endblock %}
 
-<body>
+{% block content %}
 
-    <section class="detail-page">
+<section class="detail-page">
 
-        <!-- décorations fond global -->
-        <div class="detail-circle-1"></div>
-        <div class="detail-circle-2"></div>
-        <div class="detail-dots"></div>
-        <div class="detail-circle"></div>
-        <div class="detail-lines"></div>
+    <div class="detail-circle-1"></div>
+    <div class="detail-circle-2"></div>
+    <div class="detail-dots"></div>
+    <div class="detail-circle"></div>
+    <div class="detail-lines"></div>
 
-        <div class="detail-box">
-            <!-- 🔥 décoration derrière les 2 blocs -->
-            <div class="detail-circle-bg"></div>
+    <div class="detail-box">
+        <div class="detail-circle-bg"></div>
 
-            <div class="detail-container">
+        <div class="detail-container">
 
-                <!-- IMAGE -->
-                <div class="detail-gallery">
-                    <div class="detail-main-image">
-                        {% if produit.image %}
-                        <img id="main-product-image" src="{{ produit.image.url }}" alt="{{ produit.nom }}">
-                        {% else %}
-                        <img id="main-product-image" src="{% static 'images/iphone.jpg' %}" alt="{{ produit.nom }}">
-                        {% endif %}
+            <!-- IMAGE -->
+            <div class="detail-gallery" data-aos="fade-right">
+                <div class="detail-main-image">
+                    {% if produit.image %}
+                    <img id="main-product-image" src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                    {% else %}
+                    <img id="main-product-image" src="{% static 'images/iphone.jpg' %}" alt="{{ produit.nom }}">
+                    {% endif %}
+                </div>
+
+                <div class="detail-thumbs">
+                    {% if produit.image %}
+                    <div class="thumb active">
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
                     </div>
+                    {% endif %}
+                    {% if produit.image_2 %}
+                    <div class="thumb">
+                        <img src="{{ produit.image_2.url }}" alt="{{ produit.nom }}">
+                    </div>
+                    {% endif %}
+                    {% if produit.image_3 %}
+                    <div class="thumb">
+                        <img src="{{ produit.image_3.url }}" alt="{{ produit.nom }}">
+                    </div>
+                    {% endif %}
+                    {% if produit.image_4 %}
+                    <div class="thumb">
+                        <img src="{{ produit.image_4.url }}" alt="{{ produit.nom }}">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
 
-                    <div class="detail-thumbs">
-                        {% if produit.image %}
-                        <div class="thumb active">
-                            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
-                        </div>
-                        {% endif %}
+            <!-- INFO -->
+            <div class="detail-info" data-aos="fade-left" data-aos-delay="100">
+                <span class="detail-badge">{{ produit.categorie.nom|upper }} · {{ produit.marque }}</span>
 
-                        {% if produit.image_2 %}
-                        <div class="thumb">
-                            <img src="{{ produit.image_2.url }}" alt="{{ produit.nom }}">
-                        </div>
-                        {% endif %}
+                <h1 class="detail-title">{{ produit.nom }}</h1>
 
-                        {% if produit.image_3 %}
-                        <div class="thumb">
-                            <img src="{{ produit.image_3.url }}" alt="{{ produit.nom }}">
-                        </div>
-                        {% endif %}
+                <div class="detail-rating">
+                    <span>
+                        {% if produit.note_moyenne %}
+                        {% for i in "12345" %}{% if forloop.counter <= produit.note_moyenne %}★{% else %}☆{% endif %}{% endfor %}
+                        {% else %}★★★★★{% endif %}
+                    </span>
+                    <small>
+                        {% if produit.note_moyenne %}{{ produit.note_moyenne }}/5 — {{ produit.avis.count }} avis
+                        {% else %}Très apprécié{% endif %}
+                    </small>
+                </div>
 
-                        {% if produit.image_4 %}
-                        <div class="thumb">
-                            <img src="{{ produit.image_4.url }}" alt="{{ produit.nom }}">
-                        </div>
-                        {% endif %}
+                <div class="detail-price-box">
+                    {% if produit.prix_promo %}
+                    <span class="detail-old-price">{{ produit.prix }} Ar</span>
+                    <span class="detail-price">{{ produit.prix_promo }} Ar</span>
+                    <span class="detail-save">Économisez {{ produit.economie }} Ar</span>
+                    {% else %}
+                    <span class="detail-price">{{ produit.prix }} Ar</span>
+                    {% endif %}
+                </div>
+
+                <div class="detail-stock">
+                    {% if produit.stock > 0 %}
+                    <span class="in-stock">✔ En stock ({{ produit.stock }} disponibles)</span>
+                    {% else %}
+                    <span class="out-stock">❌ Rupture de stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="detail-description-box">
+                    <h3>Description</h3>
+                    <p>{{ produit.description }}</p>
+                </div>
+
+                <div class="detail-features">
+                    <div class="feature-item">
+                        <strong><i class="fa-solid fa-shield-halved"></i> Garantie</strong>
+                        <span>12 mois</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong><i class="fa-solid fa-truck-fast"></i> Livraison</strong>
+                        <span>24-72h partout à Madagascar</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong><i class="fa-solid fa-hand-holding-dollar"></i> Paiement</strong>
+                        <span>À la livraison</span>
                     </div>
                 </div>
 
-                <!-- INFO -->
-                <div class="detail-info">
-                    <span class="detail-badge">{{ produit.marque }}</span>
-
-                    <h1 class="detail-title">{{ produit.nom }}</h1>
-
-                    <div class="detail-rating">
-                        <span>★★★★★</span>
-                        <small>Très apprécié</small>
+                <div class="detail-actions" x-data="{ qte: 1 }" id="add-form">
+                    {% if produit.stock > 0 %}
+                    <div class="qty-selector">
+                        <button type="button" @click="qte = qte > 1 ? qte - 1 : 1">−</button>
+                        <input type="number" name="quantite" x-model.number="qte" min="1" max="{{ produit.stock }}" value="1">
+                        <button type="button" @click="qte = qte < {{ produit.stock }} ? qte + 1 : {{ produit.stock }}">+</button>
                     </div>
-
-                    <div class="detail-price-box">
-                        {% if produit.prix_promo %}
-                        <span class="detail-old-price">{{ produit.prix }} Ar</span>
-                        <span class="detail-price">{{ produit.prix_promo }} Ar</span>
-                        {% else %}
-                        <span class="detail-price">{{ produit.prix }} Ar</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="detail-stock">
-                        {% if produit.stock > 0 %}
-                        <span class="in-stock">✔ En stock ({{ produit.stock }})</span>
-                        {% else %}
-                        <span class="out-stock">❌ Rupture de stock</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="detail-description-box">
-                        <h3>Description</h3>
-                        <p>{{ produit.description }}</p>
-                    </div>
-
-                    <div class="detail-actions">
-                        <a href="#" class="buy-btn">Ajouter au panier</a>
-                        <a href="{% url 'accueil' %}" class="back-btn">Retour</a>
-                    </div>
+                    <button class="buy-btn"
+                        hx-post="{% url 'ajouter_au_panier' produit.id %}"
+                        hx-include="#add-form"
+                        hx-swap="none"
+                        hx-target="#cart-badge">
+                        <i class="fa-solid fa-cart-plus"></i> Ajouter au panier
+                    </button>
+                    {% endif %}
+                    <a href="{% url 'accueil' %}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Retour</a>
                 </div>
+            </div>
 
+        </div>
+    </div>
+
+    <!-- ============ AVIS CLIENTS ============ -->
+    <div class="container reviews-section" data-aos="fade-up">
+        <div class="reviews-grid">
+            <div class="reviews-list">
+                <h2><i class="fa-solid fa-comments"></i> Avis clients ({{ produit.avis.count }})</h2>
+                {% for avis in produit.avis.all %}
+                <div class="review-card">
+                    <div class="review-head">
+                        <div class="author-avatar">{{ avis.nom|first|upper }}</div>
+                        <div>
+                            <strong>{{ avis.nom }}</strong>
+                            <div class="review-stars">
+                                {% for i in "12345" %}{% if forloop.counter <= avis.note %}★{% else %}☆{% endif %}{% endfor %}
+                            </div>
+                        </div>
+                        <small>{{ avis.date|date:"d/m/Y" }}</small>
+                    </div>
+                    <p>{{ avis.commentaire }}</p>
+                </div>
+                {% empty %}
+                <p class="no-reviews">Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>
+                {% endfor %}
+            </div>
+
+            <div class="reviews-form">
+                <h2><i class="fa-solid fa-pen"></i> Donner mon avis</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                        <small class="form-error">{{ field.errors|striptags }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="buy-btn">Publier mon avis</button>
+                </form>
             </div>
         </div>
+    </div>
 
+    <!-- ============ PRODUITS SIMILAIRES ============ -->
+    {% if similaires %}
+    <section class="products-section similaires-section" id="similaires">
+        <div class="section-header" data-aos="fade-up">
+            <h2>Vous aimerez aussi</h2>
+            <p>D'autres téléphones de la même catégorie</p>
+        </div>
+        <main class="container">
+            <div class="products-grid">
+                {% for produit in similaires %}
+                <div class="product-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}0">
+                    {% if produit.prix_promo %}
+                    <span class="promo-badge">-{{ produit.reduction_pourcentage }}%</span>
+                    {% endif %}
+                    <a href="{% url 'detail_produit' produit.id %}" class="product-image">
+                        {% if produit.image %}
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" loading="lazy">
+                        {% endif %}
+                    </a>
+                    <div class="product-info">
+                        <span class="product-cat">{{ produit.categorie.nom }}</span>
+                        <h3><a href="{% url 'detail_produit' produit.id %}">{{ produit.nom }}</a></h3>
+                        <p class="brand">{{ produit.marque }}</p>
+                        {% if produit.prix_promo %}
+                        <p class="price-box">
+                            <span class="old-price">{{ produit.prix }} Ar</span>
+                            <span class="price">{{ produit.prix_promo }} Ar</span>
+                        </p>
+                        {% else %}
+                        <p class="price">{{ produit.prix }} Ar</p>
+                        {% endif %}
+                        <a href="{% url 'detail_produit' produit.id %}" class="product-btn">Voir détails</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
     </section>
-   <script>
+    {% endif %}
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
 document.addEventListener("DOMContentLoaded", function () {
     const mainImage = document.getElementById("main-product-image");
     const thumbs = document.querySelectorAll(".thumb");
@@ -114,18 +226,14 @@ document.addEventListener("DOMContentLoaded", function () {
     thumbs.forEach((thumb) => {
         thumb.addEventListener("click", function () {
             const thumbImage = this.querySelector("img");
-
             if (thumbImage && mainImage) {
                 mainImage.src = thumbImage.src;
                 mainImage.alt = thumbImage.alt;
             }
-
             thumbs.forEach((item) => item.classList.remove("active"));
             this.classList.add("active");
         });
     });
 });
 </script>
-</body>
-
-</html>
+{% endblock %}

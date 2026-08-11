@@ -1,0 +1,24 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Paiement annulé — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section success-page">
+    <div class="container">
+        <div class="success-box cancel-box" data-aos="zoom-in">
+            <div class="success-icon cancel-icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+            <h1>Paiement annulé</h1>
+            <p>La commande <strong>#{{ commande.id }}</strong> a été annulée et les articles
+            remis en stock. Aucun montant n'a été débité.</p>
+
+            <div class="success-actions">
+                <a href="{% url 'panier' %}" class="btn-primary"><i class="fa-solid fa-cart-shopping"></i> Reprendre mes achats</a>
+                <a href="{% url 'accueil' %}" class="continue-link">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

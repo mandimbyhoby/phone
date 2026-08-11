@@ -1,0 +1,104 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Mon compte — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section account-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>👤 Mon compte</h2>
+            <p>Bonjour <strong>{{ request.user.username }}</strong>, gérez vos informations</p>
+        </div>
+
+        <div class="account-layout">
+            <!-- MENU LATÉRAL -->
+            <aside class="account-menu" data-aos="fade-right">
+                <div class="account-avatar">
+                    {% if profil.photo %}
+                    <img src="{{ profil.photo.url }}" alt="Photo de profil">
+                    {% else %}
+                    {{ request.user.username|first|upper }}
+                    {% endif %}
+                </div>
+                <h3>{{ profil.nom_complet|default:request.user.username }}</h3>
+                <p class="account-email">{{ request.user.email }}</p>
+                <nav>
+                    <a href="#infos" class="active">Mes informations</a>
+                    <a href="{% url 'changer_mot_de_passe' %}">Changer mon mot de passe</a>
+                    <a href="{% url 'mes_commandes' %}">Mes commandes</a>
+                    <a href="{% url 'deconnexion' %}">Se déconnecter</a>
+                </nav>
+            </aside>
+
+            <!-- CONTENU -->
+            <div class="account-content" data-aos="fade-left" data-aos-delay="100">
+                <div class="account-card" id="infos">
+                    <h3><i class="fa-solid fa-address-card"></i> Mes informations personnelles</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                {{ form.nom_complet.label_tag }}
+                                {{ form.nom_complet }}
+                                {% if form.nom_complet.errors %}<small class="form-error">{{ form.nom_complet.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.email.label_tag }}
+                                {{ form.email }}
+                                {% if form.email.errors %}<small class="form-error">{{ form.email.errors|striptags }}</small>{% endif %}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                {{ form.telephone.label_tag }}
+                                {{ form.telephone }}
+                                {% if form.telephone.errors %}<small class="form-error">{{ form.telephone.errors|striptags }}</small>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.ville.label_tag }}
+                                {{ form.ville }}
+                                {% if form.ville.errors %}<small class="form-error">{{ form.ville.errors|striptags }}</small>{% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.adresse.label_tag }}
+                            {{ form.adresse }}
+                            {% if form.adresse.errors %}<small class="form-error">{{ form.adresse.errors|striptags }}</small>{% endif %}
+                        </div>
+
+                        <!-- ===== PHOTO DE PROFIL ===== -->
+                        <div class="form-group photo-group">
+                            <label>Photo de profil</label>
+                            <div class="photo-upload">
+                                <div class="photo-preview" id="photo-preview">
+                                    {% if profil.photo %}
+                                    <img src="{{ profil.photo.url }}" alt="Aperçu photo de profil">
+                                    {% else %}
+                                    <i class="fa-solid fa-user"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="photo-upload-actions">
+                                    {{ form.photo }}
+                                    {% if form.photo.errors %}<small class="form-error">{{ form.photo.errors|striptags }}</small>{% endif %}
+                                    {% if profil.photo %}
+                                    <label class="photo-remove-label">
+                                        <input type="checkbox" name="photo_clear" id="photo-clear" class="photo-clear">
+                                        <i class="fa-solid fa-trash"></i> Supprimer ma photo
+                                    </label>
+                                    {% endif %}
+                                    <small class="form-hint">JPG, PNG ou WebP — max 2 Mo</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="buy-btn submit-order">
+                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer mes modifications
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

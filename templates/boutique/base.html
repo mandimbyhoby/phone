@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Phone Store — Téléphones pas chers à Madagascar{% endblock %}</title>
+    <meta name="description" content="Phone Store : votre boutique en ligne de téléphones à Madagascar. iPhone, Samsung et plus, au meilleur prix.">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=12">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+    <script>
+        // Démarrage explicite d'Alpine (fiable avec HTMX/AOS)
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.Alpine) {
+                window.Alpine.start();
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    {% csrf_token %}
+
+    <!-- ============ BANDEAU ANNONCE ============ -->
+    <div class="top-bar">
+        <p><i class="fa-solid fa-truck-fast"></i> Livraison gratuite à Antananarivo dès 1 000 000 Ar
+            <span>|</span> Paiement à la livraison <span>|</span> <a href="{% url 'contact' %}">Contactez-nous</a>
+        </p>
+    </div>
+
+    <!-- ============ NAVBAR ============ -->
+    <header class="site-navbar">
+        <div class="nav-inner">
+            <a href="{% url 'accueil' %}" class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>PHONE<br>STORE</h2>
+                    <p>E-COMMERCE</p>
+                </div>
+            </a>
+
+            <nav class="nav-menu" id="nav-menu">
+                <a href="{% url 'accueil' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                    <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="nav-label">Accueil</span>
+                </a>
+                <a href="{% url 'accueil' %}#products" class="nav-link {% if request.path == '/produit/' %}active{% endif %}">
+                    <span class="nav-icon"><i class="fa-solid fa-store"></i></span>
+                    <span class="nav-label">Boutique</span>
+                </a>
+                <a href="{% url 'apropos' %}" class="nav-link {% if request.path == '/apropos/' %}active{% endif %}">
+                    <span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span>
+                    <span class="nav-label">À propos</span>
+                </a>
+                <a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}">
+                    <span class="nav-icon"><i class="fa-solid fa-envelope"></i></span>
+                    <span class="nav-label">Contact</span>
+                </a>
+            </nav>
+
+            <div class="nav-actions">
+                <form action="{% url 'accueil' %}" method="get" class="search-box">
+                    <input type="text" name="q" placeholder="Rechercher un téléphone..." value="{{ q|default:'' }}">
+                    <button type="submit" aria-label="Rechercher">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
+                <!-- COMPTE (style Amazon) -->
+                <div class="nav-user" x-data="{ open: false, timer: null }"
+                    @mouseenter="clearTimeout(timer); open = true"
+                    @mouseleave="timer = setTimeout(() => open = false, 250)">
+                    <button class="nav-user-btn" :class="open && 'open'" @click="open = !open"
+                        aria-label="Comptes et listes">
+                        {% if user.is_authenticated and user.profil.photo %}
+                        <span class="nav-user-photo"><img src="{{ user.profil.photo.url }}" alt="Ma photo"></span>
+                        {% else %}
+                        <span class="nav-user-photo nav-user-photo-placeholder">{{ user.username|first|upper|default:'👤' }}</span>
+                        {% endif %}
+                        <span class="nav-user-texts">
+                            <span class="nav-user-greeting">Bonjour, {% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% else %}Identifiez-vous{% endif %}</span>
+                            <span class="nav-user-title">Comptes et listes <i class="fa-solid fa-chevron-down"></i></span>
+                        </span>
+                    </button>
+
+                    {% if user.is_authenticated %}
+                    <div class="nav-user-menu" x-show="open" x-cloak x-transition.opacity.duration.150ms>
+                        <div class="nav-user-menu-head">
+                            <div class="nav-user-head-info">
+                                {% if user.profil.photo %}
+                                <img src="{{ user.profil.photo.url }}" alt="Ma photo" class="nav-user-head-photo">
+                                {% else %}
+                                <span class="nav-user-head-photo placeholder">{{ user.username|first|upper }}</span>
+                                {% endif %}
+                                <strong>Bonjour, {{ user.get_full_name|default:user.username }}</strong>
+                            </div>
+                            <a href="{% url 'profil' %}">Gérer mon compte</a>
+                        </div>
+                        <div class="nav-user-columns">
+                            <div class="nav-user-col">
+                                <h5>Vos commandes</h5>
+                                <a href="{% url 'mes_commandes' %}">Mes commandes</a>
+                                <h5>Vos informations</h5>
+                                <a href="{% url 'profil' %}">Mon profil</a>
+                            </div>
+                            <div class="nav-user-col">
+                                <h5>Votre compte</h5>
+                                <a href="{% url 'profil' %}">Adresse &amp; téléphone</a>
+                                <a href="{% url 'changer_mot_de_passe' %}">Changer mon mot de passe</a>
+                                <a href="{% url 'deconnexion' %}" class="logout-link">Se déconnecter</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="nav-user-menu nav-user-menu-auth" x-show="open" x-cloak x-transition.opacity.duration.150ms>
+                        <div class="nav-user-menu-head">
+                            <a href="{% url 'connexion' %}" class="amazon-signin-btn">Se connecter</a>
+                            <p>Nouveau client ? <a href="{% url 'inscription' %}">Commencez ici</a></p>
+                        </div>
+                        <div class="nav-user-columns">
+                            <div class="nav-user-col">
+                                <h5>Votre compte</h5>
+                                <a href="{% url 'connexion' %}">Se connecter</a>
+                                <a href="{% url 'inscription' %}">Créer un compte</a>
+                                <a href="{% url 'mot_de_passe_oublie' %}">Mot de passe oublié</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- PANIER -->
+                <div x-data="{ open: false }" class="cart-wrap">
+                    <button class="cart-btn" @click="open = true" aria-label="Ouvrir le panier">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span id="cart-badge" class="cart-badge">{{ nombre_articles_panier }}</span>
+                    </button>
+
+                    <!-- OVERLAY -->
+                    <div class="drawer-overlay" x-show="open" @click="open = false"
+                        x-transition.opacity.duration.200ms x-cloak></div>
+
+                    <!-- DRAWER -->
+                    <aside class="cart-drawer" x-show="open" x-cloak
+                        x-transition:enter="drawer-enter" x-transition:enter-start="drawer-enter-from"
+                        x-transition:enter-end="drawer-enter-to"
+                        x-transition:leave="drawer-leave" x-transition:leave-start="drawer-leave-from"
+                        x-transition:leave-end="drawer-leave-to">
+                        <header class="drawer-header">
+                            <h3><i class="fa-solid fa-cart-shopping"></i> Mon panier</h3>
+                            <button class="drawer-close" @click="open = false" aria-label="Fermer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </header>
+                        <div id="cart-widget-items" class="drawer-body">
+                            {% include 'boutique/partials/cart_items.html' with items=panier_items total=panier_total %}
+                        </div>
+                    </aside>
+                </div>
+
+                <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ MESSAGES ============ -->
+    {% if messages %}
+    <div class="toast-stack">
+        {% for message in messages %}
+        <div class="toast toast-{{ message.tags }}"
+            x-data="{ show: true }" x-show="show"
+            x-init="setTimeout(() => show = false, 4500)"
+            @click="show = false">
+            <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ============ CONTENU ============ -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-col footer-brand">
+                <a href="{% url 'accueil' %}" class="logo footer-logo">
+                    <div class="logo-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <div class="logo-text">
+                        <h2>PHONE<br>STORE</h2>
+                        <p>E-COMMERCE</p>
+                    </div>
+                </a>
+                <p>Votre boutique en ligne de téléphones à Madagascar. Qualité garantie, prix imbattables et
+                    livraison rapide partout dans l'île.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="{% url 'accueil' %}">Accueil</a></li>
+                    <li><a href="{% url 'accueil' %}#products">Boutique</a></li>
+                    <li><a href="{% url 'apropos' %}">À propos</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Mon compte</h4>
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'profil' %}">Mon profil</a></li>
+                    <li><a href="{% url 'mes_commandes' %}">Mes commandes</a></li>
+                    <li><a href="{% url 'changer_mot_de_passe' %}">Mot de passe</a></li>
+                    <li><a href="{% url 'deconnexion' %}">Se déconnecter</a></li>
+                    {% else %}
+                    <li><a href="{% url 'connexion' %}">Se connecter</a></li>
+                    <li><a href="{% url 'inscription' %}">Créer un compte</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Catégories</h4>
+                <ul>
+                    {% for c in categories %}
+                    <li><a href="{% url 'accueil' %}?categorie={{ c.slug }}">{{ c.nom }}</a></li>
+                    {% empty %}
+                    <li><a href="{% url 'accueil' %}">Tous les produits</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="footer-contact">
+                    <li><i class="fa-solid fa-location-dot"></i> Antananarivo, Madagascar</li>
+                    <li><i class="fa-solid fa-phone"></i> +261 34 00 000 00</li>
+                    <li><i class="fa-solid fa-envelope"></i> contact@phonestore.mg</li>
+                </ul>
+                <form class="newsletter" hx-post="#" hx-swap="none">
+                    <input type="email" placeholder="Votre email" required>
+                    <button type="submit" aria-label="S'abonner"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Phone Store — Tous droits réservés.</p>
+            <p>Fait avec <i class="fa-solid fa-heart"></i> à Madagascar</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/app.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

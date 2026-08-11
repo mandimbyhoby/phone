@@ -1,0 +1,75 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Mes commandes — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section account-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>📦 Mes commandes</h2>
+            <p>Retrouvez l'historique de vos achats</p>
+        </div>
+
+        <div class="account-layout">
+            <aside class="account-menu" data-aos="fade-right">
+                <div class="account-avatar">{{ request.user.username|first|upper }}</div>
+                <h3>{{ request.user.username }}</h3>
+                <nav>
+                    <a href="{% url 'profil' %}">Mes informations</a>
+                    <a href="{% url 'changer_mot_de_passe' %}">Changer mon mot de passe</a>
+                    <a href="#orders" class="active">Mes commandes</a>
+                    <a href="{% url 'deconnexion' %}">Se déconnecter</a>
+                </nav>
+            </aside>
+
+            <div class="account-content" data-aos="fade-left" data-aos-delay="100">
+                <div class="account-card" id="orders">
+                    <h3><i class="fa-solid fa-receipt"></i> Historique des commandes</h3>
+
+                    {% if commandes %}
+                    <div class="orders-list">
+                        {% for commande in commandes %}
+                        <div class="order-row">
+                            <div class="order-row-head">
+                                <div>
+                                    <strong>Commande #{{ commande.id }}</strong>
+                                    <small class="order-date">{{ commande.date_commande|date:"d/m/Y H:i" }}</small>
+                                </div>
+                                <div class="order-row-right">
+                                    <span class="order-status status-{{ commande.statut }}">{{ commande.get_statut_display }}</span>
+                                    <strong class="order-total">{{ commande.total }} Ar</strong>
+                                </div>
+                            </div>
+                            <div class="order-row-items">
+                                {% for ligne in commande.lignes.all %}
+                                <div class="order-row-item">
+                                    <span>{{ ligne.quantite }} × {{ ligne.produit.nom }}</span>
+                                    <span>{{ ligne.sous_total }} Ar</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if commande.paiement %}
+                            <div class="order-row-pay">
+                                <i class="fa-solid fa-wallet"></i> {{ commande.paiement.get_methode_display }}
+                                — <span class="pay-{% if commande.paiement.statut == 'paye' %}ok{% else %}wait{% endif %}">
+                                {{ commande.paiement.get_statut_display }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-cart">
+                        <i class="fa-solid fa-box-open"></i>
+                        <h3>Aucune commande pour le moment</h3>
+                        <p>Votre historique de commandes apparaîtra ici.</p>
+                        <a href="{% url 'accueil' %}#products" class="btn-primary">Découvrir les produits</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

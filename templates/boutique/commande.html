@@ -1,0 +1,123 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Finaliser ma commande — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section checkout-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>📦 Finaliser ma commande</h2>
+            <p>Livraison partout à Madagascar — choisissez votre mode de paiement</p>
+        </div>
+
+        <div class="checkout-layout">
+            <div class="checkout-form" data-aos="fade-right">
+                <h3><i class="fa-solid fa-user"></i> Informations de livraison</h3>
+                <form method="post" id="checkout-form">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            {{ form.nom.label_tag }}
+                            {{ form.nom }}
+                            {% if form.nom.errors %}<small class="form-error">{{ form.nom.errors|striptags }}</small>{% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.telephone.label_tag }}
+                            {{ form.telephone }}
+                            {% if form.telephone.errors %}<small class="form-error">{{ form.telephone.errors|striptags }}</small>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}<small class="form-error">{{ form.email.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.adresse.label_tag }}
+                        {{ form.adresse }}
+                        {% if form.adresse.errors %}<small class="form-error">{{ form.adresse.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.ville.label_tag }}
+                        {{ form.ville }}
+                        {% if form.ville.errors %}<small class="form-error">{{ form.ville.errors|striptags }}</small>{% endif %}
+                    </div>
+
+                    <!-- ============ MÉTHODE DE PAIEMENT ============ -->
+                    <div class="payment-methods">
+                        <h3><i class="fa-solid fa-wallet"></i> Méthode de paiement</h3>
+                        <div class="payment-grid">
+                            {% for value, label in form.methode_paiement.field.choices %}
+                            <label class="payment-option">
+                                <input type="radio" name="methode_paiement" value="{{ value }}"
+                                    {% if form.methode_paiement.value == value %}checked{% endif %}
+                                    onchange="this.closest('form').querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected')); this.closest('.payment-option').classList.add('selected');">
+                                <span class="payment-logo">
+                                    {% if value == 'carte' %}
+                                    <i class="fa-solid fa-credit-card"></i>
+                                    {% elif value == 'paypal' %}
+                                    <i class="fa-brands fa-paypal"></i>
+                                    {% elif value == 'orange_money' %}
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                    {% else %}
+                                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                                    {% endif %}
+                                </span>
+                                <span class="payment-text">
+                                    <strong>{{ label }}</strong>
+                                    {% if value == 'carte' %}<small>Visa · Mastercard · Amex</small>
+                                    {% elif value == 'orange_money' %}<small>Paiement mobile Mvola/OM</small>
+                                    {% elif value == 'paypal' %}<small>Compte PayPal</small>
+                                    {% else %}<small>Payez à la réception</small>{% endif %}
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        {% if mode_demo %}
+                        <div class="demo-note">
+                            <i class="fa-solid fa-flask"></i>
+                            <span><strong>Mode démo :</strong> aucune clé API configurée — les paiements
+                            en ligne sont <strong>simulés</strong> (commande confirmée directement).</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="buy-btn submit-order">
+                        <i class="fa-solid fa-circle-check"></i> Confirmer ma commande — {{ total }} Ar
+                    </button>
+                </form>
+            </div>
+
+            <aside class="checkout-summary" data-aos="fade-left" data-aos-delay="100">
+                <h3>Ma commande ({{ items|length }})</h3>
+                <div class="order-items">
+                    {% for item in items %}
+                    <div class="order-item">
+                        <div class="order-item-img">
+                            {% if item.produit.image %}
+                            <img src="{{ item.produit.image.url }}" alt="{{ item.produit.nom }}">
+                            {% endif %}
+                            <span class="order-qty">{{ item.quantite }}</span>
+                        </div>
+                        <div class="order-item-info">
+                            <strong>{{ item.produit.nom }}</strong>
+                            <small>{{ item.quantite }} × {{ item.prix }} Ar</small>
+                        </div>
+                        <strong>{{ item.sous_total }} Ar</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total à payer</span>
+                    <strong>{{ total }} Ar</strong>
+                </div>
+                <div class="summary-secure">
+                    <i class="fa-solid fa-lock"></i> Paiement sécurisé
+                    <span>Stripe · PayPal · Orange Money</span>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

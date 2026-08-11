@@ -1,0 +1,102 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}À propos — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section about-page">
+    <!-- 🔥 FOND ANIMÉ (comme l'accueil) -->
+    <div class="bg-circle"></div>
+    <div class="bg-circle small"></div>
+    <div class="particles">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="light-lines">
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>À propos de Phone Store</h2>
+            <p>Le spécialiste du téléphone à Madagascar depuis 2018</p>
+        </div>
+
+        <div class="about-hero" data-aos="fade-up">
+            <div class="about-text">
+                <h3>Notre histoire</h3>
+                <p>
+                    Phone Store est né d'une conviction simple : chacun mérite d'accéder à un téléphone
+                    de qualité au juste prix. Depuis 2018, nous importons directement les derniers
+                    modèles — iPhone, Samsung, Xiaomi, Oppo — et les proposons à des prix imbattables
+                    sur tout Madagascar.
+                </p>
+                <p>
+                    Chaque appareil est vérifié, testé et authentique. Notre engagement : la satisfaction
+                    de nos clients, avec une garantie de 12 mois et un paiement à la livraison pour une
+                    confiance totale.
+                </p>
+                <div class="about-stats" data-aos="fade-up">
+                    <div class="about-stat">
+                        <strong>+500</strong>
+                        <span>Clients satisfaits</span>
+                    </div>
+                    <div class="about-stat">
+                        <strong>+{{ nombre_commandes }}</strong>
+                        <span>Commandes livrées</span>
+                    </div>
+                    <div class="about-stat">
+                        <strong>{{ nombre_produits }}</strong>
+                        <span>Produits en stock</span>
+                    </div>
+                    <div class="about-stat">
+                        <strong>7j/7</strong>
+                        <span>Support disponible</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/hero3.png' %}" alt="Phone Store — Téléphones">
+                <div class="about-badge">
+                    <i class="fa-solid fa-medal"></i>
+                    <div>
+                        <strong>Depuis 2018</strong>
+                        <span>Plus de 7 ans d'expérience</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="values-grid" data-aos="fade-up">
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4>Authenticité garantie</h4>
+                <p>Tous nos téléphones sont importés officiellement et garantis 12 mois.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <h4>Prix imbattables</h4>
+                <p>Importation directe : nous supprimons les intermédiaires pour vous.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                <h4>Livraison partout</h4>
+                <p>Antananarivo en 24h, et dans toute l'île sous 72h maximum.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon"><i class="fa-solid fa-headset"></i></div>
+                <h4>Support réactif</h4>
+                <p>Une équipe disponible 7j/7 avant et après votre achat.</p>
+            </div>
+        </div>
+
+        <div class="cta-box" data-aos="zoom-in">
+            <h2>Envie de passer à la nouvelle génération ?</h2>
+            <p>Découvrez notre sélection de téléphones et commandez en quelques clics.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'accueil' %}#products" class="btn-primary">Voir la boutique</a>
+                <a href="{% url 'contact' %}" class="btn-link">Contactez-nous</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

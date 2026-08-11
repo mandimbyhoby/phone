@@ -1,0 +1,60 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Mon panier — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section cart-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>🛒 Mon panier</h2>
+            <p>Vérifiez vos articles avant de commander</p>
+        </div>
+
+        {% if items %}
+        <div class="cart-layout">
+            <div class="cart-table" id="cart-page-items" data-aos="fade-right">
+                {% include 'boutique/partials/cart_items.html' %}
+            </div>
+
+            <aside class="cart-summary" data-aos="fade-left" data-aos-delay="100">
+                <h3>Récapitulatif</h3>
+                <div class="summary-line">
+                    <span>Articles</span>
+                    <strong>{{ items|length }}</strong>
+                </div>
+                <div class="summary-line">
+                    <span>Sous-total</span>
+                    <strong>{{ total }} Ar</strong>
+                </div>
+                <div class="summary-line">
+                    <span>Livraison</span>
+                    <strong>Gratuite</strong>
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total</span>
+                    <strong>{{ total }} Ar</strong>
+                </div>
+                <a href="{% url 'passer_commande' %}" class="buy-btn checkout-btn">
+                    <i class="fa-solid fa-lock"></i> Passer la commande
+                </a>
+                <a href="{% url 'accueil' %}#products" class="continue-link">
+                    <i class="fa-solid fa-arrow-left"></i> Continuer mes achats
+                </a>
+                <div class="summary-note">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Paiement à la livraison — vous ne payez qu'à la réception.
+                </div>
+            </aside>
+        </div>
+        {% else %}
+        <div class="empty-cart" data-aos="zoom-in">
+            <i class="fa-solid fa-cart-arrow-down"></i>
+            <h3>Votre panier est vide</h3>
+            <p>Découvrez notre sélection de téléphones au meilleur prix.</p>
+            <a href="{% url 'accueil' %}#products" class="btn-primary">Découvrir les produits</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

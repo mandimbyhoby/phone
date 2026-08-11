@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'boutique.context_processors.panier_global',
             ],
         },
     },
@@ -111,6 +113,20 @@ USE_I18N = True
 
 USE_TZ = True
 
+# ============================================================
+# A U T H E N T I F I C A T I O N
+# ============================================================
+
+LOGIN_URL = 'connexion'
+LOGIN_REDIRECT_URL = 'accueil'
+LOGOUT_REDIRECT_URL = 'accueil'
+
+# Email : en développement, les emails (lien de réinitialisation de mot de
+# passe) sont affichés dans la console du serveur. Pour l'envoi réel,
+# remplacez par les réglages SMTP (ex. Gmail, Mailjet, ...).
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'Phone Store <no-reply@phonestore.mg>'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -124,3 +140,33 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================
+# P A I E M E N T S
+# ============================================================
+# Laissez les clés vides → le site fonctionne en MODE DÉMO
+# (les paiements sont simulés pour tester le parcours complet).
+#
+# Pour passer en réel, remplissez les clés (idéalement via des variables
+# d'environnement, pas en dur ici).
+
+# --- Stripe (cartes Visa / Mastercard / Amex / Apple Pay / Google Pay) ---
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+
+# --- PayPal ---
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '')
+PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET', '')
+PAYPAL_ENV = os.environ.get('PAYPAL_ENV', 'sandbox')  # 'sandbox' ou 'live'
+
+# --- Orange Money (API marchand) ---
+ORANGE_MONEY_CLIENT_ID = os.environ.get('ORANGE_MONEY_CLIENT_ID', '')
+ORANGE_MONEY_CLIENT_SECRET = os.environ.get('ORANGE_MONEY_CLIENT_SECRET', '')
+ORANGE_MONEY_MERCHANT_NUMBER = os.environ.get('ORANGE_MONEY_MERCHANT_NUMBER', '')
+ORANGE_MONEY_BASE_URL = os.environ.get('ORANGE_MONEY_BASE_URL', 'https://api.orange.com')
+
+# --- Devise / conversion ---
+# L'Ariary (MGA) n'est pas accepté par Stripe/PayPal : le montant est converti
+# en EUR pour les cartes et PayPal. Ajustez le taux selon le cours du jour.
+PAIEMENT_TAUX_EUR = float(os.environ.get('PAIEMENT_TAUX_EUR', '5000'))  # 1 EUR = 5000 Ar

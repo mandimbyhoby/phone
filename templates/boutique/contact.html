@@ -1,0 +1,104 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Contact — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section contact-page">
+    <!-- 🔥 FOND ANIMÉ (comme l'accueil) -->
+    <div class="bg-circle"></div>
+    <div class="bg-circle small"></div>
+    <div class="particles">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="light-lines">
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>📞 Contactez-nous</h2>
+            <p>Une question ? Nous répondons 7j/7</p>
+        </div>
+
+        <div class="contact-layout">
+            <div class="contact-info" data-aos="fade-right">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <h4>Notre boutique</h4>
+                        <p>Lot II A 15, Analakely<br>Antananarivo 101, Madagascar</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div>
+                        <h4>Téléphone / WhatsApp</h4>
+                        <p>+261 34 00 000 00<br>+261 33 00 000 00</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>contact@phonestore.mg<br>support@phonestore.mg</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <h4>Horaires</h4>
+                        <p>Lundi – Samedi : 8h30 – 18h00<br>Dimanche : 9h00 – 12h00</p>
+                    </div>
+                </div>
+                <div class="contact-qr">
+                    <img src="{% static 'images/qr-site.png' %}" alt="QR code du site Phone Store">
+                    <div class="contact-qr-text">
+                        <h4><i class="fa-solid fa-qrcode"></i> Scannez-nous !</h4>
+                        <p>Flashez ce QR code avec votre téléphone pour visiter la boutique en ligne.</p>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3923.1129318494417!2d47.51943531470292!3d-18.91031498730882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x21f105e94f9a0f07%3A0x5b5e5f2f5b5e5f2f!2sAntananarivo!5e0!3m2!1sfr!2smg!4v1700000000000!5m2!1sfr!2smg"
+                        width="100%" height="260" style="border:0; border-radius:16px;"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Notre position"></iframe>
+                </div>
+            </div>
+
+            <div class="contact-form-box" data-aos="fade-left" data-aos-delay="100">
+                <h3><i class="fa-solid fa-paper-plane"></i> Envoyez-nous un message</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            {{ form.nom.label_tag }}
+                            {{ form.nom }}
+                            {% if form.nom.errors %}<small class="form-error">{{ form.nom.errors|striptags }}</small>{% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                            {% if form.email.errors %}<small class="form-error">{{ form.email.errors|striptags }}</small>{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form.sujet.label_tag }}
+                        {{ form.sujet }}
+                        {% if form.sujet.errors %}<small class="form-error">{{ form.sujet.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                        {% if form.message.errors %}<small class="form-error">{{ form.message.errors|striptags }}</small>{% endif %}
+                    </div>
+                    <button type="submit" class="buy-btn submit-order">
+                        <i class="fa-solid fa-paper-plane"></i> Envoyer le message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

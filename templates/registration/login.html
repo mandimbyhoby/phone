@@ -1,0 +1,40 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Connexion — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section auth-page">
+    <div class="container">
+        <div class="auth-box" data-aos="zoom-in">
+            <div class="auth-head">
+                <div class="auth-logo"><i class="fa-solid fa-user-lock"></i></div>
+                <h1>Connexion</h1>
+                <p>Accédez à votre compte pour passer commande</p>
+            </div>
+
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
+                {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}<small class="form-error">{{ field.errors|striptags }}</small>{% endif %}
+                </div>
+                {% endfor %}
+                <div class="auth-links">
+                    <a href="{% url 'mot_de_passe_oublie' %}"><i class="fa-solid fa-key"></i> Mot de passe oublié ?</a>
+                </div>
+                <button type="submit" class="buy-btn submit-order">
+                    <i class="fa-solid fa-right-to-bracket"></i> Se connecter
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Pas encore de compte ? <a href="{% url 'inscription' %}">Créer un compte</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

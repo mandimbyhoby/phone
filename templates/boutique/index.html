@@ -1,175 +1,337 @@
+{% extends 'boutique/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Store</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
+{% block title %}Phone Store — Téléphones pas chers à Madagascar{% endblock %}
 
-<body>
+{% block content %}
 
-    <section class="page-title">
-        <h1>LANDING PAGE TEMPLATE</h1>
-        <p>E-Commerce</p>
-    </section>
+<!-- ============ HERO ============ -->
+<section class="hero-wrapper">
+    <div class="bg-circle"></div>
+    <div class="bg-circle small"></div>
 
-    <section class="hero-wrapper">
+    <div class="particles">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
 
-        <!-- 🔥 BACKGROUND ANIMATIONS -->
-        <div class="bg-circle"></div>
-        <div class="bg-circle small"></div>
-
-        <div class="particles">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+    <div class="hero-box">
+        <div class="dots-top-left">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
         </div>
+        <div class="top-right-lines"></div>
+        <div class="left-arc"></div>
+        <div class="left-dot"></div>
+        <div class="right-circle"></div>
+        <div class="bottom-rings"></div>
+        <div class="dots-bottom-right"></div>
 
-        <div class="hero-box">
-
-            <!-- décorations existantes -->
-            <div class="dots-top-left">
-                <span></span><span></span><span></span>
-                <span></span><span></span><span></span>
-            </div>
-
-            <div class="top-right-lines"></div>
-            <div class="left-arc"></div>
-            <div class="left-dot"></div>
-            <div class="right-circle"></div>
-            <div class="bottom-rings"></div>
-            <div class="dots-bottom-right"></div>
-
-            <!-- NAVBAR -->
-            <header class="navbar">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </div>
-                    <div class="logo-text">
-                        <h2>ONLINE<br>SHOP</h2>
-                        <p>E-COMMERCE</p>
-                    </div>
+        <div class="hero-content">
+            <div class="hero-text" data-aos="fade-right">
+                <span class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Nouveautés chaque semaine</span>
+                <h1>
+                    Le Téléphone<br>
+                    De Vos Rêves<br>
+                    Au Meilleur Prix
+                </h1>
+                <div class="hero-line"></div>
+                <p>
+                    iPhone, Samsung, Xiaomi et plus encore — garantis, authentiques et livrés
+                    partout à Madagascar. Paiement à la livraison, la confiance en plus.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn-primary">Découvrir la boutique</a>
+                    <a href="{% url 'contact' %}" class="btn-link">Nous contacter →</a>
                 </div>
-
-                <nav class="nav-menu">
-                    <a href="#" class="active">Home</a>
-                    <a href="#">About Us</a>
-                    <a href="#">Service</a>
-                    <a href="#">Shop</a>
-                </nav>
-
-                <form class="search-box">
-                    <input type="text" placeholder="Find Something...">
-                    <button type="submit">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </form>
-            </header>
-
-            <!-- HERO CONTENT -->
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>
-                        Make Paying<br>
-                        Easier With<br>
-                        E-Wallet
-                    </h1>
-
-                    <div class="hero-line"></div>
-
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-
-                    <div class="hero-buttons">
-                        <a href="#products" class="btn-primary">Read More</a>
-                        <a href="#" class="btn-link">Redeem Voucher</a>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <strong>+500</strong>
+                        <span>Clients satisfaits</span>
                     </div>
-                </div>
-
-                <div class="hero-image">
-                    <div class="triangle-stack">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="hero-stat">
+                        <strong>24h</strong>
+                        <span>Livraison express</span>
                     </div>
-
-                    <img src="{% static 'images/hero3.png' %}" alt="Hero Image">
+                    <div class="hero-stat">
+                        <strong>100%</strong>
+                        <span>Produits authentiques</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- SOCIAL -->
-            <div class="social-strip">
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <div class="hero-image" data-aos="fade-left" data-aos-delay="150">
+                <div class="triangle-stack">
+                    <span></span><span></span><span></span>
+                </div>
+                <img src="{% static 'images/hero3.png' %}" alt="Téléphone à la une">
+            </div>
+        </div>
+
+        <div class="social-strip">
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ AVANTAGES ============ -->
+<section class="features-strip">
+    <div class="container features-grid" data-aos="fade-up">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <div>
+                <h4>Livraison rapide</h4>
+                <p>Partout à Madagascar sous 24-72h</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div>
+                <h4>Paiement à la livraison</h4>
+                <p>Payez en espèces à la réception</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <h4>Garantie 12 mois</h4>
+                <p>Tous nos téléphones sont garantis</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-headset"></i></div>
+            <div>
+                <h4>Support 7j/7</h4>
+                <p>Une équipe à votre écoute</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PRODUITS ============ -->
+<section class="products-section" id="products">
+    <div class="products-bg-flash">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="light-lines">
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="section-header" data-aos="fade-up">
+        <h2>Nos téléphones</h2>
+        <p>Choisissez le modèle qui vous convient</p>
+    </div>
+
+    <!-- ===== BARRE DE FILTRES (HTMX) ===== -->
+    <div class="container" id="filters" data-aos="fade-up">
+        <div class="filters-bar">
+            <div class="filter-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="filter-search-input" type="text" name="q" value="{{ q }}"
+                    placeholder="Rechercher un téléphone..."
+                    hx-get="{% url 'accueil' %}"
+                    hx-target="#product-grid"
+                    hx-select="#product-grid"
+                    hx-swap="outerHTML"
+                    hx-trigger="input changed delay:400ms, search"
+                    hx-include="#sort-select"
+                    hx-push-url="true">
             </div>
 
-        </div>
-    </section>
-
-    <section class="products-section" id="products">
-        <div class="section-header">
-            <h2>Nos téléphones</h2>
-            <p>Choisissez le modèle qui vous convient</p>
-        </div>
-
-        <main class="container">
-            <div class="products-grid">
-                {% for produit in produits %}
-                <div class="product-card">
-
-                    {% if produit.prix_promo %}
-                    <span class="promo-badge">Promo</span>
-                    {% endif %}
-
-                    <div class="product-image">
-                        {% if produit.image %}
-                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
-                        {% else %}
-                        <img src="{% static 'images/iphone.jpg' %}" alt="Image par défaut">
-                        {% endif %}
-                    </div>
-
-                    <div class="product-info">
-                        <h3>{{ produit.nom }}</h3>
-                        <p class="brand">{{ produit.marque }}</p>
-
-                        {% if produit.prix_promo %}
-                        <p class="price-box">
-                            <span class="old-price">{{ produit.prix }} Ar</span>
-                            <span class="price">{{ produit.prix_promo }} Ar</span>
-                        </p>
-                        {% else %}
-                        <p class="price">{{ produit.prix }} Ar</p>
-                        {% endif %}
-
-                        <p class="stock">
-                            {% if produit.stock > 0 %}
-                            <span class="in-stock">✔ En stock ({{ produit.stock }})</span>
-                            {% else %}
-                            <span class="out-stock">❌ Rupture de stock</span>
-                            {% endif %}
-                        </p>
-
-                        <a href="{% url 'detail_produit' produit.id %}" class="product-btn">Voir détails</a>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="empty-message">Aucun téléphone disponible pour le moment.</p>
+            <div class="filter-pills">
+                <a href="{% url 'accueil' %}"
+                    class="filter-pill {% if not categorie_active %}active{% endif %}"
+                    hx-get="{% url 'accueil' %}"
+                    hx-target="#product-grid"
+                    hx-select="#product-grid"
+                    hx-swap="outerHTML"
+                    hx-include="#filter-search-input, #sort-select"
+                    hx-vals='{"categorie": ""}'
+                    hx-push-url="true">Tous</a>
+                {% for c in categories %}
+                <a href="{% url 'accueil' %}?categorie={{ c.slug }}"
+                    class="filter-pill {% if categorie_active == c.slug %}active{% endif %}"
+                    hx-get="{% url 'accueil' %}"
+                    hx-target="#product-grid"
+                    hx-select="#product-grid"
+                    hx-swap="outerHTML"
+                    hx-include="#filter-search-input, #sort-select"
+                    hx-vals='{"categorie": "{{ c.slug }}"}'
+                    hx-push-url="true">{{ c.nom }}</a>
                 {% endfor %}
             </div>
-        </main>
-    </section>
 
-</body>
+            <select id="sort-select" name="tri" class="filter-sort" aria-label="Trier les produits"
+                hx-get="{% url 'accueil' %}"
+                hx-target="#product-grid"
+                hx-select="#product-grid"
+                hx-swap="outerHTML"
+                hx-trigger="change"
+                hx-include="#filter-search-input"
+                hx-push-url="true">
+                <option value="nouveaute" {% if tri == 'nouveaute' %}selected{% endif %}>Nouveautés</option>
+                <option value="prix_asc" {% if tri == 'prix_asc' %}selected{% endif %}>Prix croissant</option>
+                <option value="prix_desc" {% if tri == 'prix_desc' %}selected{% endif %}>Prix décroissant</option>
+                <option value="promo" {% if tri == 'promo' %}selected{% endif %}>Promotions</option>
+                <option value="nom" {% if tri == 'nom' %}selected{% endif %}>Nom A → Z</option>
+            </select>
+        </div>
+    </div>
 
-</html>
+    <main class="container">
+        {% include 'boutique/partials/product_grid.html' %}
+    </main>
+</section>
+
+<!-- ============ PROMOTIONS ============ -->
+{% if promos %}
+<section class="promo-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>🔥 Offres du moment</h2>
+            <p>Des réductions exceptionnelles, jusqu'à épuisement du stock</p>
+        </div>
+        <div class="promo-grid">
+            {% for produit in promos %}
+            <a href="{% url 'detail_produit' produit.id %}" class="promo-card" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}0">
+                <div class="promo-img">
+                    {% if produit.image %}
+                    <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                    {% endif %}
+                    <span class="promo-badge">-{{ produit.reduction_pourcentage }}%</span>
+                </div>
+                <div class="promo-body">
+                    <h3>{{ produit.nom }}</h3>
+                    <div class="promo-prices">
+                        <span class="old-price">{{ produit.prix }} Ar</span>
+                        <strong>{{ produit.prix_promo }} Ar</strong>
+                    </div>
+                    <span class="promo-cta">J'en profite <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ============ TÉMOIGNAGES ============ -->
+<section class="testimonial-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>Ils nous font confiance</h2>
+            <p>Ce que disent nos clients</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card" data-aos="fade-up">
+                <div class="testimonial-stars">★★★★★</div>
+                <p>"Commande passée le lundi, livrée le mercredi à Tamatave. Téléphone parfaitement
+                    authentique, je recommande vivement !"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">H</div>
+                    <div>
+                        <strong>Hery R.</strong>
+                        <small>Tamatave</small>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="testimonial-stars">★★★★★</div>
+                <p>"Le paiement à la livraison m'a mis en confiance. Très bon rapport qualité-prix et un
+                    service client réactif."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">M</div>
+                    <div>
+                        <strong>Miora A.</strong>
+                        <small>Antananarivo</small>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="testimonial-stars">★★★★★</div>
+                <p>"Meilleur prix trouvé à Madagascar pour mon iPhone 15. Garantie 12 mois, c'est
+                    rassurant. Merci Phone Store !"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">T</div>
+                    <div>
+                        <strong>Tiana F.</strong>
+                        <small>Antsirabe</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PUBLICITÉ VIDÉO ============ -->
+<section class="video-ad-section" id="video-ad">
+    <div class="bg-circle"></div>
+    <div class="bg-circle small"></div>
+    <div class="particles">
+        <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="light-lines">
+        <span></span><span></span><span></span>
+    </div>
+
+    <div class="container video-ad-grid">
+        <div class="video-ad-text" data-aos="fade-right">
+            <span class="hero-eyebrow"><i class="fa-solid fa-clapperboard"></i> Publicité</span>
+            <h2>Voyez nos téléphones<br><em>en action</em></h2>
+            <p>
+                Découvrez en vidéo la qualité d'image, la fluidité et le design de nos
+                derniers modèles. La meilleure façon de choisir, c'est de voir.
+            </p>
+            <ul class="video-ad-features">
+                <li><i class="fa-solid fa-circle-play"></i> Démos réelles des modèles</li>
+                <li><i class="fa-solid fa-mobile-screen"></i> Nouveautés chaque semaine</li>
+                <li><i class="fa-solid fa-hand-holding-dollar"></i> Paiement à la livraison</li>
+            </ul>
+            <div class="hero-buttons">
+                <a href="#products" class="btn-primary">Voir la boutique</a>
+                <a href="{% url 'contact' %}" class="btn-link">Nous contacter →</a>
+            </div>
+        </div>
+
+        <div class="video-ad-player" data-aos="fade-left" data-aos-delay="100">
+            <div class="video-frame">
+                <!-- Vidéo locale : devient visible quand le fichier est ajouté -->
+                <video id="ad-video" poster="{% static 'images/hero3.png' %}"
+                    controls playsinline preload="metadata" hidden>
+                    <source src="/media/videos/phone-ad.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture vidéo.
+                </video>
+
+                <!-- Écran d'attente : aucune vidéo disponible pour l'instant -->
+                <div class="video-placeholder" id="ad-video-placeholder">
+                    <div class="video-placeholder-inner">
+                        <div class="video-placeholder-icon">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <h3>Publicité vidéo<br>bientôt disponible</h3>
+                        <p>Notre spot vidéo arrive bientôt.<br>En attendant, découvrez nos téléphones&nbsp;!</p>
+                        <a href="#products" class="btn-primary"><i class="fa-solid fa-store"></i> Voir la boutique</a>
+                    </div>
+                    <span class="video-placeholder-badge">
+                        <i class="fa-solid fa-hourglass-half"></i> À venir
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="cta-section">
+    <div class="container cta-box" data-aos="zoom-in">
+        <h2>Prêt à changer de téléphone ?</h2>
+        <p>Rejoignez plus de 500 clients satisfaits à Madagascar. Livraison rapide, paiement à la réception.</p>
+        <div class="cta-buttons">
+            <a href="#products" class="btn-primary">Voir les produits</a>
+            <a href="{% url 'contact' %}" class="btn-link">Une question ? Contactez-nous</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

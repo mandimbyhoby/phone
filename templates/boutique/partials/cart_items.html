@@ -1,0 +1,52 @@
+{% if items %}
+<div class="drawer-list">
+    {% for item in items %}
+    <div class="drawer-item">
+        <a href="{% url 'detail_produit' item.produit.id %}" class="drawer-item-img">
+            {% if item.produit.image %}
+            <img src="{{ item.produit.image.url }}" alt="{{ item.produit.nom }}">
+            {% endif %}
+        </a>
+        <div class="drawer-item-info">
+            <a href="{% url 'detail_produit' item.produit.id %}">{{ item.produit.nom }}</a>
+            <small>{{ item.quantite }} × {{ item.prix }} Ar</small>
+        </div>
+        <div class="drawer-item-actions">
+            <button class="qty-btn"
+                hx-post="{% url 'mettre_a_jour_panier' item.produit.id %}"
+                hx-vals='{"action": "diminuer"}'
+                hx-swap="none"
+                hx-target="#cart-badge">−</button>
+            <span class="qty-num">{{ item.quantite }}</span>
+            <button class="qty-btn"
+                hx-post="{% url 'mettre_a_jour_panier' item.produit.id %}"
+                hx-vals='{"action": "augmenter"}'
+                hx-swap="none"
+                hx-target="#cart-badge">+</button>
+        </div>
+        <strong class="drawer-item-price">{{ item.sous_total }} Ar</strong>
+        <button class="drawer-remove"
+            hx-post="{% url 'supprimer_du_panier' item.produit.id %}"
+            hx-swap="none"
+            hx-target="#cart-badge"
+            title="Retirer">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+<div class="drawer-total">
+    <span>Total</span>
+    <strong>{{ total }} Ar</strong>
+</div>
+<div class="drawer-cta">
+    <a href="{% url 'panier' %}" class="btn-primary">Voir le panier</a>
+    <a href="{% url 'passer_commande' %}" class="btn-checkout">Commander</a>
+</div>
+{% else %}
+<div class="drawer-empty">
+    <i class="fa-solid fa-cart-arrow-down"></i>
+    <p>Votre panier est vide.</p>
+    <a href="{% url 'accueil' %}" class="btn-primary">Découvrir nos produits</a>
+</div>
+{% endif %}

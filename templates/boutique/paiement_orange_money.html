@@ -1,0 +1,80 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Paiement Orange Money — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section checkout-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2><i class="fa-solid fa-mobile-screen-button"></i> Paiement Orange Money</h2>
+            <p>Commande #{{ commande.id }} — {{ commande.total }} Ar</p>
+        </div>
+
+        <div class="checkout-layout">
+            <div class="checkout-form om-form" data-aos="fade-right">
+                <div class="om-brand">
+                    <div class="om-logo"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                    <div>
+                        <h3>Orange Money</h3>
+                        <p>Payez en toute sécurité depuis votre téléphone Orange</p>
+                    </div>
+                </div>
+
+                {% if mode_demo %}
+                <div class="demo-note">
+                    <i class="fa-solid fa-flask"></i>
+                    <span><strong>Mode démo :</strong> aucune clé API Orange Money configurée — le
+                    paiement sera <strong>simulé</strong> (confirmation immédiate).</span>
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="telephone">Numéro Orange Money</label>
+                        <div class="om-phone-input">
+                            <span class="om-prefix">+261</span>
+                            <input type="tel" id="telephone" name="telephone" required
+                                class="form-input" placeholder="32 00 000 00"
+                                pattern="[0-9 ]{8,15}" title="Numéro au format 32 00 000 00">
+                        </div>
+                        <small class="form-hint">Vous recevrez une demande de confirmation sur ce numéro.</small>
+                    </div>
+                    <button type="submit" class="buy-btn submit-order">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Payer {{ commande.total }} Ar
+                    </button>
+                    <a href="{% url 'paiement_annule' commande.id %}" class="continue-link">
+                        <i class="fa-solid fa-arrow-left"></i> Annuler
+                    </a>
+                </form>
+            </div>
+
+            <aside class="checkout-summary" data-aos="fade-left" data-aos-delay="100">
+                <h3>Récapitulatif</h3>
+                <div class="order-items">
+                    {% for ligne in commande.lignes.all %}
+                    <div class="order-item">
+                        <div class="order-item-img">
+                            {% if ligne.produit.image %}
+                            <img src="{{ ligne.produit.image.url }}" alt="{{ ligne.produit.nom }}">
+                            {% endif %}
+                            <span class="order-qty">{{ ligne.quantite }}</span>
+                        </div>
+                        <div class="order-item-info">
+                            <strong>{{ ligne.produit.nom }}</strong>
+                            <small>{{ ligne.quantite }} × {{ ligne.prix_unitaire }} Ar</small>
+                        </div>
+                        <strong>{{ ligne.sous_total }} Ar</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total</span>
+                    <strong>{{ commande.total }} Ar</strong>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load static %}
+<div id="product-grid" class="products-grid">
+    {% for produit in produits %}
+    <div class="product-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:0 }}0">
+        {% if produit.prix_promo %}
+        <span class="promo-badge">-{{ produit.reduction_pourcentage }}%</span>
+        {% endif %}
+
+        <a href="{% url 'detail_produit' produit.id %}" class="product-image">
+            {% if produit.image %}
+            <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" loading="lazy">
+            {% else %}
+            <img src="{% static 'images/iphone.jpg' %}" alt="{{ produit.nom }}" loading="lazy">
+            {% endif %}
+        </a>
+
+        <div class="product-info">
+            <span class="product-cat">{{ produit.categorie.nom }}</span>
+            <h3><a href="{% url 'detail_produit' produit.id %}">{{ produit.nom }}</a></h3>
+            <p class="brand">{{ produit.marque }}</p>
+
+            <div class="product-rating">
+                {% if produit.note_moyenne %}
+                {% for i in "12345" %}
+                {% if forloop.counter <= produit.note_moyenne %}★{% else %}☆{% endif %}
+                {% endfor %}
+                <small>({{ produit.note_moyenne }})</small>
+                {% else %}
+                <small>Nouveau produit</small>
+                {% endif %}
+            </div>
+
+            {% if produit.prix_promo %}
+            <p class="price-box">
+                <span class="old-price">{{ produit.prix }} Ar</span>
+                <span class="price">{{ produit.prix_promo }} Ar</span>
+            </p>
+            {% else %}
+            <p class="price">{{ produit.prix }} Ar</p>
+            {% endif %}
+
+            <p class="stock">
+                {% if produit.stock > 0 %}
+                <span class="in-stock">✔ En stock ({{ produit.stock }})</span>
+                {% else %}
+                <span class="out-stock">❌ Rupture de stock</span>
+                {% endif %}
+            </p>
+
+            <div class="product-actions">
+                <a href="{% url 'detail_produit' produit.id %}" class="product-btn">Voir détails</a>
+                {% if produit.stock > 0 %}
+                <button class="add-cart-btn" title="Ajouter au panier"
+                    hx-post="{% url 'ajouter_au_panier' produit.id %}"
+                    hx-vals='{"quantite": 1}'
+                    hx-swap="none"
+                    hx-target="#cart-badge">
+                    <i class="fa-solid fa-cart-plus"></i>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="empty-message">Aucun téléphone ne correspond à votre recherche.</p>
+    {% endfor %}
+</div>

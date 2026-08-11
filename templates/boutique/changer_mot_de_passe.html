@@ -1,0 +1,48 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Changer mon mot de passe — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section account-page">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2>🔒 Changer mon mot de passe</h2>
+            <p>Choisissez un nouveau mot de passe sécurisé</p>
+        </div>
+
+        <div class="account-layout">
+            <aside class="account-menu" data-aos="fade-right">
+                <div class="account-avatar">{{ request.user.username|first|upper }}</div>
+                <h3>{{ request.user.username }}</h3>
+                <nav>
+                    <a href="{% url 'profil' %}">Mes informations</a>
+                    <a href="#pwd" class="active">Changer mon mot de passe</a>
+                    <a href="{% url 'mes_commandes' %}">Mes commandes</a>
+                    <a href="{% url 'deconnexion' %}">Se déconnecter</a>
+                </nav>
+            </aside>
+
+            <div class="account-content" data-aos="fade-left" data-aos-delay="100">
+                <div class="account-card" id="pwd">
+                    <h3><i class="fa-solid fa-key"></i> Nouveau mot de passe</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}<small class="form-error">{{ field.errors|striptags }}</small>{% endif %}
+                            {% if field.help_text %}<small class="form-hint">{{ field.help_text }}</small>{% endif %}
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="buy-btn submit-order">
+                            <i class="fa-solid fa-check"></i> Changer mon mot de passe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
