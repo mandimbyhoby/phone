@@ -5522,3 +5522,18 @@ html[data-theme="light"] .hero-stat {
     justify-content: center;
 }
 
+/* ============================================================
+   SÉCURITÉ — AOS désactivé
+   AOS (animations au défilement) laissait du contenu invisible
+   (opacity:0 + scale .6) quand son JS échouait. Fallback définitif :
+   aucun élément ne doit jamais être masqué par une animation.
+   ============================================================ */
+[data-aos],
+.aos-init,
+.aos-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    visibility: visible !important;
+}
+

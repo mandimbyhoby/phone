@@ -4,16 +4,6 @@
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
-    // ---- AOS : animations au scroll ----
-    if (window.AOS) {
-        AOS.init({
-            duration: 700,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 60,
-        });
-    }
-
     // ---- Menu mobile ----
     const toggle = document.getElementById('menu-toggle');
     const menu = document.getElementById('nav-menu');
