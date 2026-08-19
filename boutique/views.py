@@ -2,9 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from io import BytesIO
+
+import qrcode
+
 from django.db.models import Q
 from django.db.models.functions import Coalesce
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from .models import Produit, Categorie, Avis, Commande, LigneCommande, Paiement, Profil
@@ -501,3 +505,32 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'boutique/contact.html', {'form': form})
+
+
+def qr_code(request):
+    """
+    Génère dynamiquement le QR code du site avec l'URL réelle.
+    Priorité à settings.SITE_URL (variable d'env DJANGO_SITE_URL) ;
+    sinon le domaine de la requête est détecté automatiquement.
+    Ainsi le QR code fonctionne en local ET en ligne (ex. https://hoby2108.pythonanywhere.com/).
+    """
+    if settings.SITE_URL:
+        url = settings.SITE_URL + '/'
+    else:
+        url = request.build_absolute_uri('/')
+    qr = qrcode.QRCode(
+        version=None,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=12,
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="#2a0a63", back_color="white")
+
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    response = HttpResponse(buffer.getvalue(), content_type="image/png")
+    # Cache court : le QR est régénéré si le domaine change
+    response['Cache-Control'] = 'public, max-age=3600'
+    return response

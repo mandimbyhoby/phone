@@ -80,13 +80,16 @@ import os
 import sys
 
 # Ajoute le dossier du projet au chemin Python
-path = '/home/VOTRE-NOM/phone'
+path = '/home/hoby2108/phone'
 if path not in sys.path:
     sys.path.append(path)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'phone_store.settings'
 os.environ['DJANGO_DEBUG'] = 'False'
-os.environ['DJANGO_ALLOWED_HOSTS'] = 'VOTRE-NOM.pythonanywhere.com'
+os.environ['DJANGO_ALLOWED_HOSTS'] = 'hoby2108.pythonanywhere.com'
+
+# URL officielle du site → c'est CETTE URL qui sera encodée dans le QR code
+os.environ['DJANGO_SITE_URL'] = 'https://hoby2108.pythonanywhere.com'
 
 # ⚠️ Remplacez par une clé secrète unique (générez-en une à https://djecrety.ir)
 os.environ['DJANGO_SECRET_KEY'] = 'COLLEZ-VOTRE-CLE-ICI'
@@ -95,7 +98,8 @@ from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 ```
 
-Remplacez `VOTRE-NOM` par votre vrai nom d'utilisateur PythonAnywhere.
+> 📝 Si votre nom d'utilisateur PythonAnywhere change, remplacez `hoby2108` par
+> votre nouveau nom (dans `path`, `DJANGO_ALLOWED_HOSTS` et `DJANGO_SITE_URL`).
 
 ---
 
@@ -132,13 +136,54 @@ Dans la même page **Web**, section **Static files** :
 
 ---
 
+## 🎯 QR code de la page Contact (scannable en ligne)
+
+Le QR code n'est **plus une image statique** : il est généré automatiquement par
+l'URL `/qr-code/` avec le **vrai domaine** du site. Rien à régénérer après
+un déploiement. ✅
+
+Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
+
+1. **Dépendances installées** (le QR est créé avec `qrcode` + `Pillow`) :
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **URL officielle du site** : dans le fichier **WSGI configuration file**
+   (onglet Web), ajoutez la ligne suivante avec **votre domaine exact** :
+   ```python
+   os.environ['DJANGO_SITE_URL'] = 'https://hoby2108.pythonanywhere.com'
+   ```
+   → C'est cette URL **exacte** qui sera encodée dans le QR code.
+   (Sans cette ligne, le QR détecte automatiquement le domaine de la requête —
+   ça marche aussi, mais c'est moins sûr.)
+
+3. **Domaine autorisé** : dans le même fichier WSGI, `DJANGO_ALLOWED_HOSTS`
+   doit contenir votre domaine exact :
+   ```python
+   os.environ['DJANGO_ALLOWED_HOSTS'] = 'hoby2108.pythonanywhere.com'
+   ```
+   Sinon : erreur `DisallowedHost` (HTTP 400) sur `/qr-code/` et tout le site.
+
+4. **Forcer HTTPS** : sur l'onglet **Web** de PythonAnywhere, dans la section
+   **Security**, activez **Force HTTPS** ✅. Ainsi le QR code encode bien
+   `https://hoby2108.pythonanywhere.com/` (et non `http://`).
+   (Django détecte le HTTPS via l'en-tête `X-Forwarded-Proto` — déjà configuré
+   dans `settings.py`.)
+
+5. **Recharger** : cliquez sur le bouton vert **Reload** en haut de l'onglet Web.
+
+> 💡 Test rapide après déploiement : ouvrez
+> `https://hoby2108.pythonanywhere.com/qr-code/` — vous devez voir le QR code
+> noir & violet. Scannez-le avec votre téléphone : il doit ouvrir
+> `https://hoby2108.pythonanywhere.com/`.
+
+---
+
 ## 📍 Après le déploiement
 
-1. **Mettre à jour le QR code** du site :
-   ```bash
-   python generer_qr.py https://VOTRE-NOM.pythonanywhere.com
-   ```
-   puis re-pusher sur GitHub (ou copier `static/images/qr-site.png` directement).
+1. ~~Mettre à jour le QR code~~ → **plus nécessaire** : le QR de la page Contact
+   est généré dynamiquement avec le bon domaine (voir section ci-dessus).
 
 2. **Régénérer la bannière LinkedIn** avec la vraie URL si besoin.
 

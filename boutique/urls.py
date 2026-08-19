@@ -7,6 +7,7 @@ urlpatterns = [
     path('produit/<int:id>/', views.detail_produit, name='detail_produit'),
     path('apropos/', views.apropos, name='apropos'),
     path('contact/', views.contact, name='contact'),
+    path('qr-code/', views.qr_code, name='qr_code'),
 
     # ===== Compte client =====
     path('inscription/', views.inscription, name='inscription'),

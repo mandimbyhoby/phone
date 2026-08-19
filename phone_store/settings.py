@@ -34,6 +34,11 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS if h.strip()]
 
+# URL officielle du site (utilisée par le QR code de la page Contact).
+# En production, définissez DJANGO_SITE_URL (ex. "https://hoby2108.pythonanywhere.com").
+# Si vide, le QR code détecte automatiquement le domaine de la requête.
+SITE_URL = os.environ.get('DJANGO_SITE_URL', '').rstrip('/')
+
 
 # Application definition
 
@@ -194,6 +199,10 @@ STORAGES = {
 
 # Sécurité renforcée en production
 if not DEBUG:
+    # Le site est derrière un reverse proxy (PythonAnywhere) : permet à Django
+    # de détecter HTTPS via l'en-tête X-Forwarded-Proto (nécessaire pour que le
+    # QR code généré dynamiquement encode bien une URL https://)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     CSRF_COOKIE_SECURE = os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False') == 'True'
     SESSION_COOKIE_SECURE = os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False') == 'True'
     SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False') == 'True'
