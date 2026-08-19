@@ -29,6 +29,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ---- Mode clair / sombre ----
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem('ps-theme', theme); } catch (e) { /* ignore */ }
+        const isDark = theme === 'dark';
+        document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+            const icon = btn.querySelector('i');
+            const label = btn.querySelector('.nav-label');
+            if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            if (label) label.textContent = isDark ? 'Mode clair' : 'Mode sombre';
+            btn.setAttribute('aria-label', isDark ? 'Activer le mode clair' : 'Activer le mode sombre');
+        });
+    }
+
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    });
+
     // ---- Aperçu photo de profil ----
     const photoInput = document.getElementById('photo-input');
     const photoPreview = document.getElementById('photo-preview');

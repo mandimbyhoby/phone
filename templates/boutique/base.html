@@ -11,7 +11,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=22">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=23">
+    <script>
+        // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
+        (function () {
+            try {
+                document.documentElement.setAttribute('data-theme', localStorage.getItem('ps-theme') || 'dark');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
@@ -68,6 +78,10 @@
                     <span class="nav-icon"><img src="{% static 'images/icons/contact.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Contact</span>
                 </a>
+                <button type="button" class="theme-menu-toggle" data-theme-toggle>
+                    <span class="nav-icon"><i class="fa-solid fa-sun"></i></span>
+                    <span class="nav-label">Mode clair</span>
+                </button>
             </nav>
 
             <div class="nav-actions">
@@ -77,6 +91,10 @@
                         <img src="{% static 'images/icons/recherche.svg' %}" alt="" width="20" height="20" class="search-icon">
                     </button>
                 </form>
+
+                <button type="button" class="theme-toggle" data-theme-toggle aria-label="Activer le mode clair">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
 
                 <!-- COMPTE (style Amazon) -->
                 <div class="nav-user" x-data="{ open: false, timer: null }"
@@ -273,7 +291,7 @@
         </div>
     </footer>
 
-    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/app.js' %}?v=2"></script>
     {% block extra_js %}{% endblock %}
 </body>
 
