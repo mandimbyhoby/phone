@@ -40,6 +40,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ---- Raccourci clavier "/" : focus la barre de recherche ----
+    const searchInput = document.querySelector('.site-navbar .search-box input');
+    if (searchInput) {
+        const searchBox = searchInput.closest('.search-box');
+        function syncSearchBadge() {
+            if (searchBox) searchBox.classList.toggle('has-value', searchInput.value.trim().length > 0);
+        }
+        searchInput.addEventListener('input', syncSearchBadge);
+        syncSearchBadge();
+    }
+
+    document.addEventListener('keydown', function (e) {
+        const tag = (e.target.tagName || '').toLowerCase();
+        const isTyping = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+        if (e.key === '/' && !isTyping) {
+            const searchInput = document.querySelector('.site-navbar .search-box input');
+            if (searchInput && searchInput.offsetParent !== null) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        }
+        // Échap : refermer la recherche
+        if (e.key === 'Escape' && document.activeElement && document.activeElement.matches('.site-navbar .search-box input')) {
+            document.activeElement.blur();
+        }
+    });
+
     // ---- Aperçu photo de profil ----
     const photoInput = document.getElementById('photo-input');
     const photoPreview = document.getElementById('photo-preview');
