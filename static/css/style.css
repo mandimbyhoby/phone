@@ -1726,9 +1726,11 @@ detail-main-image {
     margin: 0 auto;
     padding: 12px 24px;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    /* Logo | Menu (taille naturelle) | Actions (TOUT l'espace restant) :
+       la barre de recherche peut ainsi s'étendre au lieu d'être écrasée */
+    grid-template-columns: auto auto 1fr;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
 }
 
 .site-navbar .logo { text-decoration: none; color: white; }
@@ -5462,14 +5464,16 @@ html[data-theme="light"] .hero-stat {
 
 /* ---------- Bouton de bascule clair/sombre ☀️/🌙 ---------- */
 
+/* Compact et discret : ne prend que 36px et ne se distingue qu'au survol,
+   afin de laisser le maximum de place à la barre de recherche. */
 .theme-toggle {
-    background: var(--ps-surface);
-    border: 1px solid var(--ps-line-2);
-    color: var(--ps-accent);
-    width: 44px;
-    height: 44px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--ps-text-2);
+    width: 36px;
+    height: 36px;
     border-radius: var(--ps-radius-sm);
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -5479,10 +5483,11 @@ html[data-theme="light"] .hero-stat {
 }
 
 .theme-toggle:hover {
-    border-color: var(--ps-accent);
+    border-color: rgba(255, 178, 36, 0.5);
     color: var(--ps-accent);
+    background: rgba(255, 178, 36, 0.08);
     transform: rotate(25deg) scale(1.1);
-    box-shadow: 0 0 14px rgba(255, 178, 36, 0.35);
+    box-shadow: 0 0 14px rgba(255, 178, 36, 0.3);
 }
 
 /* Sur mobile : la bascule vit dans le menu latéral, pas dans la barre */
@@ -5543,14 +5548,26 @@ html[data-theme="light"] .hero-stat {
 
 /* Base : compactage permanent sur desktop */
 .site-navbar .nav-menu .nav-link {
-    padding: 8px 12px;
+    padding: 7px 11px;
     font-size: 14px;
     gap: 7px;
 }
 
+.site-navbar .nav-menu { gap: 3px; }
+
 .site-navbar .nav-menu .nav-label { font-size: 14px; }
 
-.site-navbar .search-box { width: 200px; }
+/* Recherche flexible : occupe l'espace disponible (max 360px) au lieu
+   d'une largeur fixe étroite — le bouton mode compact libère la place */
+.nav-actions { flex: 1 1 auto; min-width: 0; gap: 10px; }
+
+.site-navbar .search-box {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 360px;
+    height: 40px;
+}
 
 .nav-inner { gap: 16px; }
 
@@ -5558,7 +5575,7 @@ html[data-theme="light"] .hero-stat {
 
 /* ≤1280px : recherche un peu plus étroite */
 @media (max-width: 1280px) {
-    .nav-actions .search-box { width: 150px; }
+    .site-navbar .search-box { max-width: 300px; }
 }
 
 /* ≤1180px : recherche masquée + avatar seul pour le compte
