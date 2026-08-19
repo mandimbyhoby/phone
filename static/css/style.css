@@ -5033,6 +5033,43 @@ textarea:focus {
     box-shadow: none;
 }
 
+/* ---------- Pages auth : liens et pied de page lisibles dans les 2 thèmes ---------- */
+
+.auth-head h1 { color: var(--ps-text); }
+.auth-head p { color: var(--ps-muted); }
+
+/* Pied de page (lien "Créer un compte" / "Se connecter") */
+.auth-footer {
+    border-top-color: var(--ps-line-2);
+    color: var(--ps-text-2);
+}
+
+.auth-footer a {
+    color: var(--ps-accent);
+    font-weight: 700;
+}
+
+/* Lien "Mot de passe oublié" */
+.auth-links a { color: var(--ps-accent); }
+
+/* Message d'erreur hors formulaire */
+.form-error-box {
+    background: rgba(255, 77, 109, 0.1);
+    border-color: rgba(255, 77, 109, 0.4);
+    color: var(--ps-danger);
+}
+
+/* Icônes en-tête auth (avatar connexion / inscription) : style magique */
+.auth-logo {
+    background: linear-gradient(135deg, var(--ps-accent), var(--ps-accent-2));
+    color: #171207;
+    border-radius: var(--ps-radius);
+    box-shadow: 0 12px 28px rgba(255, 178, 36, 0.35);
+}
+
+/* Aide des champs (help_text) */
+.form-hint { color: var(--ps-muted); }
+
 .order-item {
     background: var(--ps-bg-2);
     border: 1px solid var(--ps-line);
