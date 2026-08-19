@@ -193,7 +193,7 @@ Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
 
 4. **Emails (messages de contact + réinitialisation de mot de passe)** :
    les messages envoyés via le formulaire de contact sont reçus sur
-   **rakotoarijaoa04@yahoo.com** (configurable avec `CONTACT_EMAIL`).
+   **rakotoarijaona04@yahoo.com** (configurable avec `CONTACT_EMAIL`).
    Pour un envoi réel, définissez les variables SMTP dans le fichier
    **WSGI configuration file** (voir la section « Emails » ci-dessous).
 
@@ -205,7 +205,7 @@ Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
 ## 📧 Emails (messages de contact → votre boîte mail)
 
 Le formulaire de contact enregistre les messages en base **et** les envoie par
-email à `CONTACT_EMAIL` (par défaut `rakotoarijaoa04@yahoo.com`).
+email à `CONTACT_EMAIL` (par défaut `rakotoarijaona04@yahoo.com`).
 
 ### Option A — Relais SMTP de PythonAnywhere (le plus simple) ✅
 
@@ -236,10 +236,10 @@ Yahoo (nécessite un **mot de passe d'application**) :
 ```python
 os.environ['EMAIL_HOST'] = 'smtp.mail.yahoo.com'
 os.environ['EMAIL_PORT'] = '587'
-os.environ['EMAIL_HOST_USER'] = 'rakotoarijaoa04@yahoo.com'
+os.environ['EMAIL_HOST_USER'] = 'rakotoarijaona04@yahoo.com'
 os.environ['EMAIL_HOST_PASSWORD'] = 'VOTRE-MOT-DE-PASSE-APPLICATION'
 os.environ['EMAIL_USE_TLS'] = 'True'
-os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <rakotoarijaoa04@yahoo.com>'
+os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <rakotoarijaona04@yahoo.com>'
 ```
 
 ### Vérification
