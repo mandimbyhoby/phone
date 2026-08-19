@@ -4973,13 +4973,160 @@ textarea:focus {
 
 .detail-page { padding: 60px 0 90px; }
 
+/* Plus aucun dégradé violet ni décor clair sur la page détail */
+.detail-page::before,
+.detail-page::after,
+.detail-box::before,
+.detail-box::after,
+.detail-circle-bg,
+.detail-gallery::before,
+.detail-gallery::after,
+.detail-info::before,
+.detail-info::after,
+.detail-main-image::before,
+.detail-main-image::after {
+    display: none;
+}
+
+.detail-box { z-index: auto; }
+
 .detail-gallery,
 .detail-info {
     background: var(--ps-surface);
     border: 1px solid var(--ps-line);
     border-radius: var(--ps-radius);
     box-shadow: none;
+    color: var(--ps-text-2);
 }
+
+/* Zone image : surface sombre (plus de violet) */
+.detail-main-image {
+    background:
+        radial-gradient(ellipse 70% 60% at 50% 30%, rgba(255, 178, 36, 0.06), transparent 65%),
+        var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+}
+
+/* Vignettes */
+.thumb {
+    background: var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+}
+
+.thumb:hover { border-color: var(--ps-line-2); }
+
+.thumb.active {
+    border-color: var(--ps-accent);
+    box-shadow: 0 0 0 3px rgba(255, 178, 36, 0.15);
+}
+
+/* Badge catégorie : pastille sombre + ambre (plus de pastille violette claire) */
+.detail-badge {
+    background: rgba(255, 178, 36, 0.1);
+    color: var(--ps-accent);
+    border: 1px solid rgba(255, 178, 36, 0.3);
+    border-radius: var(--ps-radius-sm);
+    font-family: var(--ps-font-body);
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    padding: 7px 12px;
+}
+
+.detail-title { color: var(--ps-text); }
+
+.detail-rating small { color: var(--ps-muted); }
+
+.detail-price { color: var(--ps-accent); }
+
+.detail-old-price { color: var(--ps-muted); }
+
+.detail-save {
+    background: rgba(61, 220, 132, 0.12);
+    color: var(--ps-ok);
+    border: 1px solid rgba(61, 220, 132, 0.3);
+    border-radius: var(--ps-radius-sm);
+}
+
+/* Description & caractéristiques : surfaces sombres */
+.detail-description-box {
+    background: var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+}
+
+.detail-description-box h3 { color: var(--ps-text); }
+.detail-description-box p { color: var(--ps-text-2); }
+
+.feature-item {
+    background: var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+}
+
+.feature-item strong { color: var(--ps-text); }
+.feature-item strong i { color: var(--ps-accent); }
+.feature-item span { color: var(--ps-muted); }
+
+/* Sélecteur quantité : sombre */
+.qty-selector {
+    background: var(--ps-bg-2);
+    border: 1.5px solid var(--ps-line-2);
+    border-radius: var(--ps-radius-sm);
+}
+
+.qty-selector button { color: var(--ps-accent); }
+.qty-selector button:hover { background: rgba(255, 178, 36, 0.1); }
+
+.qty-selector input {
+    color: var(--ps-text);
+    background: transparent;
+}
+
+/* Bouton retour : sombre */
+.back-btn {
+    background: var(--ps-bg-2);
+    color: var(--ps-text-2);
+    border: 1px solid var(--ps-line-2);
+    border-radius: var(--ps-radius-sm);
+}
+
+.back-btn:hover { background: var(--ps-surface-2); color: var(--ps-text); }
+
+/* Avis clients */
+.reviews-list {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius);
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+.reviews-list h2 { color: var(--ps-text); }
+.reviews-list h2 i { color: var(--ps-accent); }
+
+.review-card {
+    background: var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+}
+
+.review-head strong { color: var(--ps-text); }
+.review-head small { color: var(--ps-muted); }
+.review-card p { color: var(--ps-text-2); }
+.review-stars { color: var(--ps-accent); }
+
+.reviews-form {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius);
+    box-shadow: none;
+    color: var(--ps-text-2);
+}
+
+.reviews-form h2 { color: var(--ps-text); }
+.reviews-form h2 i { color: var(--ps-accent); }
 
 .detail-info h1 { font-family: var(--ps-font-head); }
 
