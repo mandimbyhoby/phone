@@ -11,6 +11,8 @@
 
 html {
     scroll-behavior: smooth;
+    /* Empêche tout défilement horizontal (mobile) sans casser le sticky navbar */
+    overflow-x: clip;
 }
 
 body {
@@ -18,6 +20,11 @@ body {
     background: linear-gradient(180deg, #7a1ff0 0%, #5d16df 100%);
     color: white;
     min-height: 100vh;
+    overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+    html, body { overflow-x: hidden; }
 }
 
 /* ================= TITRE HAUT ================= */
@@ -977,6 +984,26 @@ body {
 
     .hero-buttons {
         gap: 16px;
+    }
+
+    /* Logo compact sur très petits écrans pour que la navbar tienne */
+    .logo-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+    }
+
+    .logo-text h2 {
+        font-size: 15px;
+    }
+
+    .logo-text p {
+        display: none;
+    }
+
+    .nav-inner {
+        padding: 10px 12px;
+        gap: 8px;
     }
 }
 
@@ -3011,7 +3038,10 @@ textarea.form-input { resize: vertical; }
 }
 
 @media (max-width: 860px) {
-    .nav-inner { grid-template-columns: auto 1fr auto; }
+    .nav-inner { grid-template-columns: auto 1fr auto; gap: 12px; }
+    /* Le menu fixe sort du flux de la grille → sans placement explicite,
+       les actions iraient en colonne 2 et déborderaient de l'écran mobile */
+    .nav-actions { grid-column: 3; min-width: 0; gap: 8px; }
     .nav-actions .search-box { display: none; }
     .menu-toggle { display: flex; align-items: center; justify-content: center; }
     .nav-menu {
@@ -3681,6 +3711,11 @@ textarea.form-input { resize: vertical; }
     flex-direction: column;
     gap: 1px;
     text-align: left;
+}
+
+/* Sur mobile : seul l'avatar du compte reste visible (texte masqué) */
+@media (max-width: 768px) {
+    .nav-user-texts { display: none; }
 }
 
 /* --- Photo dans l'en-tête du menu déroulant --- */
