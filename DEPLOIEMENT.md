@@ -191,8 +191,63 @@ Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
    (voir `README_PAIEMENTS.md`). Les webhooks devront pointer vers
    `https://VOTRE-NOM.pythonanywhere.com/webhook/stripe/` etc.
 
-4. **Emails de réinitialisation** : remplacez `EMAIL_BACKEND` par un vrai
-   SMTP dans les réglages (ex. Gmail App Password).
+4. **Emails (messages de contact + réinitialisation de mot de passe)** :
+   les messages envoyés via le formulaire de contact sont reçus sur
+   **rakotoarijaoa04@yahoo.com** (configurable avec `CONTACT_EMAIL`).
+   Pour un envoi réel, définissez les variables SMTP dans le fichier
+   **WSGI configuration file** (voir la section « Emails » ci-dessous).
 
 5. **Mettre le dépôt GitHub en privé** si vous ne voulez pas partager le code :
    GitHub → Settings → Danger Zone → Change visibility.
+
+---
+
+## 📧 Emails (messages de contact → votre boîte mail)
+
+Le formulaire de contact enregistre les messages en base **et** les envoie par
+email à `CONTACT_EMAIL` (par défaut `rakotoarijaoa04@yahoo.com`).
+
+### Option A — Relais SMTP de PythonAnywhere (le plus simple) ✅
+
+PythonAnywhere fournit un relais SMTP gratuit pour les sites hébergés chez eux.
+
+Dans le **WSGI configuration file** (onglet Web), ajoutez :
+
+```python
+os.environ['EMAIL_HOST'] = 'smtp.pythonanywhere.com'
+os.environ['EMAIL_PORT'] = '587'
+os.environ['EMAIL_HOST_USER'] = 'hoby2108'   # VOTRE nom d'utilisateur PythonAnywhere
+os.environ['EMAIL_HOST_PASSWORD'] = ''       # pas de mot de passe pour le relais
+os.environ['EMAIL_USE_TLS'] = 'True'
+os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <hoby2108@pythonanywhere.com>'
+```
+
+> ⚠️ Avec ce relais, l'expéditeur (`From`) doit être `VOTRE-NOM@pythonanywhere.com`.
+> Les emails partiront du domaine PythonAnywhere — vérifiez dans vos spams au début.
+
+### Option B — Yahoo SMTP (votre adresse de réception)
+
+Le destinataire étant une adresse Yahoo, vous pouvez envoyer depuis un compte
+Yahoo (nécessite un **mot de passe d'application**) :
+
+1. Allez sur https://login.yahoo.com/myaccount/security → **Generate app password**
+2. Dans le WSGI, ajoutez :
+
+```python
+os.environ['EMAIL_HOST'] = 'smtp.mail.yahoo.com'
+os.environ['EMAIL_PORT'] = '587'
+os.environ['EMAIL_HOST_USER'] = 'rakotoarijaoa04@yahoo.com'
+os.environ['EMAIL_HOST_PASSWORD'] = 'VOTRE-MOT-DE-PASSE-APPLICATION'
+os.environ['EMAIL_USE_TLS'] = 'True'
+os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <rakotoarijaoa04@yahoo.com>'
+```
+
+### Vérification
+
+1. Cliquez sur **Reload** dans l'onglet Web
+2. Sur le site, page **Contact** → envoyez un message test
+3. Vérifiez votre boîte mail (et les **spams** la première fois)
+4. Le message est aussi visible dans l'**admin Django** → *Messages de contact*
+
+> 💡 Sans configuration SMTP, les emails sont affichés dans la console du
+> serveur (mode développement) — le site ne plante pas.

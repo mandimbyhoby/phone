@@ -2,10 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+import logging
 from io import BytesIO
 
 import qrcode
 
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, JsonResponse
@@ -18,6 +20,8 @@ from .forms import (
 )
 from .panier import recuperer_panier, nombre_articles
 from . import paiements as paiements_module
+
+logger = logging.getLogger(__name__)
 
 # ============================================================
 # A U T H E N T I F I C A T I O N
@@ -499,7 +503,27 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            message_contact = form.save()
+            # Envoi par email au gérant (settings.CONTACT_EMAIL)
+            try:
+                send_mail(
+                    subject=f"[Phone Store] {message_contact.sujet}",
+                    message=(
+                        f"Nouveau message reçu depuis le formulaire de contact du site.\n\n"
+                        f"Nom : {message_contact.nom}\n"
+                        f"Email : {message_contact.email}\n"
+                        f"Sujet : {message_contact.sujet}\n"
+                        f"Date : {message_contact.date:%d/%m/%Y à %H:%M}\n\n"
+                        f"Message :\n{message_contact.message}\n"
+                    ),
+                    from_email=None,  # DEFAULT_FROM_EMAIL
+                    recipient_list=[settings.CONTACT_EMAIL],
+                    fail_silently=False,
+                )
+            except Exception as exc:
+                # Le message est déjà enregistré en base : on loggue mais on
+                # n'empêche pas la confirmation d'être affichée.
+                logger.exception("Erreur lors de l'envoi de l'email de contact : %s", exc)
             messages.success(request, "Votre message a bien été envoyé, merci !")
             return redirect('contact')
     else:

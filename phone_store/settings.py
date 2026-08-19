@@ -135,10 +135,26 @@ LOGIN_REDIRECT_URL = 'accueil'
 LOGOUT_REDIRECT_URL = 'accueil'
 
 # Email : en développement, les emails (lien de réinitialisation de mot de
-# passe) sont affichés dans la console du serveur. Pour l'envoi réel,
-# remplacez par les réglages SMTP (ex. Gmail, Mailjet, ...).
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'Phone Store <no-reply@phonestore.mg>'
+# passe, messages de contact) sont affichés dans la console du serveur.
+# Pour l'envoi réel, définissez les variables d'environnement SMTP
+# (voir DEPLOIEMENT.md — section « Emails »).
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+
+if EMAIL_HOST and EMAIL_HOST_USER:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL', 'Phone Store <no-reply@phonestore.mg>'
+)
+
+# Adresse de réception des messages envoyés via le formulaire de contact
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'rakotoarijaoa04@yahoo.com')
 
 # Media (fichiers uploadés : produits, vidéos, photos de profil)
 MEDIA_URL = '/media/'
