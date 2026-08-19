@@ -242,6 +242,26 @@ os.environ['EMAIL_USE_TLS'] = 'True'
 os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <rakotoarijaona04@yahoo.com>'
 ```
 
+### Option C — Gmail SMTP (recommandée si vous avez un compte Gmail)
+
+1. Activez la **vérification en deux étapes** sur
+   https://myaccount.google.com/security
+2. Créez un **mot de passe d'application** : même page → *Mots de passe des
+   applications* → **Autre (nom personnalisé)** → nommez-le « Phone Store »
+3. Dans le WSGI, ajoutez :
+
+```python
+os.environ['EMAIL_HOST'] = 'smtp.gmail.com'
+os.environ['EMAIL_PORT'] = '587'
+os.environ['EMAIL_HOST_USER'] = 'VOTRE-ADRESSE@gmail.com'
+os.environ['EMAIL_HOST_PASSWORD'] = 'VOTRE-MOT-DE-PASSE-16-CARACTERES'
+os.environ['EMAIL_USE_TLS'] = 'True'
+os.environ['DEFAULT_FROM_EMAIL'] = 'Phone Store <VOTRE-ADRESSE@gmail.com>'
+```
+
+> 💡 Le **From** sera votre Gmail, et les messages arrivent toujours sur
+> `CONTACT_EMAIL` (rakotoarijaona04@yahoo.com).
+
 ### Vérification
 
 1. Cliquez sur **Reload** dans l'onglet Web
