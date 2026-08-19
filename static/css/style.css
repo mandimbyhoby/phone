@@ -4329,8 +4329,17 @@ a { color: inherit; }
 .hero-box {
     background: transparent;
     box-shadow: none;
-    height: 600px;
+    /* Hauteur flexible : jamais de hauteur fixe ici, sinon les media queries
+       mobiles (height:auto) plus haut dans le fichier sont écrasées et les
+       stats (+500, 24h, 100%) sont coupées par overflow:hidden. */
+    height: auto;
+    min-height: 600px;
     border-bottom: 1px solid var(--ps-line);
+}
+
+/* Desktop : hauteur fixe uniquement sur grand écran */
+@media (min-width: 1101px) {
+    .hero-box { height: 600px; }
 }
 
 .hero-text h1 {
