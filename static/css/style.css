@@ -2016,7 +2016,8 @@ detail-main-image {
 
 .toast-stack {
     position: fixed;
-    top: 90px;
+    /* Sous la navbar : ne recouvre jamais la section "Bonjour, [nom] / Comptes" */
+    top: 140px;
     right: 20px;
     z-index: 300;
     display: grid;
