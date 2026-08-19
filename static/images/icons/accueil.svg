@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Accueil">
+  <defs>
+    <linearGradient id="icGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd166"/>
+      <stop offset="55%" stop-color="#ffb224"/>
+      <stop offset="100%" stop-color="#ff7a18"/>
+    </linearGradient>
+  </defs>
+  <!-- Maison -->
+  <path d="M12 3 L3 11 h2.5 v8.5 h5.5 v-5 h2 v5 h5.5 V11 H21 Z"
+        fill="none" stroke="url(#icGold)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Porte illuminée -->
+  <rect x="10.4" y="14.2" width="3.2" height="5.3" rx="1.2" fill="#ffb224" opacity="0.85"/>
+  <!-- Étincelle magique -->
+  <path d="M17.5 3.8 l1 2.4 2.4 1 -2.4 1 -1 2.4 -1 -2.4 -2.4 -1 2.4 -1 z" fill="url(#icGold)"/>
+  <circle cx="6.5" cy="4.5" r="1" fill="#ffd166" opacity="0.9"/>
+</svg>

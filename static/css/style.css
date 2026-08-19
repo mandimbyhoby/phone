@@ -322,13 +322,35 @@ body {
     line-height: 1;
 }
 
+/* Icônes SVG personnalisées (style magique) */
 .nav-menu .nav-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 18px;          /* largeur fixe → toutes les icônes alignées */
-    font-size: 15px;
+    width: 22px;          /* largeur fixe → toutes les icônes alignées */
+    height: 22px;
     flex-shrink: 0;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.nav-menu .nav-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 1px 3px rgba(255, 178, 36, 0.25));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Effet magique : l'icône scintille et se soulève au survol / quand active */
+.nav-menu .nav-link:hover .nav-icon,
+.nav-menu .nav-link.active .nav-icon {
+    transform: translateY(-1px) scale(1.12);
+}
+
+.nav-menu .nav-link:hover .nav-icon img,
+.nav-menu .nav-link.active .nav-icon img {
+    filter: drop-shadow(0 0 8px rgba(255, 178, 36, 0.75));
 }
 
 .nav-menu .nav-label {

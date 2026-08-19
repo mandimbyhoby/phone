@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=18">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=19">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
@@ -53,19 +53,19 @@
 
             <nav class="nav-menu" id="nav-menu">
                 <a href="{% url 'accueil' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
-                    <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                    <span class="nav-icon"><img src="{% static 'images/icons/accueil.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Accueil</span>
                 </a>
                 <a href="{% url 'accueil' %}#products" class="nav-link {% if request.path == '/produit/' %}active{% endif %}">
-                    <span class="nav-icon"><i class="fa-solid fa-store"></i></span>
+                    <span class="nav-icon"><img src="{% static 'images/icons/boutique.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Boutique</span>
                 </a>
                 <a href="{% url 'apropos' %}" class="nav-link {% if request.path == '/apropos/' %}active{% endif %}">
-                    <span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span>
+                    <span class="nav-icon"><img src="{% static 'images/icons/apropos.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">À propos</span>
                 </a>
                 <a href="{% url 'contact' %}" class="nav-link {% if request.path == '/contact/' %}active{% endif %}">
-                    <span class="nav-icon"><i class="fa-solid fa-envelope"></i></span>
+                    <span class="nav-icon"><img src="{% static 'images/icons/contact.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Contact</span>
                 </a>
             </nav>

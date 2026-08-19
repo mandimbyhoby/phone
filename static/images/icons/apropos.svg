@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="À propos">
+  <defs>
+    <linearGradient id="icGold3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd166"/>
+      <stop offset="55%" stop-color="#ffb224"/>
+      <stop offset="100%" stop-color="#ff7a18"/>
+    </linearGradient>
+  </defs>
+  <!-- Cercle info -->
+  <circle cx="12" cy="12" r="8.5" fill="none" stroke="url(#icGold3)" stroke-width="1.8"/>
+  <!-- Point d'exclamation magique -->
+  <circle cx="12" cy="7.8" r="1.5" fill="#ffb224"/>
+  <path d="M12 10.6 v6" stroke="#ffb224" stroke-width="2" stroke-linecap="round"/>
+  <!-- Étincelles magiques -->
+  <path d="M18.5 4 l0.8 1.9 1.9 0.8 -1.9 0.8 -0.8 1.9 -0.8 -1.9 -1.9 -0.8 1.9 -0.8 z" fill="url(#icGold3)"/>
+  <circle cx="4.5" cy="5.5" r="1" fill="#ffd166" opacity="0.9"/>
+</svg>
