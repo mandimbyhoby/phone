@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=33">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=34">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -79,6 +79,16 @@
                 <button type="button" class="theme-menu-toggle" data-theme-toggle aria-label="Mode clair">
                     <span class="nav-icon"><i class="fa-solid fa-sun"></i></span>
                 </button>
+                {% if user.is_staff %}
+                <a href="{% url 'admin:boutique_commande_changelist' %}?statut__exact=en_attente"
+                    class="nav-link notif-menu-link">
+                    <span class="nav-icon"><i class="fa-solid fa-bell"></i></span>
+                    <span class="nav-label">Notifications</span>
+                    {% if nombre_nouvelles_commandes > 0 %}
+                    <span class="notif-menu-badge">{{ nombre_nouvelles_commandes }}</span>
+                    {% endif %}
+                </a>
+                {% endif %}
             </nav>
 
             <div class="nav-actions">
@@ -94,6 +104,48 @@
                 <button type="button" class="theme-toggle" data-theme-toggle aria-label="Activer le mode clair">
                     <i class="fa-solid fa-sun"></i>
                 </button>
+
+                <!-- NOTIFICATIONS (nouvelles commandes — gérant) -->
+                {% if user.is_staff %}
+                <div class="notif-wrap" x-data="{ open: false }" @click.outside="open = false">
+                    <button type="button" class="notif-btn" @click="open = !open"
+                        :class="open && 'open'" aria-label="Notifications">
+                        <i class="fa-solid fa-bell"></i>
+                        {% if nombre_nouvelles_commandes > 0 %}
+                        <span class="notif-badge">{{ nombre_nouvelles_commandes }}</span>
+                        {% endif %}
+                    </button>
+
+                    <div class="notif-menu" x-show="open" x-cloak x-transition.opacity.duration.150ms>
+                        <header class="notif-menu-head">
+                            <h4><i class="fa-solid fa-cart-shopping"></i> Nouvelles commandes</h4>
+                            {% if nombre_nouvelles_commandes > 0 %}
+                            <span class="notif-menu-count">{{ nombre_nouvelles_commandes }}</span>
+                            {% endif %}
+                        </header>
+                        <div class="notif-menu-body">
+                            {% for commande in dernieres_commandes %}
+                            <a class="notif-item"
+                                href="{% url 'admin:boutique_commande_change' commande.id %}">
+                                <span class="notif-item-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                                <span class="notif-item-text">
+                                    <strong>Commande #{{ commande.id }} — {{ commande.nom }}</strong>
+                                    <small>{{ commande.total }} Ar · {{ commande.date_commande|date:"d/m H:i" }}</small>
+                                </span>
+                                <i class="fa-solid fa-chevron-right notif-item-arrow"></i>
+                            </a>
+                            {% empty %}
+                            <p class="notif-empty">Aucune nouvelle commande. 🎉</p>
+                            {% endfor %}
+                        </div>
+                        <footer class="notif-menu-footer">
+                            <a href="{% url 'admin:boutique_commande_changelist' %}?statut__exact=en_attente">
+                                Voir toutes les commandes
+                            </a>
+                        </footer>
+                    </div>
+                </div>
+                {% endif %}
 
                 <!-- COMPTE (style Amazon) -->
                 <div class="nav-user" x-data="{ open: false, timer: null }"
