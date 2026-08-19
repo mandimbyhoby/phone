@@ -5853,6 +5853,16 @@ html[data-theme="light"] .page-section .bg-circle {
 .nav-menu .notif-menu-link:hover .nav-icon i,
 .nav-menu .notif-menu-link.active .nav-icon i { color: var(--ps-accent); }
 
+/* Sur desktop : les boutons du menu latéral (mode + notifications) sont masqués,
+   on ne garde que ceux de la barre d'actions (évite les doublons).
+   Ils ne réapparaissent que dans le menu burger ≤920px. */
+@media (min-width: 921px) {
+    .nav-menu .theme-menu-toggle,
+    .nav-menu .notif-menu-link {
+        display: none;
+    }
+}
+
 /* Sur mobile : la cloche vit dans le menu latéral */
 @media (max-width: 920px) {
     .nav-actions .notif-wrap { display: none; }
