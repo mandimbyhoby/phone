@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" role="img" aria-label="Rechercher">
+  <defs>
+    <linearGradient id="srchGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd166"/>
+      <stop offset="55%" stop-color="#ffb224"/>
+      <stop offset="100%" stop-color="#ff7a18"/>
+    </linearGradient>
+  </defs>
+  <!-- Loupe -->
+  <circle cx="8.2" cy="8.2" r="5.4" fill="none" stroke="url(#srchGold)" stroke-width="2"/>
+  <path d="M12.4 12.4 L17 17" stroke="url(#srchGold)" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- Reflet sur la loupe -->
+  <path d="M5.6 5.8 a 3 3 0 0 1 2.2 -1.2" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+  <!-- Étincelle magique -->
+  <path d="M16.6 2.4 l0.8 1.9 1.9 0.8 -1.9 0.8 -0.8 1.9 -0.8 -1.9 -1.9 -0.8 1.9 -0.8 z" fill="url(#srchGold)"/>
+  <circle cx="3.2" cy="15.5" r="0.9" fill="#ffd166" opacity="0.9"/>
+</svg>
