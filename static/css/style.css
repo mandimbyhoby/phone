@@ -4998,16 +4998,21 @@ a { color: inherit; }
     padding: 70px 0 90px;
 }
 
-.page-section .bg-circle,
-.page-section .particles,
-.page-section .light-lines,
-.page-section .products-bg-flash,
 .detail-circle-1,
 .detail-circle-2,
 .detail-dots,
 .detail-circle,
 .detail-lines {
     display: none;
+}
+
+/* Les décorations animées des pages internes restent actives (les couleurs
+   sont adaptées au thème ci-dessous) */
+.page-section .bg-circle,
+.page-section .particles,
+.page-section .light-lines,
+.page-section .products-bg-flash {
+    display: block;
 }
 
 .page-title h1 { font-family: var(--ps-font-head); }
@@ -5523,6 +5528,59 @@ html[data-theme="light"] .site-footer {
 /* Cartes stats hero : fond adapté au mode clair */
 html[data-theme="light"] .hero-stat {
     background: rgba(17, 24, 39, 0.045);
+}
+
+/* ---------- MODE CLAIR — animations de fond toujours visibles ----------
+   Les particules / cercles / lignes lumineuses étaient blanches → invisibles
+   sur fond clair. On les recolorie en teintes sombres et ambre. */
+
+/* Particules */
+html[data-theme="light"] .particles span {
+    background: rgba(17, 24, 39, 0.22);
+}
+
+/* Cercles décoratifs */
+html[data-theme="light"] .bg-circle {
+    background: rgba(17, 24, 39, 0.06);
+}
+
+/* Lignes lumineuses (dégradé ambre foncé sur fond clair) */
+html[data-theme="light"] .light-lines span {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(217, 119, 6, 0.55),
+        transparent
+    );
+    filter: blur(1px);
+}
+
+/* Flashs / particules produits */
+html[data-theme="light"] .products-bg-flash span {
+    background: rgba(217, 119, 6, 0.4);
+    box-shadow: 0 0 25px rgba(217, 119, 6, 0.3);
+}
+
+/* Halos d'arrière-plan des sections produits (avant/après) */
+html[data-theme="light"] .products-section::before {
+    background: rgba(217, 119, 6, 0.07);
+}
+
+html[data-theme="light"] .products-section::after {
+    background: rgba(217, 119, 6, 0.06);
+}
+
+/* Dégradé d'arrière-plan du hero (halo ambre visible sur clair) */
+html[data-theme="light"] .hero-wrapper {
+    background:
+        radial-gradient(ellipse 60% 50% at 75% 20%, rgba(217, 119, 6, 0.08), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 15% 80%, rgba(234, 88, 12, 0.06), transparent 60%),
+        var(--ps-bg);
+}
+
+/* Pseudo-éléments des sections produits dans les pages internes */
+html[data-theme="light"] .page-section .bg-circle {
+    background: rgba(17, 24, 39, 0.05);
 }
 
 /* ---------- Bouton de bascule clair/sombre ☀️/🌙 ---------- */
