@@ -5,12 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
     <title>{% block title %}Phone Store — Téléphones pas chers à Madagascar{% endblock %}</title>
     <meta name="description" content="Phone Store : votre boutique en ligne de téléphones à Madagascar. iPhone, Samsung et plus, au meilleur prix.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=17">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=18">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <script src="https://unpkg.com/htmx.org@1.9.12"></script>
@@ -42,7 +43,7 @@
         <div class="nav-inner">
             <a href="{% url 'accueil' %}" class="logo">
                 <div class="logo-icon">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                    <img src="{% static 'images/logo.svg' %}" alt="Logo Phone Store" width="58" height="58">
                 </div>
                 <div class="logo-text">
                     <h2>PHONE<br>STORE</h2>
@@ -201,7 +202,7 @@
         <div class="footer-top">
             <div class="footer-col footer-brand">
                 <a href="{% url 'accueil' %}" class="logo footer-logo">
-                    <div class="logo-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <div class="logo-icon"><img src="{% static 'images/logo.svg' %}" alt="Logo Phone Store" width="58" height="58"></div>
                     <div class="logo-text">
                         <h2>PHONE<br>STORE</h2>
                         <p>E-COMMERCE</p>

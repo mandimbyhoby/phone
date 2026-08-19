@@ -261,6 +261,22 @@ body {
     color: white;
 }
 
+/* Logo SVG (icône magique) */
+.logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    /* Petit halo au survol pour renforcer le côté magique */
+    filter: drop-shadow(0 2px 8px rgba(255, 178, 36, 0.25));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover .logo-icon img {
+    filter: drop-shadow(0 4px 14px rgba(255, 178, 36, 0.5));
+    transform: scale(1.06) rotate(-3deg);
+}
+
 .logo-text h2 {
     font-size: 18px;
     font-weight: 800;
