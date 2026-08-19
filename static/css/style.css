@@ -3076,7 +3076,7 @@ textarea.form-input { resize: vertical; }
     .contact-layout { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 920px) {
     .nav-inner { grid-template-columns: auto 1fr auto; gap: 12px; }
     /* Le menu fixe sort du flux de la grille → sans placement explicite,
        les actions iraient en colonne 2 et déborderaient de l'écran mobile */
@@ -4399,7 +4399,7 @@ a { color: inherit; }
 }
 
 /* Menu mobile */
-@media (max-width: 860px) {
+@media (max-width: 920px) {
     .nav-menu {
         /* transition:none est CRUCIAL : la transition "right 0.3s" d'origine
            gèle right à -300px (bug Chromium avec backdrop-filter sur l'ancêtre
@@ -5486,7 +5486,7 @@ html[data-theme="light"] .hero-stat {
 }
 
 /* Sur mobile : la bascule vit dans le menu latéral, pas dans la barre */
-@media (max-width: 860px) {
+@media (max-width: 920px) {
     .nav-actions .theme-toggle { display: none; }
 }
 
@@ -5536,5 +5536,41 @@ html[data-theme="light"] .hero-stat {
     transform: none !important;
     transition: none !important;
     visibility: visible !important;
+}
+
+/* ============================================================
+   NAVBAR DESKTOP — compactage pour que TOUT tienne à l'écran
+   Problème : menu nav (602px) + actions (601px) + logo = 1360px >
+   max-width 1280px → panier et compte poussés hors écran (coupés).
+   Solution : paliers de compactage selon la largeur.
+   ============================================================ */
+
+/* Base : compactage permanent sur desktop */
+.site-navbar .nav-menu .nav-link {
+    padding: 8px 12px;
+    font-size: 14px;
+    gap: 7px;
+}
+
+.site-navbar .nav-menu .nav-label { font-size: 14px; }
+
+.site-navbar .search-box { width: 200px; }
+
+.nav-inner { gap: 16px; }
+
+.nav-actions { gap: 10px; }
+
+/* ≤1280px : recherche un peu plus étroite */
+@media (max-width: 1280px) {
+    .nav-actions .search-box { width: 150px; }
+}
+
+/* ≤1180px : recherche masquée + avatar seul pour le compte
+   (le texte "Bonjour, ... / Comptes" n'est visible que sur grands écrans) */
+@media (max-width: 1180px) {
+    .nav-actions .search-box { display: none; }
+    .nav-user-texts { display: none; }
+    .nav-user-btn { padding: 6px 8px; }
+    .nav-user-greeting { display: none; }
 }
 
