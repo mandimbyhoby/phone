@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=27">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=28">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -76,9 +76,8 @@
                     <span class="nav-icon"><img src="{% static 'images/icons/contact.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Contact</span>
                 </a>
-                <button type="button" class="theme-menu-toggle" data-theme-toggle>
+                <button type="button" class="theme-menu-toggle" data-theme-toggle aria-label="Mode clair">
                     <span class="nav-icon"><i class="fa-solid fa-sun"></i></span>
-                    <span class="nav-label">Mode clair</span>
                 </button>
             </nav>
 

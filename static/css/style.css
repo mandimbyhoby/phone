@@ -5490,22 +5490,18 @@ html[data-theme="light"] .hero-stat {
     .nav-actions .theme-toggle { display: none; }
 }
 
-/* Élément de bascule dans le menu mobile */
+/* Élément de bascule dans le menu mobile (icône seule) */
 .nav-menu .theme-menu-toggle {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: var(--ps-font-body);
-    font-weight: 600;
-    font-size: 15px;
     color: var(--ps-text-2);
     display: flex;
     align-items: center;
-    gap: 9px;
+    justify-content: flex-start;
     width: 100%;
     padding: 14px 18px;
     border-radius: var(--ps-radius-sm);
-    text-align: left;
     transition: background 0.25s ease, color 0.25s ease;
 }
 
