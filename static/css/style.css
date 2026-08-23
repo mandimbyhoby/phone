@@ -4991,6 +4991,58 @@ a { color: inherit; }
 
 /* ---------- Pages internes (page-section) ---------- */
 
+.legal-content {
+    max-width: 860px;
+    color: var(--ps-text-2);
+}
+
+.legal-content .section-header {
+    margin-bottom: 38px;
+}
+
+.legal-content .section-header h1 {
+    color: var(--ps-text);
+    font-family: var(--ps-font-head);
+}
+
+.legal-content h2 {
+    color: var(--ps-text);
+    font-family: var(--ps-font-head);
+    font-size: 21px;
+    margin: 30px 0 10px;
+}
+
+.legal-content p {
+    line-height: 1.8;
+    margin: 0 0 14px;
+}
+
+.legal-content a {
+    color: var(--ps-accent);
+    font-weight: 600;
+}
+
+.faq-content details {
+    border-bottom: 1px solid var(--ps-line-2);
+    padding: 19px 0;
+}
+
+.faq-content summary {
+    color: var(--ps-text);
+    cursor: pointer;
+    font-family: var(--ps-font-head);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.faq-content details p {
+    margin: 14px 28px 0 0;
+}
+
+.faq-contact {
+    margin-top: 34px !important;
+}
+
 .page-section {
     background:
         radial-gradient(ellipse 60% 40% at 85% 0%, rgba(255, 178, 36, 0.05), transparent 55%),

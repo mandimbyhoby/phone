@@ -23,19 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY',
-    'django-insecure-lv*uf*b$kgqqr1yxx^$vawk2ygx7b8so@4&kbu(r_w&m_4-jqn'
+    'dev-only-phone-store-key-change-in-production-2026'
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # Hôtes autorisés : en production, définissez DJANGO_ALLOWED_HOSTS
-# (ex. "votre-nom.pythonanywhere.com,www.exemple.mg")
+# (ex. "phoneboutique.mg,www.phoneboutique.mg")
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS if h.strip()]
 
 # URL officielle du site (utilisée par le QR code de la page Contact).
-# En production, définissez DJANGO_SITE_URL (ex. "https://hoby2108.pythonanywhere.com").
+# En production, définissez DJANGO_SITE_URL (ex. "https://phoneboutique.mg").
 # Si vide, le QR code détecte automatiquement le domaine de la requête.
 SITE_URL = os.environ.get('DJANGO_SITE_URL', '').rstrip('/')
 
@@ -166,6 +166,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ============================================================
 # P A I E M E N T S
 # ============================================================
+# Les paiements en ligne restent désactivés tant qu'aucun compte marchand
+# n'est configuré. Activation future via PAIEMENTS_EN_LIGNE=True.
+PAIEMENTS_EN_LIGNE = os.environ.get('PAIEMENTS_EN_LIGNE', 'False') == 'True'
+
 # Laissez les clés vides → le site fonctionne en MODE DÉMO
 # (les paiements sont simulés pour tester le parcours complet).
 #
@@ -220,6 +224,6 @@ if not DEBUG:
     # de détecter HTTPS via l'en-tête X-Forwarded-Proto (nécessaire pour que le
     # QR code généré dynamiquement encode bien une URL https://)
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    CSRF_COOKIE_SECURE = os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'False') == 'True'
-    SESSION_COOKIE_SECURE = os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'False') == 'True'
-    SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False') == 'True'
+    CSRF_COOKIE_SECURE = os.environ.get('DJANGO_CSRF_COOKIE_SECURE', 'True') == 'True'
+    SESSION_COOKIE_SECURE = os.environ.get('DJANGO_SESSION_COOKIE_SECURE', 'True') == 'True'
+    SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'True') == 'True'

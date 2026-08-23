@@ -8,6 +8,10 @@ urlpatterns = [
     path('apropos/', views.apropos, name='apropos'),
     path('contact/', views.contact, name='contact'),
     path('qr-code/', views.qr_code, name='qr_code'),
+    path('conditions-vente/', views.conditions_vente, name='conditions_vente'),
+    path('confidentialite/', views.confidentialite, name='confidentialite'),
+    path('livraison-retours/', views.livraison_retours, name='livraison_retours'),
+    path('faq/', views.faq, name='faq'),
 
     # ===== Compte client =====
     path('inscription/', views.inscription, name='inscription'),

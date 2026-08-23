@@ -8,7 +8,7 @@
     <div class="container">
         <div class="section-header" data-aos="fade-up">
             <h2>📦 Finaliser ma commande</h2>
-            <p>Livraison partout à Madagascar — choisissez votre mode de paiement</p>
+            <p>Livraison partout à Madagascar — paiement à la réception</p>
         </div>
 
         <div class="checkout-layout">
@@ -74,13 +74,10 @@
                             </label>
                             {% endfor %}
                         </div>
-                        {% if mode_demo %}
                         <div class="demo-note">
-                            <i class="fa-solid fa-flask"></i>
-                            <span><strong>Mode démo :</strong> aucune clé API configurée — les paiements
-                            en ligne sont <strong>simulés</strong> (commande confirmée directement).</span>
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                            <span>Vous payez uniquement à la réception de votre commande.</span>
                         </div>
-                        {% endif %}
                     </div>
 
                     <button type="submit" class="buy-btn submit-order">
@@ -113,8 +110,8 @@
                     <strong>{{ total }} Ar</strong>
                 </div>
                 <div class="summary-secure">
-                    <i class="fa-solid fa-lock"></i> Paiement sécurisé
-                    <span>Stripe · PayPal · Orange Money</span>
+                    <i class="fa-solid fa-hand-holding-dollar"></i> Paiement à la réception
+                    <span>Vous ne payez pas en ligne</span>
                 </div>
             </aside>
         </div>

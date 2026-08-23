@@ -1,0 +1,35 @@
+{% extends 'boutique/base.html' %}
+
+{% block title %}Questions fréquentes — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section legal-page">
+    <div class="container legal-content faq-content">
+        <div class="section-header">
+            <h1>Questions fréquentes</h1>
+            <p>Les réponses aux questions les plus courantes</p>
+        </div>
+        <details open>
+            <summary>Comment commander ?</summary>
+            <p>Choisissez un produit, ajoutez-le au panier, connectez-vous ou créez un compte, puis renseignez vos informations de livraison.</p>
+        </details>
+        <details>
+            <summary>Comment payer ma commande ?</summary>
+            <p>Le paiement à la livraison est actuellement disponible. Vous payez lorsque vous recevez votre commande.</p>
+        </details>
+        <details>
+            <summary>Livrez-vous dans ma ville ?</summary>
+            <p>Nous livrons à Antananarivo et dans les autres villes selon les possibilités de livraison. Les détails sont confirmés avec vous.</p>
+        </details>
+        <details>
+            <summary>Comment suivre ma commande ?</summary>
+            <p>Connectez-vous à votre compte et ouvrez la rubrique « Mes commandes ». Nous pouvons aussi vous contacter par téléphone pour confirmer la livraison.</p>
+        </details>
+        <details>
+            <summary>Que faire si mon produit a un problème ?</summary>
+            <p>Contactez-nous rapidement en indiquant votre numéro de commande et le problème rencontré. Consultez aussi notre page Livraison et retours.</p>
+        </details>
+        <p class="faq-contact">Vous ne trouvez pas la réponse ? <a href="{% url 'contact' %}">Contactez-nous</a>.</p>
+    </div>
+</section>
+{% endblock %}

@@ -86,10 +86,10 @@ if path not in sys.path:
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'phone_store.settings'
 os.environ['DJANGO_DEBUG'] = 'False'
-os.environ['DJANGO_ALLOWED_HOSTS'] = 'hoby2108.pythonanywhere.com'
+os.environ['DJANGO_ALLOWED_HOSTS'] = 'phoneboutique.mg,www.phoneboutique.mg'
 
 # URL officielle du site → c'est CETTE URL qui sera encodée dans le QR code
-os.environ['DJANGO_SITE_URL'] = 'https://hoby2108.pythonanywhere.com'
+os.environ['DJANGO_SITE_URL'] = 'https://phoneboutique.mg'
 
 # ⚠️ Remplacez par une clé secrète unique (générez-en une à https://djecrety.ir)
 os.environ['DJANGO_SECRET_KEY'] = 'COLLEZ-VOTRE-CLE-ICI'
@@ -152,7 +152,7 @@ Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
 2. **URL officielle du site** : dans le fichier **WSGI configuration file**
    (onglet Web), ajoutez la ligne suivante avec **votre domaine exact** :
    ```python
-   os.environ['DJANGO_SITE_URL'] = 'https://hoby2108.pythonanywhere.com'
+   os.environ['DJANGO_SITE_URL'] = 'https://phoneboutique.mg'
    ```
    → C'est cette URL **exacte** qui sera encodée dans le QR code.
    (Sans cette ligne, le QR détecte automatiquement le domaine de la requête —
@@ -161,22 +161,22 @@ Pour qu'il fonctionne sur PythonAnywhere, vérifiez ces **4 points** :
 3. **Domaine autorisé** : dans le même fichier WSGI, `DJANGO_ALLOWED_HOSTS`
    doit contenir votre domaine exact :
    ```python
-   os.environ['DJANGO_ALLOWED_HOSTS'] = 'hoby2108.pythonanywhere.com'
+   os.environ['DJANGO_ALLOWED_HOSTS'] = 'phoneboutique.mg,www.phoneboutique.mg'
    ```
    Sinon : erreur `DisallowedHost` (HTTP 400) sur `/qr-code/` et tout le site.
 
 4. **Forcer HTTPS** : sur l'onglet **Web** de PythonAnywhere, dans la section
    **Security**, activez **Force HTTPS** ✅. Ainsi le QR code encode bien
-   `https://hoby2108.pythonanywhere.com/` (et non `http://`).
+   `https://phoneboutique.mg/` (et non `http://`).
    (Django détecte le HTTPS via l'en-tête `X-Forwarded-Proto` — déjà configuré
    dans `settings.py`.)
 
 5. **Recharger** : cliquez sur le bouton vert **Reload** en haut de l'onglet Web.
 
 > 💡 Test rapide après déploiement : ouvrez
-> `https://hoby2108.pythonanywhere.com/qr-code/` — vous devez voir le QR code
+> `https://phoneboutique.mg/qr-code/` — vous devez voir le QR code
 > noir & violet. Scannez-le avec votre téléphone : il doit ouvrir
-> `https://hoby2108.pythonanywhere.com/`.
+> `https://phoneboutique.mg/`.
 
 ---
 

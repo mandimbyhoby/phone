@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=35">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=36">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -329,15 +329,16 @@
                     <li><i class="fa-solid fa-phone"></i> +261 34 00 000 00</li>
                     <li><i class="fa-solid fa-envelope"></i> contact@phonestore.mg</li>
                 </ul>
-                <form class="newsletter" hx-post="#" hx-swap="none">
-                    <input type="email" placeholder="Votre email" required>
-                    <button type="submit" aria-label="S'abonner"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
+                <ul>
+                    <li><a href="{% url 'faq' %}">Questions fréquentes</a></li>
+                    <li><a href="{% url 'livraison_retours' %}">Livraison et retours</a></li>
+                </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Phone Store — Tous droits réservés.</p>
-            <p>Fait avec <i class="fa-solid fa-heart"></i> à Madagascar</p>
+            <p><a href="{% url 'conditions_vente' %}">Conditions de vente</a> ·
+                <a href="{% url 'confidentialite' %}">Confidentialité</a></p>
         </div>
     </footer>
 

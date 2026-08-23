@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from .models import Avis, Commande, MessageContact, Profil
@@ -10,6 +11,12 @@ METHODE_PAIEMENT_CHOICES = [
     ('orange_money', 'Orange Money'),
     ('especes', 'Paiement à la livraison'),
 ]
+
+METHODES_PAIEMENT_DISPONIBLES = (
+    METHODE_PAIEMENT_CHOICES
+    if settings.PAIEMENTS_EN_LIGNE
+    else [('especes', 'Paiement à la livraison')]
+)
 
 
 # ============================================================
@@ -197,7 +204,7 @@ class AvisForm(forms.ModelForm):
 
 class CommandeForm(forms.ModelForm):
     methode_paiement = forms.ChoiceField(
-        choices=METHODE_PAIEMENT_CHOICES,
+        choices=METHODES_PAIEMENT_DISPONIBLES,
         initial='especes',
         widget=forms.RadioSelect(attrs={'class': 'payment-radio'}),
         label='Méthode de paiement',

@@ -1,0 +1,24 @@
+{% extends 'boutique/base.html' %}
+
+{% block title %}Livraison et retours — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section legal-page">
+    <div class="container legal-content">
+        <div class="section-header">
+            <h1>Livraison et retours</h1>
+            <p>Les informations essentielles avant votre commande</p>
+        </div>
+        <h2>Zones desservies</h2>
+        <p>Phone Store livre à Antananarivo et dans les autres villes de Madagascar selon les possibilités du transporteur.</p>
+        <h2>Frais et délais</h2>
+        <p>Les frais et le délai sont confirmés avant la livraison selon la ville, l'adresse et le contenu de la commande. Une livraison gratuite peut s'appliquer à Antananarivo selon les conditions affichées sur le site.</p>
+        <h2>Réception</h2>
+        <p>Vérifiez l'état et le contenu du colis lors de la réception. Le paiement s'effectue à la livraison. En cas de problème, contactez-nous avec votre numéro de commande.</p>
+        <h2>Retour ou échange</h2>
+        <p>Demandez un retour ou un échange rapidement après réception en précisant la référence de commande et le motif. La demande sera étudiée selon l'état du produit et les conditions de garantie applicables.</p>
+        <h2>Nous contacter</h2>
+        <p>Pour organiser une livraison ou un retour, rendez-vous sur la <a href="{% url 'contact' %}">page Contact</a>.</p>
+    </div>
+</section>
+{% endblock %}

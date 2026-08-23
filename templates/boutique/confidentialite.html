@@ -1,0 +1,24 @@
+{% extends 'boutique/base.html' %}
+
+{% block title %}Politique de confidentialité — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section legal-page">
+    <div class="container legal-content">
+        <div class="section-header">
+            <h1>Politique de confidentialité</h1>
+            <p>Dernière mise à jour : août 2026</p>
+        </div>
+        <h2>Données collectées</h2>
+        <p>Lors d'une inscription ou d'une commande, nous collectons uniquement les informations nécessaires : nom, email, téléphone, adresse et ville.</p>
+        <h2>Utilisation</h2>
+        <p>Ces données servent à créer votre compte, préparer la livraison, confirmer votre commande et répondre à vos messages. Elles ne sont pas vendues à des tiers.</p>
+        <h2>Conservation et sécurité</h2>
+        <p>Les données sont conservées pendant la durée nécessaire au suivi commercial et protégées par les mesures de sécurité du site.</p>
+        <h2>Vos droits</h2>
+        <p>Vous pouvez demander la consultation, la correction ou la suppression de vos données en nous contactant depuis la <a href="{% url 'contact' %}">page Contact</a>.</p>
+        <h2>Cookies</h2>
+        <p>Le site utilise des cookies techniques, notamment pour maintenir le panier et la session de connexion.</p>
+    </div>
+</section>
+{% endblock %}

@@ -26,7 +26,7 @@ Boutique en ligne de téléphones à Madagascar, développée avec **Django 6**,
 | 📱 Orange Money | **API marchand Orange** | MGA |
 | 💵 Paiement à la livraison | — | Ar |
 
-> 🧪 **Mode démo intégré** : sans clés API, les paiements sont simulés pour tester tout le parcours. Voir [`README_PAIEMENTS.md`](README_PAIEMENTS.md).
+> 💵 **Paiement à la livraison activé par défaut** ; les paiements en ligne sont prêts à être activés après configuration des comptes marchands. Voir [`README_PAIEMENTS.md`](README_PAIEMENTS.md).
 
 ### 👤 Comptes clients
 - Inscription / connexion **obligatoire avant achat**

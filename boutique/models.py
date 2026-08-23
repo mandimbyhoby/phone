@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 from django.conf import settings
 
 
@@ -47,10 +48,8 @@ class Produit(models.Model):
 
     @property
     def note_moyenne(self):
-        avis = self.avis.all()
-        if not avis:
-            return 0
-        return round(sum(a.note for a in avis) / len(avis), 1)
+        moyenne = self.avis.aggregate(moyenne=Avg('note'))['moyenne']
+        return round(moyenne, 1) if moyenne is not None else 0
 
 
 class Avis(models.Model):

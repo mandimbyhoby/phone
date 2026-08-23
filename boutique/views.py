@@ -8,6 +8,7 @@ from io import BytesIO
 import qrcode
 
 from django.core.mail import send_mail
+from django.db import transaction
 from django.db.models import Q
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, JsonResponse
@@ -195,21 +196,43 @@ def passer_commande(request):
     if request.method == 'POST':
         form = CommandeForm(request.POST)
         if form.is_valid():
-            commande = form.save(commit=False)
-            commande.utilisateur = request.user
-            commande.total = total
-            commande.save()
-            # Enregistre les lignes et décrémente le stock
-            for item in items:
-                LigneCommande.objects.create(
-                    commande=commande,
-                    produit=item['produit'],
-                    quantite=item['quantite'],
-                    prix_unitaire=item['produit'].prix_actuel,
-                )
-                produit = item['produit']
-                produit.stock = max(0, produit.stock - item['quantite'])
-                produit.save()
+            with transaction.atomic():
+                produits_verrouilles = {}
+                for item in items:
+                    produit = Produit.objects.select_for_update().get(
+                        pk=item['produit'].pk,
+                        disponible=True,
+                    )
+                    produits_verrouilles[produit.pk] = produit
+                    if item['quantite'] > produit.stock:
+                        form.add_error(
+                            None,
+                            f"Le stock de « {produit.nom} » est insuffisant. "
+                            f"Il reste {produit.stock} article(s).",
+                        )
+
+                if form.errors:
+                    return render(request, 'boutique/commande.html', {
+                        'form': form,
+                        'items': items,
+                        'total': total,
+                        'mode_demo': paiements_module.en_mode_demo(),
+                    })
+
+                commande = form.save(commit=False)
+                commande.utilisateur = request.user
+                commande.total = total
+                commande.save()
+                for item in items:
+                    produit = produits_verrouilles[item['produit'].pk]
+                    LigneCommande.objects.create(
+                        commande=commande,
+                        produit=produit,
+                        quantite=item['quantite'],
+                        prix_unitaire=produit.prix_actuel,
+                    )
+                    produit.stock -= item['quantite']
+                    produit.save(update_fields=['stock'])
             request.session['cart'] = {}
 
             # Création du paiement associé
@@ -499,6 +522,22 @@ def apropos(request):
     })
 
 
+def conditions_vente(request):
+    return render(request, 'boutique/conditions_vente.html')
+
+
+def confidentialite(request):
+    return render(request, 'boutique/confidentialite.html')
+
+
+def livraison_retours(request):
+    return render(request, 'boutique/livraison_retours.html')
+
+
+def faq(request):
+    return render(request, 'boutique/faq.html')
+
+
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -536,7 +575,7 @@ def qr_code(request):
     Génère dynamiquement le QR code du site avec l'URL réelle.
     Priorité à settings.SITE_URL (variable d'env DJANGO_SITE_URL) ;
     sinon le domaine de la requête est détecté automatiquement.
-    Ainsi le QR code fonctionne en local ET en ligne (ex. https://hoby2108.pythonanywhere.com/).
+    Ainsi le QR code fonctionne en local ET en ligne (ex. https://phoneboutique.mg/).
     """
     if settings.SITE_URL:
         url = settings.SITE_URL + '/'
