@@ -330,6 +330,9 @@
                     <li><i class="fa-solid fa-envelope"></i> contact@phonestore.mg</li>
                 </ul>
                 <ul>
+                    {% if WHATSAPP_NUMBER %}
+                    <li><a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Commander sur WhatsApp</a></li>
+                    {% endif %}
                     <li><a href="{% url 'faq' %}">Questions fréquentes</a></li>
                     <li><a href="{% url 'livraison_retours' %}">Livraison et retours</a></li>
                     <li><a href="{% url 'conditions_vente' %}">Conditions de vente</a></li>

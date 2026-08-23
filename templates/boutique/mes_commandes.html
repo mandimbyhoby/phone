@@ -56,6 +56,14 @@
                                 {{ commande.paiement.get_statut_display }}</span>
                             </div>
                             {% endif %}
+                            {% if commande.statut == 'en_attente' or commande.statut == 'confirmee' %}
+                            <form method="post" action="{% url 'annuler_commande' commande.id %}" class="order-cancel-form">
+                                {% csrf_token %}
+                                <button type="submit" class="order-cancel-btn" onclick="return confirm('Annuler cette commande ?');">
+                                    <i class="fa-solid fa-xmark"></i> Annuler la commande
+                                </button>
+                            </form>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>

@@ -1,4 +1,6 @@
 from django.contrib import admin
+import csv
+from django.http import HttpResponse
 from django.utils.html import mark_safe
 from .models import Categorie, Produit, Avis, Commande, LigneCommande, MessageContact, Paiement, Profil
 
@@ -29,6 +31,7 @@ class ProduitAdmin(admin.ModelAdmin):
         'marque',
         'prix',
         'stock',
+        'stock_alerte',
         'disponible',
         'date_ajout',
         'image_preview'
@@ -37,6 +40,7 @@ class ProduitAdmin(admin.ModelAdmin):
     list_filter = ['disponible', 'categorie', 'marque']
     list_editable = ['prix', 'stock', 'disponible']
     search_fields = ['nom', 'marque']
+    actions = ['exporter_csv']
 
     fieldsets = (
         ('Informations générales', {
@@ -61,6 +65,29 @@ class ProduitAdmin(admin.ModelAdmin):
         return "Pas d'image"
 
     image_preview.short_description = "Image"
+
+    @admin.display(description='Alerte stock', ordering='stock')
+    def stock_alerte(self, obj):
+        if obj.stock == 0:
+            return 'Rupture'
+        if obj.stock <= 3:
+            return 'Stock faible'
+        return 'OK'
+
+    @admin.action(description='Exporter les produits en CSV')
+    def exporter_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename="produits.csv"'
+        response.write('\ufeff')
+        writer = csv.writer(response)
+        writer.writerow(['Nom', 'Marque', 'Catégorie', 'Prix', 'Prix promo', 'Stock', 'Disponible'])
+        for produit in queryset.select_related('categorie'):
+            writer.writerow([
+                produit.nom, produit.marque, produit.categorie.nom,
+                produit.prix, produit.prix_promo or '', produit.stock,
+                'Oui' if produit.disponible else 'Non',
+            ])
+        return response
 
 
 @admin.register(Avis)
@@ -88,8 +115,24 @@ class CommandeAdmin(admin.ModelAdmin):
     list_filter = ['statut', 'ville']
     list_editable = ['statut']
     search_fields = ['nom', 'email', 'telephone', 'utilisateur__username']
+    actions = ['exporter_csv']
     inlines = [LigneCommandeInline, PaiementInline]
     readonly_fields = ['total', 'date_commande']
+
+    @admin.action(description='Exporter les commandes en CSV')
+    def exporter_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename="commandes.csv"'
+        response.write('\ufeff')
+        writer = csv.writer(response)
+        writer.writerow(['N°', 'Client', 'Email', 'Téléphone', 'Ville', 'Total', 'Statut', 'Date'])
+        for commande in queryset:
+            writer.writerow([
+                commande.id, commande.nom, commande.email, commande.telephone,
+                commande.ville, commande.total, commande.get_statut_display(),
+                commande.date_commande.strftime('%Y-%m-%d %H:%M'),
+            ])
+        return response
 
 
 @admin.register(Paiement)

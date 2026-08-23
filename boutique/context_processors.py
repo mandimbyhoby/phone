@@ -1,5 +1,6 @@
 from .panier import recuperer_panier, nombre_articles
 from .models import Commande
+from django.conf import settings
 
 
 def panier_global(request):
@@ -10,6 +11,7 @@ def panier_global(request):
         'panier_items': items,
         'panier_total': total,
         'panier_session': request.session.get('cart', {}),
+        'WHATSAPP_NUMBER': settings.WHATSAPP_NUMBER,
     }
 
 

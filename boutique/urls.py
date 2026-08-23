@@ -20,6 +20,7 @@ urlpatterns = [
     path('profil/', views.profil, name='profil'),
     path('profil/mot-de-passe/', views.changer_mot_de_passe, name='changer_mot_de_passe'),
     path('mes-commandes/', views.mes_commandes, name='mes_commandes'),
+    path('commande/annuler/<int:commande_id>/', views.annuler_commande, name='annuler_commande'),
 
     # ===== Mot de passe oublié =====
     path('mot-de-passe-oublie/',

@@ -91,6 +91,9 @@ os.environ['DJANGO_ALLOWED_HOSTS'] = 'phoneboutique.mg,www.phoneboutique.mg'
 # URL officielle du site → c'est CETTE URL qui sera encodée dans le QR code
 os.environ['DJANGO_SITE_URL'] = 'https://phoneboutique.mg'
 
+# Numéro WhatsApp au format international, sans + ni espaces (optionnel)
+os.environ['WHATSAPP_NUMBER'] = '261340000000'
+
 # ⚠️ Remplacez par une clé secrète unique (générez-en une à https://djecrety.ir)
 os.environ['DJANGO_SECRET_KEY'] = 'COLLEZ-VOTRE-CLE-ICI'
 

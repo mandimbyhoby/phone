@@ -156,6 +156,7 @@ DEFAULT_FROM_EMAIL = os.environ.get(
 
 # Adresse de réception des messages envoyés via le formulaire de contact
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'rakotoarijaona04@yahoo.com')
+WHATSAPP_NUMBER = os.environ.get('WHATSAPP_NUMBER', '')
 
 # Media (fichiers uploadés : produits, vidéos, photos de profil)
 MEDIA_URL = '/media/'

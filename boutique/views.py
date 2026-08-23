@@ -247,6 +247,22 @@ def passer_commande(request):
             # Redirection selon la méthode choisie
             if methode == 'especes':
                 paiements_module.marquer_paye(paiement)
+                try:
+                    send_mail(
+                        subject=f"Commande #{commande.id} reçue — Phone Store",
+                        message=(
+                            f"Bonjour {commande.nom},\n\n"
+                            f"Votre commande #{commande.id} a bien été enregistrée.\n"
+                            f"Total : {commande.total} Ar\n"
+                            f"Paiement : à la livraison\n\n"
+                            "Nous vous contacterons pour confirmer la livraison."
+                        ),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[commande.email],
+                        fail_silently=True,
+                    )
+                except Exception:
+                    logger.exception("Erreur lors de l'envoi de la confirmation de commande")
                 messages.success(request, "Votre commande a bien été enregistrée ! Paiement à la livraison.")
                 return redirect('commande_succes', commande_id=commande.id)
             if methode == 'carte':
@@ -277,6 +293,30 @@ def passer_commande(request):
         'total': total,
         'mode_demo': paiements_module.en_mode_demo(),
     })
+
+
+@login_required
+def annuler_commande(request, commande_id):
+    commande = get_object_or_404(Commande, id=commande_id, utilisateur=request.user)
+    if request.method != 'POST':
+        return redirect('mes_commandes')
+    if commande.statut not in ('en_attente', 'confirmee'):
+        messages.error(request, "Cette commande ne peut plus être annulée.")
+        return redirect('mes_commandes')
+
+    with transaction.atomic():
+        for ligne in commande.lignes.select_related('produit').all():
+            produit = Produit.objects.select_for_update().get(pk=ligne.produit_id)
+            produit.stock += ligne.quantite
+            produit.save(update_fields=['stock'])
+        commande.statut = 'annulee'
+        commande.save(update_fields=['statut'])
+        paiement = getattr(commande, 'paiement', None)
+        if paiement and paiement.statut == 'paye':
+            paiement.statut = 'echoue'
+            paiement.save(update_fields=['statut'])
+    messages.success(request, f"La commande #{commande.id} a été annulée.")
+    return redirect('mes_commandes')
 
 
 @login_required
