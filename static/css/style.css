@@ -4502,7 +4502,19 @@ a { color: inherit; }
 
 /* Desktop : hauteur fixe uniquement sur grand écran */
 @media (min-width: 1101px) {
-    .hero-box { height: 600px; }
+    .hero-box {
+        height: auto;
+        min-height: 600px;
+        overflow: visible;
+    }
+
+    .hero-content {
+        height: auto;
+        min-height: 510px;
+        align-items: center;
+    }
+
+    .hero-text { padding-bottom: 30px; }
 }
 
 .hero-text h1 {
