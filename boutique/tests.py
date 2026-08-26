@@ -98,6 +98,9 @@ class CommandeStockTests(TestCase):
 		self.assertEqual(response.status_code, 302)
 		self.assertEqual(len(mail.outbox), 1)
 		self.assertIn('Commande #', mail.outbox[0].subject)
+		self.assertEqual(len(mail.outbox[0].attachments), 1)
+		self.assertEqual(mail.outbox[0].attachments[0][0], 'facture-commande-1.pdf')
+		self.assertEqual(mail.outbox[0].attachments[0][2], 'application/pdf')
 
 	def test_client_peut_annuler_et_recupere_le_stock(self):
 		user = User.objects.create_user(username='client-annulation', password='motdepasse-test')
@@ -135,6 +138,9 @@ class CommandeStockTests(TestCase):
 		commande.refresh_from_db()
 		produit.refresh_from_db()
 		self.assertEqual(commande.statut, 'annulee')
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn('annulee', mail.outbox[0].subject)
+		self.assertIn('a bien ete annulee', mail.outbox[0].body)
 		self.assertEqual(produit.stock, 1)
 
 # Create your tests here.

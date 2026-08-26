@@ -21,6 +21,7 @@ from .forms import (
 )
 from .panier import recuperer_panier, nombre_articles
 from . import paiements as paiements_module
+from .factures import generer_facture_pdf, envoyer_email_annulation
 
 logger = logging.getLogger(__name__)
 
@@ -112,6 +113,19 @@ def changer_mot_de_passe(request):
 def mes_commandes(request):
     commandes = request.user.commandes.prefetch_related('lignes__produit', 'paiement')
     return render(request, 'boutique/mes_commandes.html', {'commandes': commandes})
+
+
+@login_required
+def telecharger_facture(request, commande_id):
+    commande = get_object_or_404(
+        Commande,
+        id=commande_id,
+        utilisateur=request.user,
+        paiement__statut='paye',
+    )
+    response = HttpResponse(generer_facture_pdf(commande), content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="facture-commande-{commande.id}.pdf"'
+    return response
 
 # ============================================================
 # P A N I E R  (session)
@@ -247,22 +261,6 @@ def passer_commande(request):
             # Redirection selon la méthode choisie
             if methode == 'especes':
                 paiements_module.marquer_paye(paiement)
-                try:
-                    send_mail(
-                        subject=f"Commande #{commande.id} reçue — Phone Store",
-                        message=(
-                            f"Bonjour {commande.nom},\n\n"
-                            f"Votre commande #{commande.id} a bien été enregistrée.\n"
-                            f"Total : {commande.total} Ar\n"
-                            f"Paiement : à la livraison\n\n"
-                            "Nous vous contacterons pour confirmer la livraison."
-                        ),
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=[commande.email],
-                        fail_silently=True,
-                    )
-                except Exception:
-                    logger.exception("Erreur lors de l'envoi de la confirmation de commande")
                 messages.success(request, "Votre commande a bien été enregistrée ! Paiement à la livraison.")
                 return redirect('commande_succes', commande_id=commande.id)
             if methode == 'carte':
@@ -316,6 +314,7 @@ def annuler_commande(request, commande_id):
             paiement.statut = 'echoue'
             paiement.save(update_fields=['statut'])
     messages.success(request, f"La commande #{commande.id} a été annulée.")
+    envoyer_email_annulation(commande)
     return redirect('mes_commandes')
 
 
@@ -394,6 +393,8 @@ def paiement_annule(request, commande_id):
         commande.save()
         paiement.statut = 'echoue'
         paiement.save()
+
+        envoyer_email_annulation(commande)
 
     return render(request, 'boutique/paiement_annule.html', {'commande': commande})
 
@@ -527,6 +528,27 @@ def accueil(request):
         'tri': tri,
         'promos': promos,
     })
+
+
+def recherche_suggestions(request):
+    query = request.GET.get('q', '').strip()
+    if not query:
+        return JsonResponse({'produits': []})
+
+    produits = Produit.objects.filter(disponible=True).filter(
+        Q(nom__icontains=query) |
+        Q(marque__icontains=query) |
+        Q(description__icontains=query)
+    ).order_by('-date_ajout')[:4]
+
+    return JsonResponse({'produits': [{
+        'id': produit.id,
+        'nom': produit.nom,
+        'marque': produit.marque,
+        'prix': str(produit.prix_actuel),
+        'image': produit.image.url if produit.image else '/static/images/iphone.jpg',
+        'url': f'/produit/{produit.id}/',
+    } for produit in produits]})
 
 
 def detail_produit(request, id):

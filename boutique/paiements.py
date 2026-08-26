@@ -26,6 +26,7 @@ import requests
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
+from .factures import envoyer_facture
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +64,10 @@ def marquer_paye(paiement, transaction_id="", email=""):
         if commande.statut == "en_attente":
             commande.statut = "confirmee"
             commande.save()
+        try:
+            envoyer_facture(commande)
+        except Exception:
+            logger.exception("Erreur lors de l'envoi de la facture de la commande #%s", commande.id)
     return paiement
 
 
