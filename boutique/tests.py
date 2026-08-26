@@ -4,6 +4,7 @@ from django.test import TestCase, override_settings
 
 from .forms import CommandeForm
 from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit
+from . import paiements as paiements_module
 
 
 @override_settings(STORAGES={
@@ -46,6 +47,19 @@ class ProduitTests(TestCase):
 		avis_recents = list(response.context['avis_recents'])
 		self.assertEqual(len(avis_recents), 3)
 		self.assertEqual([avis.nom for avis in avis_recents], ['Client 3', 'Client 2', 'Client 1'])
+
+	@override_settings(STRIPE_SECRET_KEY='')
+	def test_stripe_refuse_une_configuration_incomplete(self):
+		paiement = Paiement.objects.create(
+			commande=Commande.objects.create(
+				nom='Client Test', email='client@example.com', telephone='+261340000000',
+				adresse='Adresse test', ville='Antananarivo', total='100000.00',
+			),
+			methode='carte', montant='100000.00', reference='PAY-TEST-STRIPE',
+		)
+
+		with self.assertRaises(paiements_module.ConfigurationPaiementError):
+			paiements_module.creer_paiement_stripe(paiement, self.client.request().wsgi_request)
 
 
 @override_settings(STORAGES={

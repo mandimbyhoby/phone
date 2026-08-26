@@ -264,14 +264,19 @@ def passer_commande(request):
                 paiements_module.marquer_paye(paiement)
                 messages.success(request, "Votre commande a bien été enregistrée ! Paiement à la livraison.")
                 return redirect('commande_succes', commande_id=commande.id)
-            if methode == 'carte':
-                url = paiements_module.creer_paiement_stripe(paiement, request)
-                return redirect(url)
-            if methode == 'paypal':
-                url = paiements_module.creer_paiement_paypal(paiement, request)
-                return redirect(url)
-            if methode == 'orange_money':
-                return redirect('paiement_orange_money', commande_id=commande.id)
+            try:
+                if methode == 'carte':
+                    url = paiements_module.creer_paiement_stripe(paiement, request)
+                    return redirect(url)
+                if methode == 'paypal':
+                    url = paiements_module.creer_paiement_paypal(paiement, request)
+                    return redirect(url)
+                if methode == 'orange_money':
+                    return redirect('paiement_orange_money', commande_id=commande.id)
+            except paiements_module.ConfigurationPaiementError as exc:
+                logger.error("Paiement non configuré pour la commande #%s : %s", commande.id, exc)
+                messages.error(request, "Ce moyen de paiement n'est pas encore disponible.")
+                return redirect('paiement_annule', commande_id=commande.id)
     else:
         # Pré-remplit le formulaire avec les données du compte client
         initial = {}

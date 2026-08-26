@@ -31,6 +31,10 @@ from .factures import envoyer_facture
 logger = logging.getLogger(__name__)
 
 
+class ConfigurationPaiementError(RuntimeError):
+    """Une passerelle en ligne n'est pas configurée pour une transaction réelle."""
+
+
 # ============================================================
 # UTILITAIRES
 # ============================================================
@@ -78,12 +82,10 @@ def marquer_paye(paiement, transaction_id="", email=""):
 def creer_paiement_stripe(paiement, request) -> str:
     """Crée une session Stripe Checkout. Retourne l'URL de redirection.
 
-    En mode démo, marque le paiement payé et retourne l'URL de succès.
+    Refuse le paiement si Stripe n'est pas configuré.
     """
     if not settings.STRIPE_SECRET_KEY:
-        logger.info("Stripe non configuré → mode démo")
-        marquer_paye(paiement)
-        return reverse("commande_succes", args=[paiement.commande_id])
+        raise ConfigurationPaiementError("Stripe n'est pas configuré.")
 
     import stripe
     stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -159,12 +161,10 @@ def _token_paypal() -> str:
 def creer_paiement_paypal(paiement, request) -> str:
     """Crée une commande PayPal (orders v2). Retourne l'URL d'approbation.
 
-    En mode démo, marque le paiement payé et retourne l'URL de succès.
+    Refuse le paiement si PayPal n'est pas configuré.
     """
     if not settings.PAYPAL_CLIENT_ID or not settings.PAYPAL_CLIENT_SECRET:
-        logger.info("PayPal non configuré → mode démo")
-        marquer_paye(paiement)
-        return reverse("commande_succes", args=[paiement.commande_id])
+        raise ConfigurationPaiementError("PayPal n'est pas configuré.")
 
     commande = paiement.commande
     montant_eur = float(convertir_en_eur(commande.total)) / 100.0
@@ -239,15 +239,17 @@ def payer_orange_money(paiement, telephone: str, request) -> str:
       ORANGE_MONEY_CLIENT_ID / ORANGE_MONEY_CLIENT_SECRET /
       ORANGE_MONEY_MERCHANT_NUMBER / ORANGE_MONEY_BASE_URL
 
-    En mode démo, marque le paiement payé et retourne l'URL de succès.
+    Refuse le paiement si Orange Money n'est pas configuré.
     """
     paiement.telephone = telephone
     paiement.save()
 
-    if not (settings.ORANGE_MONEY_CLIENT_ID and settings.ORANGE_MONEY_MERCHANT_NUMBER):
-        logger.info("Orange Money non configuré → mode démo")
-        marquer_paye(paiement)
-        return reverse("commande_succes", args=[paiement.commande_id])
+    if not (
+        settings.ORANGE_MONEY_CLIENT_ID
+        and settings.ORANGE_MONEY_CLIENT_SECRET
+        and settings.ORANGE_MONEY_MERCHANT_NUMBER
+    ):
+        raise ConfigurationPaiementError("Orange Money n'est pas configuré.")
 
     # --- Exemple d'implémentation avec l'API marchand Orange Money ---
     # 1. Token OAuth2
