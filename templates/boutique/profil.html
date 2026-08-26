@@ -97,6 +97,26 @@
                         </button>
                     </form>
                 </div>
+                <div class="account-card" id="factures">
+                    <h3><i class="fa-solid fa-file-invoice"></i> Mes factures</h3>
+                    {% if commandes %}
+                    <div class="orders-list">
+                        {% for commande in commandes %}
+                        {% if commande.statut != 'annulee' %}
+                        <div class="order-row">
+                            <div class="order-row-head">
+                                <div><strong>Commande #{{ commande.id }}</strong><small class="order-date">{{ commande.date_commande|date:"d/m/Y" }}</small></div>
+                                <strong class="order-total">{{ commande.total }} Ar</strong>
+                            </div>
+                            <a href="{% url 'telecharger_facture' commande.id %}" class="order-invoice-btn"><i class="fa-solid fa-file-pdf"></i> Télécharger la facture PDF</a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="form-hint">Vos factures apparaîtront ici après un paiement confirmé.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

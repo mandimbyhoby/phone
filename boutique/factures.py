@@ -76,6 +76,7 @@ def generer_facture_pdf(commande):
     payment = getattr(commande, 'paiement', None)
     payment_label = payment.get_methode_display() if payment else 'Paiement en ligne'
     payment_reference = payment.reference if payment else '-'
+    payment_status = payment.get_statut_display() if payment else 'En attente'
     invoice_date = (payment.date_paiement if payment and payment.date_paiement else commande.date_commande) or timezone.now()
 
     story = [
@@ -90,7 +91,7 @@ def generer_facture_pdf(commande):
         Table([
             [Paragraph('<b>FACTUREE A</b>', section), Paragraph('<b>DETAILS DU PAIEMENT</b>', section)],
             [Paragraph(f'<b>{escape(commande.nom)}</b><br/>{escape(commande.email)}<br/>{escape(commande.telephone)}<br/>{escape(commande.adresse)}<br/>{escape(commande.ville)}', body),
-             Paragraph(f'Methode : {payment_label}<br/>Reference : {payment_reference}<br/>Statut : Paiement confirme', body)]
+             Paragraph(f'Methode : {payment_label}<br/>Reference : {payment_reference}<br/>Statut : {payment_status}', body)]
         ], colWidths=[86 * mm, 86 * mm], style=TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), LIGHT),
             ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor('#e3e6ec')),

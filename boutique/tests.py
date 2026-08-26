@@ -102,6 +102,35 @@ class CommandeStockTests(TestCase):
 		self.assertEqual(mail.outbox[0].attachments[0][0], 'facture-commande-1.pdf')
 		self.assertEqual(mail.outbox[0].attachments[0][2], 'application/pdf')
 
+	def test_client_peut_telecharger_sa_facture_pdf(self):
+		user = User.objects.create_user(username='client-facture', password='motdepasse-test')
+		categorie = Categorie.objects.create(nom='Téléphones', slug='telephones-facture')
+		produit = Produit.objects.create(
+			categorie=categorie, nom='Téléphone Facture', marque='Test',
+			description='Produit de test', prix='100000.00', stock=1,
+			image='produits/facture.jpg',
+		)
+		commande = Commande.objects.create(
+			utilisateur=user, nom='Client Facture', email='client@example.com',
+			telephone='+261340000000', adresse='Adresse test', ville='Antananarivo',
+			total='100000.00', statut='confirmee',
+		)
+		LigneCommande.objects.create(
+			commande=commande, produit=produit, quantite=1, prix_unitaire='100000.00'
+		)
+		Paiement.objects.create(
+			commande=commande, methode='especes', montant='100000.00',
+			reference='PAY-FACTURE', statut='paye',
+		)
+		self.client.force_login(user)
+
+		response = self.client.get(f'/commande/{commande.id}/facture/')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response['Content-Type'], 'application/pdf')
+		self.assertIn(f'facture-commande-{commande.id}.pdf', response['Content-Disposition'])
+		self.assertTrue(response.content.startswith(b'%PDF'))
+
 	def test_client_peut_annuler_et_recupere_le_stock(self):
 		user = User.objects.create_user(username='client-annulation', password='motdepasse-test')
 		categorie = Categorie.objects.create(nom='Tests', slug='tests-annulation')

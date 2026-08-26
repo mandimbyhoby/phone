@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.accueil, name='accueil'),
+    path('recherche-suggestions/', views.recherche_suggestions, name='recherche_suggestions'),
     path('produit/<int:id>/', views.detail_produit, name='detail_produit'),
     path('apropos/', views.apropos, name='apropos'),
     path('contact/', views.contact, name='contact'),
@@ -20,6 +21,7 @@ urlpatterns = [
     path('profil/', views.profil, name='profil'),
     path('profil/mot-de-passe/', views.changer_mot_de_passe, name='changer_mot_de_passe'),
     path('mes-commandes/', views.mes_commandes, name='mes_commandes'),
+    path('commande/<int:commande_id>/facture/', views.telecharger_facture, name='telecharger_facture'),
     path('commande/annuler/<int:commande_id>/', views.annuler_commande, name='annuler_commande'),
 
     # ===== Mot de passe oublié =====

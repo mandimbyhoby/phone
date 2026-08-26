@@ -44,10 +44,69 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('.site-navbar .search-box input');
     if (searchInput) {
         const searchBox = searchInput.closest('.search-box');
+        let searchTimer;
+        let searchRequest;
+
         function syncSearchBadge() {
             if (searchBox) searchBox.classList.toggle('has-value', searchInput.value.trim().length > 0);
         }
+
+        function escapeSearchText(value) {
+            const element = document.createElement('span');
+            element.textContent = value || '';
+            return element.innerHTML;
+        }
+
+        function renderSearchResults(products) {
+            let preview = searchBox.querySelector('.search-results-preview');
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.className = 'search-results-preview';
+                preview.setAttribute('role', 'status');
+                preview.setAttribute('aria-live', 'polite');
+                searchBox.appendChild(preview);
+            }
+            preview.innerHTML = products.length ? products.map(function (product) {
+                return '<a href="' + escapeSearchText(product.url) + '" class="search-result-item">' +
+                    '<span class="search-result-image"><img src="' + escapeSearchText(product.image) + '" alt="' + escapeSearchText(product.nom) + '"></span>' +
+                    '<span class="search-result-copy"><strong>' + escapeSearchText(product.nom) + '</strong>' +
+                    '<small>' + escapeSearchText(product.marque) + ' · ' + escapeSearchText(product.prix) + ' Ar</small></span>' +
+                    '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>';
+            }).join('') : '<span class="search-result-empty">Aucun téléphone trouvé</span>';
+            preview.hidden = false;
+        }
+
+        function searchNavigationProducts() {
+            const query = searchInput.value.trim();
+            clearTimeout(searchTimer);
+            if (searchRequest) searchRequest.abort();
+            const existingPreview = searchBox.querySelector('.search-results-preview');
+            if (!query) {
+                if (existingPreview) existingPreview.hidden = true;
+                return;
+            }
+            searchTimer = setTimeout(function () {
+                searchRequest = new AbortController();
+                fetch(searchBox.dataset.searchUrl + '?q=' + encodeURIComponent(query), {
+                    signal: searchRequest.signal,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                    .then(function (response) { return response.json(); })
+                    .then(function (data) { renderSearchResults(data.produits || []); })
+                    .catch(function (error) {
+                        if (error.name !== 'AbortError') return;
+                    });
+            }, 180);
+        }
+
         searchInput.addEventListener('input', syncSearchBadge);
+        searchInput.addEventListener('input', searchNavigationProducts);
+        searchBox.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const firstResult = searchBox.querySelector('.search-result-item');
+            if (firstResult) firstResult.click();
+            else searchNavigationProducts();
+        });
         syncSearchBadge();
     }
 

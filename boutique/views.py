@@ -121,8 +121,9 @@ def telecharger_facture(request, commande_id):
         Commande,
         id=commande_id,
         utilisateur=request.user,
-        paiement__statut='paye',
     )
+    if commande.statut == 'annulee':
+        return redirect('mes_commandes')
     response = HttpResponse(generer_facture_pdf(commande), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="facture-commande-{commande.id}.pdf"'
     return response

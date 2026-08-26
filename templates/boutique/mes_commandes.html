@@ -56,6 +56,11 @@
                                 {{ commande.paiement.get_statut_display }}</span>
                             </div>
                             {% endif %}
+                            {% if commande.statut != 'annulee' %}
+                            <a href="{% url 'telecharger_facture' commande.id %}" class="order-invoice-btn">
+                                <i class="fa-solid fa-file-pdf"></i> Télécharger la facture
+                            </a>
+                            {% endif %}
                             {% if commande.statut == 'en_attente' or commande.statut == 'confirmee' %}
                             <form method="post" action="{% url 'annuler_commande' commande.id %}" class="order-cancel-form">
                                 {% csrf_token %}

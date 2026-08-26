@@ -52,6 +52,11 @@
             </div>
 
             <div class="success-actions">
+                {% if commande.paiement and commande.paiement.statut == 'paye' %}
+                <a href="{% url 'telecharger_facture' commande.id %}" class="btn-primary">
+                    <i class="fa-solid fa-file-pdf"></i> Télécharger ma facture PDF
+                </a>
+                {% endif %}
                 <a href="{% url 'accueil' %}" class="btn-primary"><i class="fa-solid fa-house"></i> Retour à l'accueil</a>
                 <a href="{% url 'accueil' %}#products" class="continue-link">Continuer mes achats</a>
             </div>
