@@ -6,6 +6,10 @@ from .forms import CommandeForm
 from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit
 
 
+@override_settings(STORAGES={
+	'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+	'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+})
 class ProduitTests(TestCase):
 	def setUp(self):
 		self.categorie = Categorie.objects.create(nom='Téléphones', slug='telephones')
@@ -26,6 +30,22 @@ class ProduitTests(TestCase):
 		Avis.objects.create(produit=self.produit, nom='A', note=5, commentaire='Très bien')
 		Avis.objects.create(produit=self.produit, nom='B', note=4, commentaire='Bien')
 		self.assertEqual(self.produit.note_moyenne, 4.5)
+
+	def test_accueil_affiche_les_trois_avis_les_plus_recents(self):
+		for index in range(4):
+			Avis.objects.create(
+				produit=self.produit,
+				nom=f'Client {index}',
+				note=index + 1,
+				commentaire=f'Avis {index}',
+			)
+
+		response = self.client.get('/')
+
+		self.assertEqual(response.status_code, 200)
+		avis_recents = list(response.context['avis_recents'])
+		self.assertEqual(len(avis_recents), 3)
+		self.assertEqual([avis.nom for avis in avis_recents], ['Client 3', 'Client 2', 'Client 1'])
 
 
 @override_settings(STORAGES={

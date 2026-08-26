@@ -520,6 +520,7 @@ def accueil(request):
 
     # Promotions pour la bannière
     promos = Produit.objects.filter(disponible=True, prix_promo__isnull=False)[:3]
+    avis_recents = Avis.objects.select_related('produit').order_by('-date')[:3]
 
     return render(request, 'boutique/index.html', {
         'produits': produits,
@@ -528,6 +529,7 @@ def accueil(request):
         'categorie_active': categorie_slug,
         'tri': tri,
         'promos': promos,
+        'avis_recents': avis_recents,
     })
 
 

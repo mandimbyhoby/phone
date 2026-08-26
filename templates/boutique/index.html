@@ -224,42 +224,23 @@
             <p>Ce que disent nos clients</p>
         </div>
         <div class="testimonial-grid">
-            <div class="testimonial-card" data-aos="fade-up">
-                <div class="testimonial-stars">★★★★★</div>
-                <p>"Commande passée le lundi, livrée le mercredi à Tamatave. Téléphone parfaitement
-                    authentique, je recommande vivement !"</p>
+            {% for avis in avis_recents %}
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}00">
+                <div class="testimonial-stars" aria-label="Note : {{ avis.note }} sur 5">
+                    {% for i in "12345" %}{% if forloop.counter <= avis.note %}★{% else %}☆{% endif %}{% endfor %}
+                </div>
+                <p>"{{ avis.commentaire }}"</p>
                 <div class="testimonial-author">
-                    <div class="author-avatar">H</div>
+                    <div class="author-avatar">{{ avis.nom|first|upper }}</div>
                     <div>
-                        <strong>Hery R.</strong>
-                        <small>Tamatave</small>
+                        <strong>{{ avis.nom }}</strong>
+                        <small>{{ avis.produit.nom }}</small>
                     </div>
                 </div>
             </div>
-            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="testimonial-stars">★★★★★</div>
-                <p>"Le paiement à la livraison m'a mis en confiance. Très bon rapport qualité-prix et un
-                    service client réactif."</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">M</div>
-                    <div>
-                        <strong>Miora A.</strong>
-                        <small>Antananarivo</small>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="testimonial-stars">★★★★★</div>
-                <p>"Meilleur prix trouvé à Madagascar pour mon iPhone 15. Garantie 12 mois, c'est
-                    rassurant. Merci Phone Store !"</p>
-                <div class="testimonial-author">
-                    <div class="author-avatar">T</div>
-                    <div>
-                        <strong>Tiana F.</strong>
-                        <small>Antsirabe</small>
-                    </div>
-                </div>
-            </div>
+            {% empty %}
+            <p class="testimonial-empty">Aucun avis client pour le moment.</p>
+            {% endfor %}
         </div>
     </div>
 </section>
