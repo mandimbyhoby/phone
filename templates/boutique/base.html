@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=42">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=43">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -41,7 +41,7 @@
 
     <!-- ============ BANDEAU ANNONCE ============ -->
     <div class="top-bar">
-        <p><i class="fa-solid fa-truck-fast"></i> Livraison gratuite à Antananarivo dès 1 000 000 Ar
+        <p><i class="fa-solid fa-truck-fast"></i> Livraison partout à Madagascar
             <span>|</span> Paiement à la livraison <span>|</span> <a href="{% url 'contact' %}">Contactez-nous</a>
         </p>
     </div>
@@ -240,6 +240,7 @@
                     <button class="cart-btn" @click="open = true" aria-label="Ouvrir le panier">
                         <img src="{% static 'images/icons/panier.svg' %}" alt="Panier" width="24" height="24" class="cart-icon">
                         <span id="cart-badge" class="cart-badge">{{ nombre_articles_panier }}</span>
+                        <span class="cart-btn-label">Mon panier</span>
                     </button>
 
                     <!-- OVERLAY -->
@@ -253,7 +254,11 @@
                         x-transition:leave="drawer-leave" x-transition:leave-start="drawer-leave-from"
                         x-transition:leave-end="drawer-leave-to">
                         <header class="drawer-header">
-                            <h3><img src="{% static 'images/icons/panier.svg' %}" alt="" width="22" height="22" class="drawer-cart-icon"> Mon panier</h3>
+                            <div class="drawer-heading">
+                                <span class="drawer-eyebrow">VOTRE SÉLECTION</span>
+                                <h3><img src="{% static 'images/icons/panier.svg' %}" alt="" width="22" height="22" class="drawer-cart-icon"> Mon panier</h3>
+                            </div>
+                            <span class="drawer-count">{{ nombre_articles_panier }} article{{ nombre_articles_panier|pluralize }}</span>
                             <button class="drawer-close" @click="open = false" aria-label="Fermer">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>

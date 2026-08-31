@@ -31,6 +31,11 @@ from .factures import envoyer_facture
 logger = logging.getLogger(__name__)
 
 
+def _cle_chaine(val) -> str:
+    """Nettoie une valeur de configuration pour éviter les espaces parasites."""
+    return (val or "").strip()
+
+
 class ConfigurationPaiementError(RuntimeError):
     """Une passerelle en ligne n'est pas configurée pour une transaction réelle."""
 
@@ -41,7 +46,7 @@ class ConfigurationPaiementError(RuntimeError):
 
 def en_mode_demo() -> bool:
     """Vrai si aucune clé n'est configurée → paiement simulé."""
-    return not settings.STRIPE_SECRET_KEY and not settings.PAYPAL_CLIENT_ID
+    return not _cle_chaine(settings.STRIPE_SECRET_KEY) and not _cle_chaine(settings.PAYPAL_CLIENT_ID)
 
 
 def convertir_en_eur(montant_ar: Decimal) -> int:
@@ -84,11 +89,12 @@ def creer_paiement_stripe(paiement, request) -> str:
 
     Refuse le paiement si Stripe n'est pas configuré.
     """
-    if not settings.STRIPE_SECRET_KEY:
+    stripe_secret_key = _cle_chaine(settings.STRIPE_SECRET_KEY)
+    if not stripe_secret_key:
         raise ConfigurationPaiementError("Stripe n'est pas configuré.")
 
     import stripe
-    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe.api_key = stripe_secret_key
 
     commande = paiement.commande
     montant_eur = convertir_en_eur(commande.total)
@@ -123,10 +129,11 @@ def creer_paiement_stripe(paiement, request) -> str:
 
 def verifier_paiement_stripe(paiement) -> bool:
     """Vérifie l'état d'une session Stripe et marque payé si complet."""
-    if not settings.STRIPE_SECRET_KEY:
+    stripe_secret_key = _cle_chaine(settings.STRIPE_SECRET_KEY)
+    if not stripe_secret_key:
         return True
     import stripe
-    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe.api_key = stripe_secret_key
     try:
         session = stripe.checkout.Session.retrieve(paiement.transaction_id)
         if session.payment_status == "paid":
@@ -143,6 +150,8 @@ def verifier_paiement_stripe(paiement) -> bool:
 
 def _token_paypal() -> str:
     """Récupère un access token PayPal (OAuth2 client_credentials)."""
+    client_id = _cle_chaine(settings.PAYPAL_CLIENT_ID)
+    client_secret = _cle_chaine(settings.PAYPAL_CLIENT_SECRET)
     url = (
         "https://api-m.sandbox.paypal.com/v1/oauth2/token"
         if settings.PAYPAL_ENV != "live"
@@ -151,7 +160,7 @@ def _token_paypal() -> str:
     resp = requests.post(
         url,
         data={"grant_type": "client_credentials"},
-        auth=(settings.PAYPAL_CLIENT_ID, settings.PAYPAL_CLIENT_SECRET),
+        auth=(client_id, client_secret),
         timeout=30,
     )
     resp.raise_for_status()
@@ -163,7 +172,9 @@ def creer_paiement_paypal(paiement, request) -> str:
 
     Refuse le paiement si PayPal n'est pas configuré.
     """
-    if not settings.PAYPAL_CLIENT_ID or not settings.PAYPAL_CLIENT_SECRET:
+    client_id = _cle_chaine(settings.PAYPAL_CLIENT_ID)
+    client_secret = _cle_chaine(settings.PAYPAL_CLIENT_SECRET)
+    if not client_id or not client_secret:
         raise ConfigurationPaiementError("PayPal n'est pas configuré.")
 
     commande = paiement.commande
@@ -208,7 +219,7 @@ def creer_paiement_paypal(paiement, request) -> str:
 
 def capturer_paiement_paypal(paiement) -> bool:
     """Capture la commande PayPal après approbation. Retourne True si payé."""
-    if not settings.PAYPAL_CLIENT_ID or not settings.PAYPAL_CLIENT_SECRET:
+    if not _cle_chaine(settings.PAYPAL_CLIENT_ID) or not _cle_chaine(settings.PAYPAL_CLIENT_SECRET):
         return True
     headers = {
         "Authorization": f"Bearer {_token_paypal()}",

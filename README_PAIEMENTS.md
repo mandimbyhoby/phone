@@ -1,16 +1,16 @@
 # 💳 Système de paiement — Guide de configuration
 
-> **Configuration actuelle :** seul le paiement à la livraison est activé.
-> Les paiements en ligne seront disponibles après configuration de comptes
-> marchands et activation de `PAIEMENTS_EN_LIGNE=True`.
+> **Configuration actuelle :** le paiement à la livraison est toujours disponible.
+> PayPal apparaît après configuration de ses identifiants et activation de
+> `PAIEMENTS_EN_LIGNE=True`.
 
 Le site gère **4 méthodes de paiement** :
 
 | Méthode | Passerelle | Statut |
 |---|---|---|
-| 💳 Carte bancaire (Visa, Mastercard, Amex, Apple Pay, Google Pay) | **Stripe** | ⏸️ désactivé |
-| 🅿️ PayPal | **PayPal Checkout** | ⏸️ désactivé |
-| 📱 Orange Money | **API marchand Orange** | ⏸️ désactivé |
+| 💳 Carte bancaire (Visa, Mastercard, Amex, Apple Pay, Google Pay) | **Stripe** | selon configuration |
+| 🅿️ PayPal | **PayPal Checkout** | selon configuration |
+| 📱 Orange Money | **API marchand Orange** | selon configuration |
 | 💵 Paiement à la livraison | — | ✅ intégré |
 
 ## 🧪 Mode actuel
@@ -19,7 +19,8 @@ Les commandes sont confirmées avec paiement à la livraison. Aucun paiement en
 ligne n'est simulé, afin de ne pas présenter une fausse confirmation au client.
 
 Pour activer les options en ligne après configuration des comptes marchands,
-définissez `PAIEMENTS_EN_LIGNE=True` dans l'environnement du serveur.
+définissez `PAIEMENTS_EN_LIGNE=True` dans l'environnement du serveur. Chaque
+moyen n'est affiché que lorsque ses propres identifiants sont renseignés.
 
 ## 🔑 Activer les vrais paiements
 

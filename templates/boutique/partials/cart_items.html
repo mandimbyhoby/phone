@@ -12,13 +12,15 @@
             <small>{{ item.quantite }} × {{ item.prix }} Ar</small>
         </div>
         <div class="drawer-item-actions">
-            <button class="qty-btn"
+                <button class="qty-btn"
+                    aria-label="Diminuer la quantité de {{ item.produit.nom }}"
                 hx-post="{% url 'mettre_a_jour_panier' item.produit.id %}"
                 hx-vals='{"action": "diminuer"}'
                 hx-swap="none"
                 hx-target="#cart-badge">−</button>
             <span class="qty-num">{{ item.quantite }}</span>
-            <button class="qty-btn"
+                <button class="qty-btn"
+                    aria-label="Augmenter la quantité de {{ item.produit.nom }}"
                 hx-post="{% url 'mettre_a_jour_panier' item.produit.id %}"
                 hx-vals='{"action": "augmenter"}'
                 hx-swap="none"
@@ -40,8 +42,8 @@
     <strong>{{ total }} Ar</strong>
 </div>
 <div class="drawer-cta">
-    <a href="{% url 'panier' %}" class="btn-primary">Voir le panier</a>
-    <a href="{% url 'passer_commande' %}" class="btn-checkout">Commander</a>
+    <a href="{% url 'panier' %}" class="btn-primary"><span>Voir le panier</span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    <a href="{% url 'passer_commande' %}" class="btn-checkout"><span>Commander</span><i class="fa-solid fa-arrow-right"></i></a>
 </div>
 {% else %}
 <div class="drawer-empty">

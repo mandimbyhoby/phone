@@ -1,3 +1,6 @@
+from types import SimpleNamespace
+from unittest.mock import patch
+
 from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase, override_settings
@@ -60,6 +63,25 @@ class ProduitTests(TestCase):
 
 		with self.assertRaises(paiements_module.ConfigurationPaiementError):
 			paiements_module.creer_paiement_stripe(paiement, self.client.request().wsgi_request)
+
+	@override_settings(STRIPE_SECRET_KEY=' sk_test_123456789 ')
+	@patch('stripe.checkout.Session.create')
+	def test_stripe_strip_les_clefs_avec_espaces(self, mock_create):
+		paiement = Paiement.objects.create(
+			commande=Commande.objects.create(
+				nom='Client Test', email='client@example.com', telephone='+261340000000',
+				adresse='Adresse test', ville='Antananarivo', total='100000.00',
+			),
+			methode='carte', montant='100000.00', reference='PAY-STRIPE-STRIP',
+		)
+		mock_create.return_value = SimpleNamespace(id='cs_test_123', url='https://example.com/checkout')
+
+		url = paiements_module.creer_paiement_stripe(paiement, self.client.request().wsgi_request)
+
+		self.assertEqual(url, 'https://example.com/checkout')
+		paiement_db = Paiement.objects.get(pk=paiement.pk)
+		self.assertEqual(paiement_db.transaction_id, 'cs_test_123')
+		self.assertEqual(__import__('stripe').api_key, 'sk_test_123456789')
 
 
 @override_settings(STORAGES={

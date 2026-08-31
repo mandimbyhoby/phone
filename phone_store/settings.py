@@ -178,25 +178,25 @@ PAIEMENTS_EN_LIGNE = os.environ.get('PAIEMENTS_EN_LIGNE', 'False') == 'True'
 # d'environnement, pas en dur ici).
 
 # --- Stripe (cartes Visa / Mastercard / Amex / Apple Pay / Google Pay) ---
-STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
-STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '').strip()
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '').strip()
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '').strip()
 
 # --- PayPal ---
-PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '')
-PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET', '')
-PAYPAL_ENV = os.environ.get('PAYPAL_ENV', 'sandbox')  # 'sandbox' ou 'live'
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '').strip()
+PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET', '').strip()
+PAYPAL_ENV = os.environ.get('PAYPAL_ENV', 'sandbox').strip()  # 'sandbox' ou 'live'
 
 # --- Orange Money (API marchand) ---
-ORANGE_MONEY_CLIENT_ID = os.environ.get('ORANGE_MONEY_CLIENT_ID', '')
-ORANGE_MONEY_CLIENT_SECRET = os.environ.get('ORANGE_MONEY_CLIENT_SECRET', '')
-ORANGE_MONEY_MERCHANT_NUMBER = os.environ.get('ORANGE_MONEY_MERCHANT_NUMBER', '')
-ORANGE_MONEY_BASE_URL = os.environ.get('ORANGE_MONEY_BASE_URL', 'https://api.orange.com')
+ORANGE_MONEY_CLIENT_ID = os.environ.get('ORANGE_MONEY_CLIENT_ID', '').strip()
+ORANGE_MONEY_CLIENT_SECRET = os.environ.get('ORANGE_MONEY_CLIENT_SECRET', '').strip()
+ORANGE_MONEY_MERCHANT_NUMBER = os.environ.get('ORANGE_MONEY_MERCHANT_NUMBER', '').strip()
+ORANGE_MONEY_BASE_URL = os.environ.get('ORANGE_MONEY_BASE_URL', 'https://api.orange.com').strip()
 
 # --- Devise / conversion ---
 # L'Ariary (MGA) n'est pas accepté par Stripe/PayPal : le montant est converti
 # en EUR pour les cartes et PayPal. Ajustez le taux selon le cours du jour.
-PAIEMENT_TAUX_EUR = float(os.environ.get('PAIEMENT_TAUX_EUR', '5000'))  # 1 EUR = 5000 Ar
+PAIEMENT_TAUX_EUR = float(os.environ.get('PAIEMENT_TAUX_EUR', '5000').strip())  # 1 EUR = 5000 Ar
 
 # ============================================================
 # P R O D U C T I O N  (statiques + sécurité)

@@ -28,11 +28,11 @@
 
         <div class="hero-content">
             <div class="hero-text" data-aos="fade-right">
-                <span class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Nouveautés chaque semaine</span>
+                <span class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Catalogue mis à jour</span>
                 <h1>
                     Le Téléphone<br>
-                    De Vos Rêves<br>
-                    Au Meilleur Prix
+                    Qui Vous Convient<br>
+                    Avec Fiabilité
                 </h1>
                 <div class="hero-line"></div>
                 <p>
@@ -45,16 +45,16 @@
                 </div>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <strong>+500</strong>
-                        <span>Clients satisfaits</span>
+                        <strong>Clients</strong>
+                        <span>Gestion de clientèle</span>
                     </div>
                     <div class="hero-stat">
-                        <strong>24h</strong>
-                        <span>Livraison express</span>
+                        <strong>Commandes</strong>
+                        <span>Suivi des livraisons</span>
                     </div>
                     <div class="hero-stat">
-                        <strong>100%</strong>
-                        <span>Produits authentiques</span>
+                        <strong>Produits</strong>
+                        <span>Disponibles</span>
                     </div>
                 </div>
             </div>
@@ -189,8 +189,8 @@
 <section class="promo-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <h2>Offres du moment</h2>
-            <p>Des réductions exceptionnelles, jusqu'à épuisement du stock</p>
+            <h2>Sélection actuelle</h2>
+            <p>Une sélection de produits présentés selon leur disponibilité</p>
         </div>
         <div class="promo-grid">
             {% for produit in promos %}
@@ -207,7 +207,7 @@
                         <span class="old-price">{{ produit.prix }} Ar</span>
                         <strong>{{ produit.prix_promo }} Ar</strong>
                     </div>
-                    <span class="promo-cta">J'en profite <i class="fa-solid fa-arrow-right"></i></span>
+                    <span class="promo-cta">Découvrir <i class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </a>
             {% endfor %}
@@ -265,8 +265,8 @@
                 derniers modèles. La meilleure façon de choisir, c'est de voir.
             </p>
             <ul class="video-ad-features">
-                <li><i class="fa-solid fa-circle-play"></i> Démos réelles des modèles</li>
-                <li><i class="fa-solid fa-mobile-screen"></i> Nouveautés chaque semaine</li>
+                <li><i class="fa-solid fa-circle-play"></i> Présentation des modèles</li>
+                <li><i class="fa-solid fa-mobile-screen"></i> Catalogue régulièrement actualisé</li>
                 <li><i class="fa-solid fa-hand-holding-dollar"></i> Paiement à la livraison</li>
                 <li><i class="fa-solid fa-credit-card"></i> Paiement en ligne sécurisé</li>
             </ul>
@@ -308,7 +308,7 @@
 <section class="cta-section">
     <div class="container cta-box" data-aos="zoom-in">
         <h2>Prêt à changer de téléphone ?</h2>
-        <p>Rejoignez plus de 500 clients satisfaits à Madagascar. Livraison rapide, paiement à la réception.</p>
+        <p>Rejoignez notre communauté à Madagascar. Livraison rapide, paiement à la réception.</p>
         <div class="cta-buttons">
             <a href="#products" class="btn-primary">Voir les produits</a>
             <a href="{% url 'contact' %}" class="btn-link">Une question ? Contactez-nous</a>

@@ -12,11 +12,23 @@ METHODE_PAIEMENT_CHOICES = [
     ('especes', 'Paiement à la livraison'),
 ]
 
-METHODES_PAIEMENT_DISPONIBLES = (
-    METHODE_PAIEMENT_CHOICES
-    if settings.PAIEMENTS_EN_LIGNE
-    else [('especes', 'Paiement à la livraison')]
-)
+def methodes_paiement_disponibles():
+    """Retourne uniquement les moyens activés et correctement configurés."""
+    if not settings.PAIEMENTS_EN_LIGNE:
+        return [('especes', 'Paiement à la livraison')]
+
+    methodes = [('especes', 'Paiement à la livraison')]
+    if settings.STRIPE_PUBLIC_KEY and settings.STRIPE_SECRET_KEY:
+        methodes.insert(0, ('carte', 'Carte bancaire (Visa, Mastercard, Amex)'))
+    if settings.PAYPAL_CLIENT_ID and settings.PAYPAL_CLIENT_SECRET:
+        methodes.insert(0, ('paypal', 'PayPal'))
+    if (
+        settings.ORANGE_MONEY_CLIENT_ID
+        and settings.ORANGE_MONEY_CLIENT_SECRET
+        and settings.ORANGE_MONEY_MERCHANT_NUMBER
+    ):
+        methodes.insert(-1, ('orange_money', 'Orange Money'))
+    return methodes
 
 
 # ============================================================
@@ -204,7 +216,7 @@ class AvisForm(forms.ModelForm):
 
 class CommandeForm(forms.ModelForm):
     methode_paiement = forms.ChoiceField(
-        choices=METHODES_PAIEMENT_DISPONIBLES,
+        choices=methodes_paiement_disponibles,
         initial='especes',
         widget=forms.RadioSelect(attrs={'class': 'payment-radio'}),
         label='Méthode de paiement',

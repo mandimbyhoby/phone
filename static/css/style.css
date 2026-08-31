@@ -5883,6 +5883,347 @@ textarea:focus {
 .om-brand h3 { color: var(--ps-text); font-family: var(--ps-font-head); }
 .om-brand p { color: var(--ps-muted); }
 
+/* ---------- Atmosphère animée visible dans les sections ---------- */
+
+.hero-wrapper,
+.products-section,
+.page-section,
+.video-ad-section,
+.cta-section,
+.testimonial-section,
+.promo-section,
+.features-strip,
+.detail-page {
+    background-image:
+        radial-gradient(circle at 8% 18%, rgba(255,178,36,0.085) 0, transparent 24%),
+        radial-gradient(circle at 92% 72%, rgba(255,91,91,0.06) 0, transparent 25%),
+        linear-gradient(120deg, var(--ps-bg), var(--ps-bg-2), var(--ps-bg));
+    background-size: 145% 145%, 160% 160%, 260% 260%;
+    background-position: 0% 0%, 100% 100%, 0% 50%;
+    animation: sectionAtmosphere 22s ease-in-out infinite alternate;
+}
+
+@keyframes sectionAtmosphere {
+    0% { background-position: 0% 0%, 100% 100%, 0% 50%; }
+    50% { background-position: 24% 18%, 78% 70%, 100% 50%; }
+    100% { background-position: 8% 34%, 92% 54%, 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-wrapper,
+    .products-section,
+    .page-section,
+    .video-ad-section,
+    .cta-section,
+    .testimonial-section,
+    .promo-section,
+    .features-strip,
+    .detail-page { animation: none; }
+}
+
+/* ---------- Panier : signature Phone Store ---------- */
+
+.cart-btn {
+    width: 52px;
+    height: 52px;
+    background: var(--ps-accent);
+    color: #171207;
+    border: 3px solid rgba(255,255,255,0.9);
+    box-shadow: 0 10px 24px rgba(255,178,36,0.28), 0 0 0 1px rgba(255,178,36,0.28);
+}
+
+.cart-btn::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(255,178,36,0.45);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cart-btn:hover {
+    background: var(--ps-accent-2);
+    box-shadow: 0 14px 30px rgba(255,178,36,0.4), 0 0 0 5px rgba(255,178,36,0.12);
+}
+
+.cart-btn-label {
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(6px);
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    padding: 7px 10px;
+    border-radius: var(--ps-radius-sm);
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    color: var(--ps-text);
+    font: 700 11px/1 var(--ps-font-body);
+    letter-spacing: 0.06em;
+    transition: 0.25s ease;
+}
+
+.cart-btn:hover .cart-btn-label,
+.cart-btn:focus-visible .cart-btn-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.cart-badge {
+    top: -8px;
+    right: -8px;
+    min-width: 24px;
+    height: 24px;
+    background: var(--ps-danger);
+    border-color: var(--ps-bg-2);
+    box-shadow: 0 4px 10px rgba(255,77,109,0.3);
+}
+
+.cart-drawer {
+    width: 430px;
+    background: var(--ps-bg-2);
+    box-shadow: -24px 0 60px rgba(0,0,0,0.34);
+}
+
+.drawer-header {
+    position: relative;
+    align-items: flex-start;
+    padding: 24px 22px 20px;
+    background: var(--ps-surface);
+    border-bottom: 1px solid var(--ps-line);
+}
+
+.drawer-heading { display: grid; gap: 7px; }
+.drawer-eyebrow, .summary-kicker {
+    color: var(--ps-accent);
+    font: 800 10px/1 var(--ps-font-body);
+    letter-spacing: 0.16em;
+}
+
+.drawer-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ps-text);
+    font-size: 21px;
+}
+
+.drawer-cart-icon { width: 24px; height: 24px; }
+.drawer-count {
+    margin: 4px 44px 0 auto;
+    color: var(--ps-muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.drawer-body { padding: 20px; }
+.drawer-list { gap: 10px; }
+.drawer-item {
+    border-radius: var(--ps-radius-sm);
+    padding: 12px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.drawer-item:hover {
+    transform: translateX(-3px);
+    border-color: rgba(255,178,36,0.55);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.drawer-total {
+    margin-top: 18px;
+    padding: 18px 2px 14px;
+    border-top: 1px solid var(--ps-line);
+    border-bottom: 1px solid var(--ps-line);
+}
+.drawer-total strong { color: var(--ps-accent); font-size: 23px; }
+.drawer-cta { gap: 10px; margin-top: 16px; }
+.drawer-cta a { border-radius: var(--ps-radius-sm); font-weight: 800; }
+.drawer-empty { padding: 70px 20px; }
+.drawer-empty i { color: var(--ps-accent); font-size: 54px; }
+
+.cart-page-intro { color: var(--ps-text-2); }
+.drawer-cta a,
+.checkout-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 50px;
+    padding: 13px 16px 13px 18px;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.drawer-cta a::before,
+.checkout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -45%;
+    width: 28%;
+    transform: skewX(-18deg);
+    background: rgba(255,255,255,0.28);
+    transition: left 0.45s ease;
+}
+
+.drawer-cta a:hover::before,
+.checkout-btn:hover::before { left: 125%; }
+
+.drawer-cta a i,
+.checkout-btn > i {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    font-size: 11px;
+    transition: transform 0.25s ease;
+}
+
+.drawer-cta a:hover i,
+.checkout-btn:hover > i { transform: translateX(4px); }
+
+.drawer-cta .btn-primary {
+    background: var(--ps-surface-2);
+    border: 1px solid var(--ps-line-2);
+    color: var(--ps-text);
+    box-shadow: none;
+}
+
+.drawer-cta .btn-primary i {
+    background: var(--ps-bg-2);
+    color: var(--ps-accent);
+}
+
+.drawer-cta .btn-checkout {
+    background: var(--ps-accent);
+    color: #171207;
+    box-shadow: 0 12px 26px rgba(255,178,36,0.25);
+}
+
+.drawer-cta .btn-checkout i,
+.checkout-btn > i { background: rgba(23,18,7,0.14); }
+
+.checkout-btn {
+    margin-top: 14px;
+    color: #171207;
+    font-weight: 800;
+    border-radius: var(--ps-radius-sm);
+}
+
+.checkout-btn > span { position: relative; }
+.continue-link { display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+.drawer-item-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px;
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+    background: var(--ps-bg-2);
+}
+
+.qty-btn {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--ps-line-2);
+    border-radius: 6px;
+    background: var(--ps-surface);
+    color: var(--ps-text-2);
+    font-size: 16px;
+    line-height: 1;
+    transition: 0.2s ease;
+}
+
+.qty-btn:hover {
+    transform: scale(1.08);
+    background: var(--ps-accent);
+    border-color: var(--ps-accent);
+    color: #171207;
+}
+
+.qty-num { min-width: 20px; text-align: center; color: var(--ps-text); font-weight: 800; }
+
+.cart-summary {
+    position: sticky;
+    overflow: hidden;
+    padding: 28px;
+}
+.cart-summary::before {
+    content: '';
+    display: block;
+    width: 46px;
+    height: 4px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background: var(--ps-accent);
+}
+.cart-summary h3 { margin-top: 8px; }
+.summary-kicker { display: block; }
+.cart-summary .summary-note {
+    border-left: 3px solid var(--ps-accent);
+    border-radius: 0 var(--ps-radius-sm) var(--ps-radius-sm) 0;
+}
+.empty-cart {
+    position: relative;
+    overflow: hidden;
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    box-shadow: var(--ps-shadow-lg);
+}
+.empty-cart::after {
+    content: 'PHONE STORE';
+    position: absolute;
+    right: 22px;
+    bottom: 18px;
+    color: var(--ps-line-2);
+    font: 900 10px/1 var(--ps-font-body);
+    letter-spacing: 0.18em;
+}
+
+@media (max-width: 600px) {
+    .cart-btn-label { display: none; }
+    .cart-drawer { width: 100%; max-width: 100vw; }
+    .drawer-header { padding: 20px 16px 18px; }
+    .drawer-body { padding: 16px; }
+    .cart-summary { padding: 22px; }
+}
+
+/* ---------- Fond vivant Phone Store ---------- */
+
+body {
+    background-color: var(--ps-bg);
+    background-image:
+        radial-gradient(circle at 12% 18%, rgba(255,178,36,0.09) 0, transparent 27%),
+        radial-gradient(circle at 86% 34%, rgba(255,91,91,0.07) 0, transparent 25%),
+        radial-gradient(circle at 42% 92%, rgba(72,127,255,0.08) 0, transparent 30%),
+        linear-gradient(125deg, var(--ps-bg), var(--ps-bg-2), var(--ps-bg));
+    background-size: 130% 130%, 145% 145%, 155% 155%, 260% 260%;
+    background-position: 0% 0%, 100% 0%, 0% 100%, 0% 50%;
+    animation: phoneStoreAtmosphere 24s ease-in-out infinite alternate;
+}
+
+@keyframes phoneStoreAtmosphere {
+    0% {
+        background-position: 0% 0%, 100% 0%, 0% 100%, 0% 50%;
+    }
+    50% {
+        background-position: 18% 12%, 82% 24%, 24% 82%, 100% 50%;
+    }
+    100% {
+        background-position: 6% 26%, 94% 10%, 12% 92%, 0% 50%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body { animation: none; }
+}
+
 .demo-note {
     background: rgba(255, 178, 36, 0.08);
     border: 1px solid rgba(255, 178, 36, 0.3);

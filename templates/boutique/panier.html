@@ -8,7 +8,7 @@
     <div class="container">
         <div class="section-header" data-aos="fade-up">
             <h2>Mon panier</h2>
-            <p>Vérifiez vos articles avant de commander</p>
+            <p class="cart-page-intro">Votre sélection, prête à rejoindre votre quotidien.</p>
         </div>
 
         {% if items %}
@@ -18,6 +18,7 @@
             </div>
 
             <aside class="cart-summary" data-aos="fade-left" data-aos-delay="100">
+                <span class="summary-kicker">RÉCAPITULATIF</span>
                 <h3>Récapitulatif</h3>
                 <div class="summary-line">
                     <span>Articles</span>
@@ -36,10 +37,11 @@
                     <strong>{{ total }} Ar</strong>
                 </div>
                 <a href="{% url 'passer_commande' %}" class="buy-btn checkout-btn">
-                    <i class="fa-solid fa-lock"></i> Passer la commande
+                    <span><i class="fa-solid fa-lock"></i> Passer la commande</span>
+                    <i class="fa-solid fa-arrow-right"></i>
                 </a>
                 <a href="{% url 'accueil' %}#products" class="continue-link">
-                    <i class="fa-solid fa-arrow-left"></i> Continuer mes achats
+                    <i class="fa-solid fa-arrow-left"></i><span>Continuer mes achats</span>
                 </a>
                 <div class="summary-note">
                     <i class="fa-solid fa-shield-halved"></i>
