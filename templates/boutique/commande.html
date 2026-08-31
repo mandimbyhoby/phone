@@ -49,15 +49,19 @@
                         <h3><i class="fa-solid fa-wallet"></i> Méthode de paiement</h3>
                         <div class="payment-grid">
                             {% for value, label in form.methode_paiement.field.choices %}
-                            <label class="payment-option">
+                            <label class="payment-option" data-payment-method="{{ value }}">
                                 <input type="radio" name="methode_paiement" value="{{ value }}"
                                     {% if form.methode_paiement.value == value %}checked{% endif %}
                                     onchange="this.closest('form').querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected')); this.closest('.payment-option').classList.add('selected');">
                                 <span class="payment-logo">
                                     {% if value == 'carte' %}
-                                    <i class="fa-solid fa-credit-card"></i>
+                                    <img src="{% static 'images/stripe-logo.png' %}" alt="Stripe" class="payment-brand-img"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                    <i class="fa-solid fa-credit-card payment-fallback"></i>
                                     {% elif value == 'paypal' %}
-                                    <i class="fa-brands fa-paypal"></i>
+                                    <img src="{% static 'images/paypal-logo.png' %}" alt="PayPal" class="payment-brand-img"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                    <i class="fa-brands fa-paypal payment-fallback"></i>
                                     {% elif value == 'orange_money' %}
                                     <i class="fa-solid fa-mobile-screen-button"></i>
                                     {% else %}
