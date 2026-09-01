@@ -45,6 +45,25 @@ body {
     z-index: 0;
 }
 
+.dashboard-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+    opacity: 0.42;
+    animation: gridPulse 12s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes gridPulse {
+    0% { opacity: 0.22; transform: scale(1); }
+    100% { opacity: 0.5; transform: scale(1.04); }
+}
+
 .bubble {
     position: absolute;
     display: block;
@@ -145,6 +164,14 @@ body {
     backdrop-filter: blur(8px);
     overflow: hidden;
     isolation: isolate;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.stat-card:hover,
+.chart-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(124, 77, 255, 0.4);
+    box-shadow: 0 20px 40px rgba(124, 77, 255, 0.18);
 }
 
 .stat-card::before,
