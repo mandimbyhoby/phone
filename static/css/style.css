@@ -37,6 +37,51 @@ body {
         linear-gradient(180deg, rgba(18, 18, 34, 0.98), rgba(22, 12, 41, 0.96));
 }
 
+.bubble-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bubble {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 30px rgba(255,255,255,0.08), 0 0 20px rgba(96, 165, 250, 0.12);
+    animation: bubbleFloat 18s linear infinite;
+}
+
+.bubble-1 { width: 130px; height: 130px; left: 8%; top: 10%; animation-delay: 0s; }
+.bubble-2 { width: 170px; height: 170px; left: 22%; bottom: 12%; animation-delay: 3s; }
+.bubble-3 { width: 90px; height: 90px; right: 18%; top: 18%; animation-delay: 2s; }
+.bubble-4 { width: 200px; height: 200px; right: 8%; bottom: 8%; animation-delay: 5s; }
+.bubble-5 { width: 120px; height: 120px; left: 42%; top: 26%; animation-delay: 7s; }
+.bubble-6 { width: 80px; height: 80px; left: 58%; bottom: 20%; animation-delay: 1s; }
+.bubble-7 { width: 140px; height: 140px; left: 70%; top: 52%; animation-delay: 4s; }
+.bubble-8 { width: 110px; height: 110px; left: 12%; bottom: 28%; animation-delay: 6s; }
+
+@keyframes bubbleFloat {
+    0% {
+        transform: translate3d(0, 0, 0) scale(0.8);
+        opacity: 0.2;
+    }
+    25% {
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate3d(22px, -26px, 0) scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate3d(-14px, 24px, 0) scale(1.12);
+        opacity: 0.22;
+    }
+}
+
 .admin-dashboard::before,
 .admin-dashboard::after {
     content: "";
