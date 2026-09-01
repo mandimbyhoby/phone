@@ -1,9 +1,12 @@
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 from .forms import CommandeForm
 from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit, Profil
@@ -108,6 +111,27 @@ class DashboardAdministrateurTests(TestCase):
 
 		self.assertEqual(response.status_code, 302)
 		self.assertIn('/connexion/?next=/dashboard/', response.url)
+
+	def test_dashboard_applique_le_filtre_de_periode(self):
+		user = User.objects.create_user(username='pilote2', password='motdepasse-test', is_staff=True)
+		Profil.objects.create(utilisateur=user, est_pilote_principal=True)
+		self.client.force_login(user)
+
+		commande_recent = Commande.objects.create(
+			nom='Jour', email='day@example.com', telephone='+261340000000',
+			adresse='Adresse A', ville='Antananarivo', total='100000.00',
+		)
+		commande_ancienne = Commande.objects.create(
+			nom='Ancienne', email='old@example.com', telephone='+261340000001',
+			adresse='Adresse B', ville='Antananarivo', total='500000.00',
+		)
+		Commande.objects.filter(pk=commande_recent.pk).update(date_commande=timezone.now() - timedelta(days=2))
+		Commande.objects.filter(pk=commande_ancienne.pk).update(date_commande=timezone.now() - timedelta(days=120))
+
+		response = self.client.get('/dashboard/?period=7d')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(float(response.context['ca_selectionne']), 100000.0)
 
 
 class CommandeStockTests(TestCase):

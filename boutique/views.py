@@ -44,29 +44,45 @@ def est_pilote_principal(user):
 @user_passes_test(est_pilote_principal, login_url='connexion')
 def admin_dashboard(request):
     now = timezone.now()
-    last_30_days = now - timedelta(days=30)
+    period = request.GET.get('period', '30d')
+    period_map = {'7d': 7, '30d': 30, '12m': 365}
+    days = period_map.get(period, 30)
+    start_date = now - timedelta(days=days)
 
-    revenus_jour = list(
-        Commande.objects.filter(date_commande__gte=last_30_days)
-        .annotate(jour=TruncDate('date_commande'))
-        .values('jour')
-        .annotate(total=Sum('total'))
-        .order_by('jour')
-    )
+    ca_selectionne = Commande.objects.filter(date_commande__gte=start_date).aggregate(total=Sum('total'))['total'] or 0
+    commandes_selectionnees = Commande.objects.filter(date_commande__gte=start_date)
+    produits_vendus_selectionnes = LigneCommande.objects.filter(commande__date_commande__gte=start_date).aggregate(total=Sum('quantite'))['total'] or 0
+    panier_moyen_selectionne = commandes_selectionnees.aggregate(moyenne=Avg('total'))['moyenne'] or 0
+    nouveaux_clients = Profil.objects.filter(date_inscription__gte=start_date).count()
 
-    revenus_mois = list(
-        Commande.objects.filter(date_commande__gte=now - timedelta(days=365))
-        .annotate(mois=TruncMonth('date_commande'))
-        .values('mois')
-        .annotate(total=Sum('total'))
-        .order_by('mois')
-    )
+    if period in ('7d', '30d'):
+        revenus_jour = list(
+            commandes_selectionnees.annotate(jour=TruncDate('date_commande'))
+            .values('jour')
+            .annotate(total=Sum('total'))
+            .order_by('jour')
+        )
+        revenus_mois = []
+    else:
+        revenus_jour = list(
+            Commande.objects.filter(date_commande__gte=now - timedelta(days=365))
+            .annotate(jour=TruncDate('date_commande'))
+            .values('jour')
+            .annotate(total=Sum('total'))
+            .order_by('jour')
+        )
+        revenus_mois = list(
+            Commande.objects.filter(date_commande__gte=now - timedelta(days=365))
+            .annotate(mois=TruncMonth('date_commande'))
+            .values('mois')
+            .annotate(total=Sum('total'))
+            .order_by('mois')
+        )
 
     total_ca = Commande.objects.aggregate(total=Sum('total'))['total'] or 0
     nb_commandes = Commande.objects.count()
     produits_vendus = LigneCommande.objects.aggregate(total=Sum('quantite'))['total'] or 0
     panier_moyen = Commande.objects.aggregate(moyenne=Avg('total'))['moyenne'] or 0
-    nouveaux_clients = Profil.objects.filter(date_inscription__gte=last_30_days).count()
     stock_total = Produit.objects.aggregate(total=Sum('stock'))['total'] or 0
     produits_populaires = list(
         LigneCommande.objects.values('produit__nom', 'produit__id')
@@ -102,11 +118,16 @@ def admin_dashboard(request):
 
     context = {
         'page_title': 'Dashboard administrateur',
+        'period': period,
         'ca_total': total_ca,
+        'ca_selectionne': ca_selectionne,
         'ca_30_jours': sum(item['value'] for item in revenus_jour),
+        'tempo_label': '7 jours' if period == '7d' else '30 jours' if period == '30d' else '12 mois',
         'nb_commandes': nb_commandes,
         'produits_vendus': produits_vendus,
+        'produits_vendus_selectionnes': produits_vendus_selectionnes,
         'panier_moyen': panier_moyen,
+        'panier_moyen_selectionne': panier_moyen_selectionne,
         'nouveaux_clients': nouveaux_clients,
         'stock_total': stock_total,
         'revenue_by_day': revenus_jour,

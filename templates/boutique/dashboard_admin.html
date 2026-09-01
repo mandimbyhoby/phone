@@ -14,22 +14,33 @@
     <span class="bubble bubble-6"></span>
     <span class="bubble bubble-7"></span>
     <span class="bubble bubble-8"></span>
+    <span class="bubble bubble-9"></span>
+    <span class="bubble bubble-10"></span>
   </div>
   <div class="dashboard-grid-overlay" aria-hidden="true"></div>
+  <div class="dashboard-glow glow-left" aria-hidden="true"></div>
+  <div class="dashboard-glow glow-right" aria-hidden="true"></div>
   <div class="container">
     <div class="section-header" data-aos="fade-up">
+      <div class="dashboard-eyebrow">ADMIN</div>
       <h2>📊 Dashboard administrateur</h2>
       <p>Vue globale de la performance et de l’activité du site.</p>
     </div>
 
+    <div class="dashboard-filters" data-aos="fade-up">
+      <a href="?period=7d" class="filter-btn {% if period == '7d' %}active{% endif %}">7 jours</a>
+      <a href="?period=30d" class="filter-btn {% if period == '30d' or period == '30d' %}active{% endif %}">30 jours</a>
+      <a href="?period=12m" class="filter-btn {% if period == '12m' %}active{% endif %}">12 mois</a>
+    </div>
+
     <div class="dashboard-stats" data-aos="fade-up">
+      <div class="stat-card">
+        <span>CA {{ tempo_label }}</span>
+        <strong>{{ ca_selectionne|floatformat:0 }} Ar</strong>
+      </div>
       <div class="stat-card">
         <span>CA total</span>
         <strong>{{ ca_total|floatformat:0 }} Ar</strong>
-      </div>
-      <div class="stat-card">
-        <span>CA par 30 jours</span>
-        <strong>{{ ca_30_jours|floatformat:0 }} Ar</strong>
       </div>
       <div class="stat-card">
         <span>Commandes</span>
