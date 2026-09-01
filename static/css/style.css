@@ -28,7 +28,57 @@ body {
 }
 
 .admin-dashboard {
+    position: relative;
     padding: 40px 0 80px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top left, rgba(145, 91, 255, 0.32), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.18), transparent 25%),
+        linear-gradient(180deg, rgba(18, 18, 34, 0.98), rgba(22, 12, 41, 0.96));
+}
+
+.admin-dashboard::before,
+.admin-dashboard::after {
+    content: "";
+    position: absolute;
+    inset: auto;
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0.8;
+    pointer-events: none;
+    animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.admin-dashboard::before {
+    width: 500px;
+    height: 500px;
+    background: rgba(124, 77, 255, 0.2);
+    top: -140px;
+    left: -120px;
+}
+
+.admin-dashboard::after {
+    width: 420px;
+    height: 420px;
+    background: rgba(42, 213, 198, 0.14);
+    right: -100px;
+    bottom: -60px;
+    animation-duration: 22s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(30px, 25px, 0) scale(1.08); }
+}
+
+.admin-dashboard .container {
+    position: relative;
+    z-index: 1;
+}
+
+.admin-dashboard .section-header {
+    position: relative;
+    z-index: 1;
 }
 
 .dashboard-stats {
@@ -36,15 +86,37 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 18px;
     margin: 30px 0 26px;
+    position: relative;
+    z-index: 1;
 }
 
 .stat-card,
 .chart-card {
+    position: relative;
     background: rgba(12, 18, 36, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 18px;
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
     backdrop-filter: blur(8px);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.stat-card::before,
+.chart-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,255,255,0.08), transparent 35%, transparent 65%, rgba(124,77,255,0.08));
+    transform: translateX(-100%);
+    animation: shine 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-120%); }
+    50% { transform: translateX(120%); }
+    100% { transform: translateX(120%); }
 }
 
 .stat-card {
