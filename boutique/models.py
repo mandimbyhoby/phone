@@ -78,6 +78,7 @@ class Profil(models.Model):
     adresse = models.TextField(blank=True, default='')
     ville = models.CharField(max_length=100, blank=True, default='')
     photo = models.ImageField(upload_to='profils/', null=True, blank=True)
+    est_pilote_principal = models.BooleanField(default=False, help_text='Accès réservé au dashboard administrateur principal.')
     date_inscription = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

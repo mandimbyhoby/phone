@@ -1,9 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 import logging
 from io import BytesIO
+from datetime import timedelta
+
+from django.utils import timezone
+from django.db.models import Sum, Avg, Count
+from django.db.models.functions import TruncDate, TruncMonth
 
 import qrcode
 
@@ -24,6 +29,93 @@ from . import paiements as paiements_module
 from .factures import generer_facture_pdf, envoyer_email_annulation
 
 logger = logging.getLogger(__name__)
+
+
+def est_pilote_principal(user):
+    if not user.is_authenticated:
+        return False
+    if user.is_superuser:
+        return True
+    profil = getattr(user, 'profil', None)
+    return bool(profil and profil.est_pilote_principal)
+
+
+@login_required(login_url='connexion')
+@user_passes_test(est_pilote_principal, login_url='connexion')
+def admin_dashboard(request):
+    now = timezone.now()
+    last_30_days = now - timedelta(days=30)
+
+    revenus_jour = list(
+        Commande.objects.filter(date_commande__gte=last_30_days)
+        .annotate(jour=TruncDate('date_commande'))
+        .values('jour')
+        .annotate(total=Sum('total'))
+        .order_by('jour')
+    )
+
+    revenus_mois = list(
+        Commande.objects.filter(date_commande__gte=now - timedelta(days=365))
+        .annotate(mois=TruncMonth('date_commande'))
+        .values('mois')
+        .annotate(total=Sum('total'))
+        .order_by('mois')
+    )
+
+    total_ca = Commande.objects.aggregate(total=Sum('total'))['total'] or 0
+    nb_commandes = Commande.objects.count()
+    produits_vendus = LigneCommande.objects.aggregate(total=Sum('quantite'))['total'] or 0
+    panier_moyen = Commande.objects.aggregate(moyenne=Avg('total'))['moyenne'] or 0
+    nouveaux_clients = Profil.objects.filter(date_inscription__gte=last_30_days).count()
+    stock_total = Produit.objects.aggregate(total=Sum('stock'))['total'] or 0
+    produits_populaires = list(
+        LigneCommande.objects.values('produit__nom', 'produit__id')
+        .annotate(quantite=Sum('quantite'))
+        .order_by('-quantite')[:5]
+    )
+
+    for point in revenus_jour:
+        point['label'] = point['jour'].strftime('%d/%m')
+        point['value'] = float(point['total'] or 0)
+
+    for point in revenus_mois:
+        point['label'] = point['mois'].strftime('%b %Y')
+        point['value'] = float(point['total'] or 0)
+
+    if revenus_jour:
+        max_jour = max(item['value'] for item in revenus_jour) or 1
+        for item in revenus_jour:
+            item['height'] = round((item['value'] / max_jour) * 100, 1)
+    else:
+        revenus_jour = []
+
+    if revenus_mois:
+        max_mois = max(item['value'] for item in revenus_mois) or 1
+        for item in revenus_mois:
+            item['height'] = round((item['value'] / max_mois) * 100, 1)
+    else:
+        revenus_mois = []
+
+    for produit in produits_populaires:
+        produit['nom'] = produit['produit__nom']
+        produit['quantite'] = int(produit['quantite'] or 0)
+
+    context = {
+        'page_title': 'Dashboard administrateur',
+        'ca_total': total_ca,
+        'ca_30_jours': sum(item['value'] for item in revenus_jour),
+        'nb_commandes': nb_commandes,
+        'produits_vendus': produits_vendus,
+        'panier_moyen': panier_moyen,
+        'nouveaux_clients': nouveaux_clients,
+        'stock_total': stock_total,
+        'revenue_by_day': revenus_jour,
+        'revenue_by_month': revenus_mois,
+        'produits_populaires': produits_populaires,
+        'commandes_en_attente': Commande.objects.filter(statut='en_attente').count(),
+        'commandes_confirmees': Commande.objects.filter(statut='confirmee').count(),
+    }
+    return render(request, 'boutique/dashboard_admin.html', context)
 
 # ============================================================
 # A U T H E N T I F I C A T I O N

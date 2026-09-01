@@ -88,6 +88,12 @@
                     {% endif %}
                 </a>
                 {% endif %}
+                {% if user.is_authenticated and user.is_staff and user.profil.est_pilote_principal or user.is_superuser %}
+                <a href="{% url 'admin_dashboard' %}" class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}">
+                    <span class="nav-icon"><i class="fa-solid fa-chart-column"></i></span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                {% endif %}
             </nav>
 
             <div class="nav-actions">

@@ -6,7 +6,7 @@ from django.core import mail
 from django.test import TestCase, override_settings
 
 from .forms import CommandeForm
-from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit
+from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit, Profil
 from . import paiements as paiements_module
 
 
@@ -88,6 +88,28 @@ class ProduitTests(TestCase):
 	'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
 	'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},
 })
+class DashboardAdministrateurTests(TestCase):
+	def test_dashboard_accessible_pour_pilote_principal(self):
+		user = User.objects.create_user(username='pilote', password='motdepasse-test', is_staff=True)
+		Profil.objects.create(utilisateur=user, est_pilote_principal=True)
+		self.client.force_login(user)
+
+		response = self.client.get('/dashboard/')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Dashboard administrateur')
+		self.assertContains(response, 'CA par jour')
+
+	def test_dashboard_refuse_un_autre_utilisateur(self):
+		user = User.objects.create_user(username='client', password='motdepasse-test', is_staff=False)
+		self.client.force_login(user)
+
+		response = self.client.get('/dashboard/')
+
+		self.assertEqual(response.status_code, 302)
+		self.assertIn('/connexion/?next=/dashboard/', response.url)
+
+
 class CommandeStockTests(TestCase):
 	def test_paiement_livraison_seul_par_defaut(self):
 		self.assertEqual(

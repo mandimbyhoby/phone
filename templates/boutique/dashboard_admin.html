@@ -1,0 +1,110 @@
+{% extends 'boutique/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard administrateur — Phone Store{% endblock %}
+
+{% block content %}
+<section class="page-section admin-dashboard">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>📊 Dashboard administrateur</h2>
+      <p>Vue globale de la performance et de l’activité du site.</p>
+    </div>
+
+    <div class="dashboard-stats" data-aos="fade-up">
+      <div class="stat-card">
+        <span>CA total</span>
+        <strong>{{ ca_total|floatformat:0 }} Ar</strong>
+      </div>
+      <div class="stat-card">
+        <span>CA par 30 jours</span>
+        <strong>{{ ca_30_jours|floatformat:0 }} Ar</strong>
+      </div>
+      <div class="stat-card">
+        <span>Commandes</span>
+        <strong>{{ nb_commandes }}</strong>
+      </div>
+      <div class="stat-card">
+        <span>Produits vendus</span>
+        <strong>{{ produits_vendus }}</strong>
+      </div>
+      <div class="stat-card">
+        <span>Panier moyen</span>
+        <strong>{{ panier_moyen|floatformat:0 }} Ar</strong>
+      </div>
+      <div class="stat-card">
+        <span>Nouveaux clients</span>
+        <strong>{{ nouveaux_clients }}</strong>
+      </div>
+      <div class="stat-card">
+        <span>Stock total</span>
+        <strong>{{ stock_total }}</strong>
+      </div>
+      <div class="stat-card">
+        <span>Commandes en attente</span>
+        <strong>{{ commandes_en_attente }}</strong>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card" data-aos="fade-right">
+        <h3>CA par jour</h3>
+        <div class="bar-chart">
+          {% for item in revenue_by_day %}
+            <div class="bar-col">
+              <span class="bar-value">{{ item.value|floatformat:0 }} Ar</span>
+              <div class="bar" style="height: {{ item.height }}%;"></div>
+              <small>{{ item.label }}</small>
+            </div>
+          {% empty %}
+            <p>Aucune donnée sur les 30 derniers jours.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="chart-card" data-aos="fade-left">
+        <h3>CA par mois</h3>
+        <div class="bar-chart">
+          {% for item in revenue_by_month %}
+            <div class="bar-col">
+              <span class="bar-value">{{ item.value|floatformat:0 }} Ar</span>
+              <div class="bar" style="height: {{ item.height }}%;"></div>
+              <small>{{ item.label }}</small>
+            </div>
+          {% empty %}
+            <p>Aucune donnée sur 12 mois.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="chart-card" data-aos="fade-right">
+        <h3>Produits les plus populaires</h3>
+        <ul class="top-products">
+          {% for produit in produits_populaires %}
+            <li>
+              <span>{{ forloop.counter }}. {{ produit.nom }}</span>
+              <strong>{{ produit.quantite }} vendus</strong>
+            </li>
+          {% empty %}
+            <li>Aucun achat pour le moment.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="chart-card" data-aos="fade-left">
+        <h3>Statut des commandes</h3>
+        <div class="mini-metrics">
+          <div>
+            <span>Confirmées</span>
+            <strong>{{ commandes_confirmees }}</strong>
+          </div>
+          <div>
+            <span>En attente</span>
+            <strong>{{ commandes_en_attente }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
