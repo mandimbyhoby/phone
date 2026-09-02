@@ -3520,8 +3520,8 @@ textarea.form-input { resize: vertical; }
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 2px solid rgba(109, 25, 255, 0.18);
+    background: var(--ps-surface);
+    border: 2px solid var(--ps-line-2);
     border-radius: 14px;
     padding: 12px 14px;
     cursor: pointer;
@@ -3532,9 +3532,10 @@ textarea.form-input { resize: vertical; }
 
 .payment-option.selected,
 .payment-option:has(input:checked) {
-    background: rgba(109, 25, 255, 0.06);
-    border-color: #6d19ff;
-    box-shadow: 0 8px 20px rgba(109, 25, 255, 0.18);
+    background: rgba(255, 178, 36, 0.12);
+    border-color: var(--ps-accent);
+    box-shadow: 0 8px 20px rgba(255, 178, 36, 0.18);
+    color: var(--ps-text);
 }
 
 .payment-option input { position: absolute; opacity: 0; pointer-events: none; }
@@ -3578,8 +3579,8 @@ textarea.form-input { resize: vertical; }
 
 .payment-logo .fa-paypal { color: #003087; background: transparent; }
 
-.payment-text strong { display: block; color: #222; font-size: 13.5px; line-height: 1.3; }
-.payment-text small { color: #888; font-size: 11.5px; }
+.payment-text strong { display: block; color: var(--ps-text); font-size: 13.5px; line-height: 1.3; }
+.payment-text small { color: var(--ps-text-2); font-size: 11.5px; }
 
 .demo-note {
     display: flex;
@@ -3608,10 +3609,11 @@ textarea.form-input { resize: vertical; }
     display: flex;
     flex-direction: column;
     gap: 3px;
+    color: var(--ps-text);
 }
 
 .summary-secure i { color: #1fbf6e; margin-right: 6px; }
-.summary-secure span { font-weight: 500; font-size: 11.5px; opacity: 0.8; }
+.summary-secure span { color: var(--ps-text-2); font-weight: 500; font-size: 11.5px; }
 
 /* Orange Money */
 .om-brand {
