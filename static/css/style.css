@@ -4724,28 +4724,6 @@ a { color: inherit; }
     opacity: 0.9;
 }
 
-/* Badge raccourci clavier "/" (masqué quand le champ est rempli) */
-.site-navbar .search-box .search-kbd {
-    flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--ps-muted);
-    background: var(--ps-surface);
-    border: 1px solid var(--ps-line-2);
-    border-radius: 5px;
-    padding: 1px 7px;
-    line-height: 1.6;
-    margin-right: 4px;
-    pointer-events: none;
-    /* Pas de transition : les transitions d'opacity gèlent en headless/Chromium
-       quand un ancêtre a backdrop-filter (bug identique au menu mobile) */
-}
-
-/* Le badge s'efface quand on tape (classe .has-value posée par app.js) */
-.site-navbar .search-box.has-value .search-kbd {
-    opacity: 0;
-}
-
 /* Bouton doré */
 .site-navbar .search-box button {
     flex-shrink: 0;
