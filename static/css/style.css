@@ -5737,17 +5737,23 @@ a { color: inherit; }
         width: 100%;
         gap: 20px;
     }
-    .hero-text { min-width: 0; }
+    .hero-text {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
     .hero-text,
     .hero-text p,
     .hero-stats { text-align: center; }
     .hero-text h1 {
         font-size: clamp(32px, 10vw, 42px);
         line-height: 1.08;
+        max-width: 100%;
         overflow-wrap: anywhere;
     }
     .hero-text p {
         font-size: 15px;
+        max-width: 100%;
         overflow-wrap: anywhere;
     }
     .hero-buttons {
@@ -5771,7 +5777,8 @@ a { color: inherit; }
     }
     .products-section { padding: 58px 0 68px; }
     .filters-bar { display: flex; flex-direction: column; align-items: stretch; }
-    .filter-search input { min-width: 0; text-align: center; }
+    .filter-search input { min-width: 0; }
+    .filter-search input { text-align: center; }
     .filter-pills {
         display: flex;
         justify-content: flex-start;
@@ -5795,7 +5802,8 @@ a { color: inherit; }
     }
     .product-info .price-box { justify-content: center; }
     .product-info .product-rating { justify-content: center; }
-    .product-actions { gap: 8px; justify-content: center; }
+    .product-actions { gap: 8px; }
+    .product-actions { justify-content: center; }
     .product-btn {
         flex: 1;
         min-width: 0;
@@ -5807,6 +5815,7 @@ a { color: inherit; }
     .feature-card p { overflow-wrap: anywhere; }
     .cta-box { padding: 34px 22px; }
 }
+
 /* ---------- Pages internes (page-section) ---------- */
 
 .legal-content {
