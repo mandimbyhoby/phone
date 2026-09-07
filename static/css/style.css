@@ -3786,6 +3786,18 @@ textarea.form-input { resize: vertical; }
 
 .auth-box-wide { max-width: 680px; }
 
+@media (min-width: 1101px) {
+    .auth-box-wide {
+        max-width: 820px;
+        padding: 48px 52px;
+    }
+
+    .auth-box-wide .auth-head { margin-bottom: 34px; }
+    .auth-box-wide .form-row { gap: 22px; }
+    .auth-box-wide .form-group { margin-bottom: 20px; }
+}
+
+
 .auth-head { text-align: center; margin-bottom: 26px; }
 
 .auth-logo {
