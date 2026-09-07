@@ -5591,10 +5591,34 @@ a { color: inherit; }
 
 @media (max-width: 640px) {
     .site-footer { padding-top: 46px; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 34px 24px; }
+    .footer-top {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 30px;
+        padding: 0 20px;
+    }
     .footer-brand { grid-column: 1 / -1; }
-    .footer-col:last-child { grid-column: 1 / -1; }
-    .footer-bottom { margin-top: 40px; padding-left: 24px; padding-right: 24px; }
+    .footer-brand,
+    .footer-col { min-width: 0; text-align: center; }
+    .footer-brand p {
+        max-width: 330px;
+        margin: 16px auto;
+        overflow-wrap: anywhere;
+    }
+    .footer-logo { justify-content: center; }
+    .footer-social { justify-content: center; }
+    .footer-col h4 { margin-bottom: 16px; }
+    .footer-col h4::after { margin-left: auto; margin-right: auto; }
+    .footer-col ul { justify-items: center; }
+    .footer-contact { justify-items: start; width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; }
+    .footer-contact li { overflow-wrap: anywhere; text-align: left; }
+    .footer-bottom {
+        align-items: center;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 38px;
+        padding: 18px 20px;
+        text-align: center;
+    }
 }
 
 /* ---------- Finition de l'accueil ---------- */
