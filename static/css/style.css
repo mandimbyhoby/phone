@@ -5738,12 +5738,22 @@ a { color: inherit; }
         gap: 20px;
     }
     .hero-text { min-width: 0; }
+    .hero-text,
+    .hero-text p,
+    .hero-stats { text-align: center; }
     .hero-text h1 {
         font-size: clamp(32px, 10vw, 42px);
         line-height: 1.08;
+        overflow-wrap: anywhere;
     }
-    .hero-text p { font-size: 15px; }
-    .hero-buttons { align-items: stretch; }
+    .hero-text p {
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+    .hero-buttons {
+        align-items: stretch;
+        justify-content: center;
+    }
     .hero-image {
         min-width: 0;
         min-height: 250px;
@@ -5761,7 +5771,7 @@ a { color: inherit; }
     }
     .products-section { padding: 58px 0 68px; }
     .filters-bar { display: flex; flex-direction: column; align-items: stretch; }
-    .filter-search input { min-width: 0; }
+    .filter-search input { min-width: 0; text-align: center; }
     .filter-pills {
         display: flex;
         justify-content: flex-start;
@@ -5775,9 +5785,26 @@ a { color: inherit; }
     .product-image { min-height: 220px; padding: 18px; }
     .product-image img { height: 210px; }
     .product-info { padding: 18px; }
-    .product-info h3 { font-size: 18px; }
-    .product-actions { gap: 8px; }
-    .product-btn { flex: 1; }
+    .product-info,
+    .product-info h3,
+    .product-info .brand,
+    .product-info .stock { text-align: center; }
+    .product-info h3 {
+        font-size: 18px;
+        overflow-wrap: anywhere;
+    }
+    .product-info .price-box { justify-content: center; }
+    .product-info .product-rating { justify-content: center; }
+    .product-actions { gap: 8px; justify-content: center; }
+    .product-btn {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+    .feature-card { text-align: center; }
+    .feature-card > div:last-child { min-width: 0; }
+    .feature-card h4,
+    .feature-card p { overflow-wrap: anywhere; }
     .cta-box { padding: 34px 22px; }
 }
 /* ---------- Pages internes (page-section) ---------- */
