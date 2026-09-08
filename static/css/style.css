@@ -3508,11 +3508,11 @@ textarea.form-input { resize: vertical; }
     padding: 40px 36px;
 }
 
-.auth-box-wide { max-width: 680px; }
+.auth-box-wide { max-width: 720px; }
 
 @media (min-width: 1101px) {
     .auth-box-wide {
-        max-width: 820px;
+        max-width: 900px;
         padding: 48px 52px;
     }
 
@@ -3544,17 +3544,23 @@ textarea.form-input { resize: vertical; }
 
 .password-field {
     position: relative;
+    width: 100%;
 }
 
 .password-field .form-input {
+    width: 100%;
     min-height: 50px;
     padding-right: 52px;
+}
+
+.password-row {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
 }
 
 .password-toggle {
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
