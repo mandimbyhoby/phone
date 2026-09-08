@@ -6653,6 +6653,39 @@ html[data-theme="light"] .hero-wrapper {
         var(--ps-bg);
 }
 
+html[data-theme="light"] .admin-dashboard .filter-btn {
+    background: #ffffff;
+    border-color: rgba(17, 24, 39, 0.28);
+    color: #111827;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(17, 24, 39, 0.12);
+}
+
+html[data-theme="light"] .admin-dashboard .filter-btn:hover,
+html[data-theme="light"] .admin-dashboard .filter-btn:focus-visible {
+    background: #fff7e6;
+    border-color: #d97706;
+    color: #9a3412;
+}
+
+html[data-theme="light"] .admin-dashboard .filter-btn.active {
+    background: #d97706;
+    border-color: #b45309;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);
+}
+
+@media (max-width: 600px) {
+    html[data-theme="light"] .admin-dashboard .dashboard-filters {
+        gap: 8px;
+    }
+
+    html[data-theme="light"] .admin-dashboard .filter-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
 /* Pseudo-éléments des sections produits dans les pages internes */
 html[data-theme="light"] .page-section .bg-circle {
     background: rgba(17, 24, 39, 0.05);
