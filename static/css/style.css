@@ -4685,6 +4685,19 @@ a { color: inherit; }
     .nav-menu.open { right: 0 !important; }
     .nav-menu a { border-radius: var(--ps-radius-sm); }
     .nav-menu .nav-link.active { box-shadow: inset 2px 0 0 var(--ps-accent); border-radius: var(--ps-radius-sm); }
+    .nav-menu .nav-menu-close {
+        display: flex;
+        color: var(--ps-text);
+        background: var(--ps-surface-2);
+        border-color: var(--ps-line-2);
+        z-index: 2;
+    }
+    .nav-menu .nav-menu-close:hover,
+    .nav-menu .nav-menu-close:focus-visible {
+        color: var(--ps-accent);
+        background: var(--ps-surface);
+        border-color: var(--ps-accent);
+    }
 }
 
 /* ---------- Hero ---------- */
