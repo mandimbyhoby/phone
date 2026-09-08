@@ -6941,6 +6941,8 @@ html[data-theme="light"] .page-section .bg-circle {
 
 .notif-menu-footer a:hover { text-decoration: underline; }
 
+.dashboard-filters .filter-btn { text-decoration: none; }
+
 /* Badge dans le menu mobile */
 .notif-menu-badge {
     margin-left: auto;
