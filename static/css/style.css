@@ -5838,6 +5838,31 @@ textarea:focus {
     box-shadow: none;
 }
 
+.success-box h1 {
+    color: var(--ps-text);
+}
+
+.success-box > p {
+    color: var(--ps-text-2);
+}
+
+.success-details {
+    background: var(--ps-surface-2);
+    border: 1px solid var(--ps-line);
+}
+
+.success-line {
+    border-bottom-color: var(--ps-line-2);
+}
+
+.success-line span {
+    color: var(--ps-muted);
+}
+
+.success-line strong {
+    color: var(--ps-text);
+}
+
 /* ---------- Pages auth : liens et pied de page lisibles dans les 2 thèmes ---------- */
 
 .auth-head h1 { color: var(--ps-text); }
