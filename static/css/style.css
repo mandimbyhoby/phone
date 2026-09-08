@@ -5863,6 +5863,24 @@ textarea:focus {
     color: var(--ps-text);
 }
 
+html[data-theme="dark"] .success-box h1 {
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 800;
+    text-shadow: 0 2px 18px rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="dark"] .success-box > p {
+    color: #e5edf7;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+html[data-theme="dark"] .success-box > p strong {
+    color: #ffffff;
+    font-weight: 800;
+}
+
 /* ---------- Pages auth : liens et pied de page lisibles dans les 2 thèmes ---------- */
 
 .auth-head h1 { color: var(--ps-text); }
