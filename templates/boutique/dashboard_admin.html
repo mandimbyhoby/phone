@@ -28,14 +28,14 @@
     </div>
 
     <div class="dashboard-filters" data-aos="fade-up">
-      <a href="?period=7d" class="filter-btn {% if period == '7d' %}active{% endif %}">7 jours</a>
-      <a href="?period=30d" class="filter-btn {% if period == '30d' or period == '30d' %}active{% endif %}">30 jours</a>
-      <a href="?period=12m" class="filter-btn {% if period == '12m' %}active{% endif %}">12 mois</a>
+      <a href="?period=7d" class="filter-btn {% if period == '7d' %}active{% endif %}">7 derniers jours</a>
+      <a href="?period=30d" class="filter-btn {% if period == '30d' %}active{% endif %}">30 derniers jours</a>
+      <a href="?period=12m" class="filter-btn {% if period == '12m' %}active{% endif %}">12 derniers mois</a>
     </div>
 
     <div class="dashboard-stats" data-aos="fade-up">
       <div class="stat-card">
-        <span>CA {{ tempo_label }}</span>
+        <span>CA sur {{ tempo_label }}</span>
         <strong>{{ ca_selectionne|floatformat:0 }} Ar</strong>
       </div>
       <div class="stat-card">

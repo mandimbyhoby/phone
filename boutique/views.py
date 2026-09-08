@@ -122,7 +122,7 @@ def admin_dashboard(request):
         'ca_total': total_ca,
         'ca_selectionne': ca_selectionne,
         'ca_30_jours': sum(item['value'] for item in revenus_jour),
-        'tempo_label': '7 jours' if period == '7d' else '30 jours' if period == '30d' else '12 mois',
+        'tempo_label': '7 derniers jours' if period == '7d' else '30 derniers jours' if period == '30d' else '12 derniers mois',
         'nb_commandes': nb_commandes,
         'produits_vendus': produits_vendus,
         'produits_vendus_selectionnes': produits_vendus_selectionnes,
