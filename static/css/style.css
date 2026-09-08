@@ -3542,6 +3542,50 @@ textarea.form-input { resize: vertical; }
 
 .auth-form { display: flex; flex-direction: column; gap: 2px; }
 
+.password-field {
+    position: relative;
+}
+
+.password-field .form-input {
+    min-height: 50px;
+    padding-right: 52px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffd166;
+    outline: none;
+}
+
+html[data-theme="light"] .password-toggle {
+    color: var(--ps-muted);
+}
+
+html[data-theme="light"] .password-toggle:hover,
+html[data-theme="light"] .password-toggle:focus-visible {
+    background: rgba(217, 119, 6, 0.1);
+    color: var(--ps-accent);
+}
+
 .auth-form .submit-order { margin-top: 8px; }
 
 .auth-links { text-align: right; margin-bottom: 12px; }

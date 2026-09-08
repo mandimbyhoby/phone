@@ -40,6 +40,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ---- Affichage des mots de passe ----
+    document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+        const input = document.getElementById(button.dataset.passwordToggle);
+        if (!input) return;
+        button.addEventListener('click', function () {
+            const showPassword = input.type === 'password';
+            input.type = showPassword ? 'text' : 'password';
+            button.setAttribute('aria-pressed', String(showPassword));
+            button.setAttribute('aria-label', showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+            const icon = button.querySelector('i');
+            if (icon) icon.className = showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        });
+    });
+
     // ---- Mode clair / sombre ----
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
