@@ -3508,11 +3508,11 @@ textarea.form-input { resize: vertical; }
     padding: 40px 36px;
 }
 
-.auth-box-wide { max-width: 720px; }
+.auth-box-wide { max-width: 760px; }
 
 @media (min-width: 1101px) {
     .auth-box-wide {
-        max-width: 900px;
+        max-width: 960px;
         padding: 48px 52px;
     }
 
@@ -3549,26 +3549,32 @@ textarea.form-input { resize: vertical; }
 
 .password-field .form-input {
     width: 100%;
-    min-height: 50px;
-    padding-right: 52px;
+    min-height: 56px;
+    padding-right: 48px;
 }
 
 .password-row {
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+}
+
+@media (max-width: 700px) {
+    .password-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 .password-toggle {
     position: absolute;
     top: 50%;
-    right: 4px;
+    right: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     transform: translateY(-50%);
     border: 0;
-    border-radius: 9px;
+    border-radius: 0 12px 12px 0;
     background: transparent;
     color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
