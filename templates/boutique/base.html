@@ -60,6 +60,9 @@
             </a>
 
             <nav class="nav-menu" id="nav-menu">
+                <button type="button" class="nav-menu-close" id="nav-menu-close" aria-label="Fermer le menu">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
                 <a href="{% url 'accueil' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
                     <span class="nav-icon"><img src="{% static 'images/icons/accueil.svg' %}" alt="" width="20" height="20"></span>
                     <span class="nav-label">Accueil</span>
@@ -86,12 +89,6 @@
                     {% if nombre_nouvelles_commandes > 0 %}
                     <span class="notif-menu-badge">{{ nombre_nouvelles_commandes }}</span>
                     {% endif %}
-                </a>
-                {% endif %}
-                {% if user.is_authenticated and user.is_staff and user.profil.est_pilote_principal or user.is_superuser %}
-                <a href="{% url 'admin_dashboard' %}" class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}">
-                    <span class="nav-icon"><i class="fa-solid fa-chart-column"></i></span>
-                    <span class="nav-label">Dashboard</span>
                 </a>
                 {% endif %}
             </nav>
@@ -274,7 +271,7 @@
                     </aside>
                 </div>
 
-                <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+                <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>

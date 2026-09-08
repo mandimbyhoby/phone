@@ -7,14 +7,35 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---- Menu mobile ----
     const toggle = document.getElementById('menu-toggle');
     const menu = document.getElementById('nav-menu');
+    const closeMenu = document.getElementById('nav-menu-close');
     if (toggle && menu) {
-        toggle.addEventListener('click', function () {
-            menu.classList.toggle('open');
+        function setMenuOpen(isOpen) {
+            menu.classList.toggle('open', isOpen);
+            toggle.setAttribute('aria-expanded', String(isOpen));
+            toggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
             const icon = toggle.querySelector('i');
-            if (menu.classList.contains('open')) {
+            if (isOpen) {
                 icon.className = 'fa-solid fa-xmark';
             } else {
                 icon.className = 'fa-solid fa-bars';
+            }
+        }
+
+        toggle.addEventListener('click', function () {
+            setMenuOpen(!menu.classList.contains('open'));
+        });
+        if (closeMenu) closeMenu.addEventListener('click', function () {
+            setMenuOpen(false);
+        });
+        menu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                setMenuOpen(false);
+            });
+        });
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && menu.classList.contains('open')) {
+                setMenuOpen(false);
+                toggle.focus();
             }
         });
     }
