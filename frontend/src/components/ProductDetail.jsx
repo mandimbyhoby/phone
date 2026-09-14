@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchJson, formatPrix, postForm, toast } from '../api.js';
 import { ajouterAuPanier as ajouterAuPanierAPI } from '../panierStore.js';
+import { InterfaceReaction } from './Reactions.jsx';
 
 function Etoiles({ note }) {
   const pleines = Math.round(note);
@@ -217,6 +218,12 @@ export default function ProductDetail() {
                 </span>
               )}
             </div>
+
+            <InterfaceReaction
+              produitId={produit.id}
+              resume={produit.reactions_resume}
+              maReaction={produit.ma_reaction}
+            />
 
             <div className="detail-description-box">
               <h3>Description</h3>

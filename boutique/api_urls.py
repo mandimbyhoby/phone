@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .api import AvisViewSet, CategorieViewSet, ProduitViewSet
+from .api import AvisViewSet, CategorieViewSet, ProduitViewSet, ReactionProduitAPIView
 from .api_compte import (
     AnnulerCommandeAPIView,
     ChangerMotDePasseAPIView,
@@ -28,6 +28,9 @@ router.register('avis', AvisViewSet, basename='api-avis')
 
 urlpatterns = router.urls + [
     path('dashboard/', dashboard_stats_api, name='api-dashboard'),
+
+    # Réactions « cœur » sur les produits (une par personne et par produit)
+    path('produits/<int:produit_id>/reaction/', ReactionProduitAPIView.as_view(), name='api-produit-reaction'),
 
     # Panier (session)
     path('panier/', PanierAPIView.as_view(), name='api-panier'),

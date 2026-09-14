@@ -66,6 +66,47 @@ class Avis(models.Model):
         return f"{self.nom} — {self.produit.nom} ({self.note}★)"
 
 
+class Reaction(models.Model):
+    """Réaction « cœur » d'un visiteur sur un produit.
+
+    Le réacteur est identifié par `cle_reacteur` et non directement par une clé
+    étrangère : cela permet à un visiteur SANS COMPTE de réagir (on s'appuie
+    alors sur sa session, exactement comme pour le panier), tout en garantissant
+    une seule réaction par personne et par produit grâce à la contrainte
+    d'unicité ci-dessous. `utilisateur` est renseigné en plus dès que la
+    personne est connectée, afin de pouvoir relier ses réactions à son compte.
+    """
+    TYPES = [
+        ('aime', "J'aime"),
+        ('adore', "J'adore"),
+        ('wow', 'Wow !'),
+    ]
+
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE, related_name='reactions')
+    cle_reacteur = models.CharField(max_length=64, db_index=True)
+    utilisateur = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reactions',
+    )
+    type_reaction = models.CharField(max_length=12, choices=TYPES, default='aime')
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['produit', 'cle_reacteur'],
+                name='reaction_unique_par_reacteur',
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.get_type_reaction_display()} — {self.produit.nom}"
+
+
 class Profil(models.Model):
     """Données clients supplémentaires, reliées au compte utilisateur."""
     utilisateur = models.OneToOneField(

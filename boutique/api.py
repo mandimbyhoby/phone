@@ -1,9 +1,18 @@
-from django.db.models import Q
-from rest_framework import serializers, viewsets, mixins
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Avis, Categorie, Produit
+from .models import Avis, Categorie, Produit, Reaction
+from .reactions import (
+    cle_reacteur,
+    mes_reactions_par_produit,
+    oublier_cache_reactions,
+    resume_reactions,
+)
 
 
 class ProduitPagination(PageNumberPagination):
@@ -37,6 +46,8 @@ class ProduitSerializer(serializers.ModelSerializer):
     image_2_url = serializers.SerializerMethodField()
     image_3_url = serializers.SerializerMethodField()
     image_4_url = serializers.SerializerMethodField()
+    nombre_reactions = serializers.SerializerMethodField()
+    ma_reaction = serializers.SerializerMethodField()
 
     class Meta:
         model = Produit
@@ -44,8 +55,23 @@ class ProduitSerializer(serializers.ModelSerializer):
             'id', 'nom', 'marque', 'description', 'categorie', 'prix',
             'prix_promo', 'prix_actuel', 'reduction_pourcentage', 'economie',
             'stock', 'disponible', 'note_moyenne', 'image_url', 'image_2_url',
-            'image_3_url', 'image_4_url', 'date_ajout',
+            'image_3_url', 'image_4_url', 'nombre_reactions', 'ma_reaction',
+            'date_ajout',
         )
+
+    def get_nombre_reactions(self, obj):
+        # `nb_reactions` provient de l'annotation de la vue : une seule requête
+        # pour tout le catalogue. Hors de ce contexte, on retombe sur un
+        # comptage direct pour que le sérialiseur reste utilisable partout.
+        nb = getattr(obj, 'nb_reactions', None)
+        return nb if nb is not None else obj.reactions.count()
+
+    def get_ma_reaction(self, obj):
+        """Cœur déjà choisi par le visiteur, ou None (carte non remplie)."""
+        request = self.context.get('request')
+        if request is None:
+            return None
+        return mes_reactions_par_produit(request).get(obj.id)
 
     def _absolutise(self, image_field):
         if not image_field:
@@ -68,11 +94,18 @@ class ProduitSerializer(serializers.ModelSerializer):
 
 
 class ProduitDetailSerializer(ProduitSerializer):
-    """Sérialiseur enrichi pour la fiche produit : inclut les avis clients."""
+    """Sérialiseur enrichi pour la fiche produit : avis et détail des réactions."""
     avis = AvisSerializer(many=True, read_only=True)
+    reactions_resume = serializers.SerializerMethodField()
 
     class Meta(ProduitSerializer.Meta):
-        fields = ProduitSerializer.Meta.fields + ('avis',)
+        fields = ProduitSerializer.Meta.fields + ('avis', 'reactions_resume')
+
+    def get_reactions_resume(self, obj):
+        request = self.context.get('request')
+        if request is None:
+            return {'total': 0, 'par_type': {}, 'ma_reaction': None}
+        return resume_reactions(obj, request)
 
 
 class CategorieViewSet(viewsets.ReadOnlyModelViewSet):
@@ -92,7 +125,9 @@ class ProduitViewSet(viewsets.ReadOnlyModelViewSet):
         return ProduitSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        # L'annotation évite une requête de comptage par produit dans le
+        # catalogue (500 produits = 1 requête au lieu de 501).
+        queryset = super().get_queryset().annotate(nb_reactions=Count('reactions'))
         categorie = self.request.query_params.get('categorie')
         recherche = self.request.query_params.get('q')
 
@@ -119,3 +154,45 @@ class AvisViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gener
         if produit:
             queryset = queryset.filter(produit_id=produit)
         return queryset
+
+
+class ReactionProduitAPIView(APIView):
+    """Enregistre (ou retire) la réaction « cœur » du visiteur sur un produit.
+
+    Un re-clic sur le MÊME cœur retire la réaction ; cliquer sur un AUTRE cœur
+    remplace simplement le type choisi. La réponse renvoie toujours le résumé à
+    jour, afin que l'interface React n'ait rien à recalculer elle-même.
+
+    Aucune connexion n'est exigée : un visiteur non connecté réagit via sa
+    session, ce qui lève toute barrière à l'engagement.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request, produit_id):
+        produit = get_object_or_404(Produit, pk=produit_id)
+        type_demande = str(request.data.get('type') or 'aime').lower()
+
+        if type_demande not in dict(Reaction.TYPES):
+            return Response(
+                {'detail': "Cette réaction n'existe pas."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        cle = cle_reacteur(request)
+        existante = produit.reactions.filter(cle_reacteur=cle).first()
+
+        if existante and existante.type_reaction == type_demande:
+            existante.delete()
+        else:
+            Reaction.objects.update_or_create(
+                produit=produit,
+                cle_reacteur=cle,
+                defaults={
+                    'type_reaction': type_demande,
+                    'utilisateur': request.user if request.user.is_authenticated else None,
+                },
+            )
+
+        # Le résumé doit refléter l'écriture qui vient d'avoir lieu.
+        oublier_cache_reactions(request)
+        return Response(resume_reactions(produit, request))

@@ -12,6 +12,7 @@ import Profil from './components/Profil.jsx';
 import ContactForm from './components/ContactForm.jsx';
 import AuthForm from './components/AuthForm.jsx';
 import ChangerMotDePasse from './components/ChangerMotDePasse.jsx';
+import { BoutonReaction } from './components/Reactions.jsx';
 
 // Montage conditionnel : chaque composant s'active uniquement si son
 // conteneur est présent dans la page Django.
@@ -41,4 +42,18 @@ mount('react-auth', AuthForm);
 
 // Contact
 mount('react-contact', ContactForm);
+
+// Réactions « cœurs » des cartes produit rendues côté serveur (section
+// « Vous aimerez aussi » de la fiche produit, repli <noscript> du catalogue).
+// Chaque emplacement `[data-react-reaction]` devient un îlot React autonome :
+// aucun marquage dupliqué, on réutilise le même composant que le catalogue.
+document.querySelectorAll('[data-react-reaction]').forEach(function (emplacement) {
+  createRoot(emplacement).render(
+    React.createElement(BoutonReaction, {
+      produitId: Number(emplacement.dataset.reactReaction),
+      total: Number(emplacement.dataset.total || 0),
+      actif: emplacement.dataset.actif || null,
+    })
+  );
+});
 

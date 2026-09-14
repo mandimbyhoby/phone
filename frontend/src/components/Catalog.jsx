@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { fetchJson, formatPrix, toast } from '../api.js';
 import { ajouterAuPanier as ajouterAuPanierAPI } from '../panierStore.js';
+import { BoutonReaction } from './Reactions.jsx';
 
 function Etoiles({ note }) {
   const pleines = Math.round(note);
@@ -22,6 +23,14 @@ function CarteProduit({ produit, onAjouter }) {
   return (
     <div className="product-card">
       {enPromo && <span className="promo-badge">-{produit.reduction_pourcentage}%</span>}
+
+      {/* Réaction « cœur » : placée en haut à droite de la carte, à l'opposé
+          de la pastille de promotion qui occupe le haut à gauche. */}
+      <BoutonReaction
+        produitId={produit.id}
+        total={produit.nombre_reactions}
+        actif={produit.ma_reaction}
+      />
 
       <a href={url} className="product-image">
         <img src={image} alt={produit.nom} loading="lazy" />

@@ -20,6 +20,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from .models import Produit, Categorie, Avis, Commande, LigneCommande, Paiement, Profil
+from .reactions import mes_reactions_par_produit
 from .forms import (
     AvisForm, CommandeForm, ContactForm, InscriptionForm, ConnexionForm,
     ProfilForm, ChangerMotDePasseForm,
@@ -628,7 +629,11 @@ def webhook_orange_money(request):
 # ============================================================
 
 def accueil(request):
-    produits = Produit.objects.filter(disponible=True)
+    # L'annotation évite une requête de comptage par produit dans la grille
+    # rendue côté serveur (repli <noscript>).
+    produits = Produit.objects.filter(disponible=True).annotate(
+        nb_reactions=Count('reactions')
+    )
 
     # Recherche
     q_values = [v for v in request.GET.getlist('q') if v.strip()]
@@ -701,7 +706,15 @@ def detail_produit(request, id):
     avis = produit.avis.all()
     similaires = Produit.objects.filter(
         categorie=produit.categorie, disponible=True
-    ).exclude(id=produit.id)[:4]
+    ).exclude(id=produit.id).annotate(
+        nb_reactions=Count('reactions')
+    )[:4]
+
+    # Les cartes « Vous aimerez aussi » sont rendues côté serveur : on leur
+    # rattache la réaction du visiteur pour que le cœur apparaisse déjà rempli.
+    mes_reactions = mes_reactions_par_produit(request)
+    for similaire in similaires:
+        similaire.ma_reaction = mes_reactions.get(similaire.id)
 
     if request.method == 'POST':
         form = AvisForm(request.POST)

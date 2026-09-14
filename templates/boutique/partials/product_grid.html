@@ -6,6 +6,15 @@
         <span class="promo-badge">-{{ produit.reduction_pourcentage }}%</span>
         {% endif %}
 
+        {# Réaction « cœur » : reprise par un îlot React au chargement de la page.
+           Sans JavaScript, le cœur reste affiché en lecture seule. #}
+        <span class="react-heart-slot" data-react-reaction="{{ produit.id }}" data-total="{{ produit.nb_reactions|default:0 }}">
+            <span class="react-heart is-static" title="Réactions">
+                <i class="fa-regular fa-heart"></i>
+                <span class="react-heart-count">{{ produit.nb_reactions|default:0 }}</span>
+            </span>
+        </span>
+
         <a href="{% url 'detail_produit' produit.id %}" class="product-image">
             {% if produit.image %}
             <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" loading="lazy">
