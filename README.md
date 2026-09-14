@@ -47,6 +47,19 @@ Boutique en ligne de téléphones à Madagascar, développée avec **Django 6**,
 - Gestion des commandes (statuts) et **paiements** (méthode/statut)
 - Gestion des avis, messages de contact, profils clients
 
+### 🔌 API REST
+L’API publique du catalogue est disponible sous `/api/` :
+
+| Endpoint | Usage |
+|---|---|
+| `GET /api/produits/` | Produits disponibles, paginés (12 par page) |
+| `GET /api/produits/<id>/` | Détail d’un produit |
+| `GET /api/produits/?q=iphone` | Recherche par nom |
+| `GET /api/produits/?categorie=smartphones` | Filtre par slug de catégorie |
+| `GET /api/categories/` | Liste des catégories |
+
+Les réponses sont au format JSON. Les opérations d’écriture et les données sensibles (commandes, paiements) ne sont pas exposées par cette première version.
+
 ---
 
 ## 🚀 Installation
@@ -99,6 +112,23 @@ ORANGE_MONEY_MERCHANT_NUMBER = '...'
 ```
 
 📖 Guide détaillé : [`README_PAIEMENTS.md`](README_PAIEMENTS.md)
+
+## 🐘 Utiliser PostgreSQL
+
+Le projet utilise SQLite en développement si `DATABASE_URL` n’est pas définie.
+Pour PostgreSQL, définissez cette variable dans l’environnement du serveur :
+
+```bash
+DATABASE_URL=postgresql://utilisateur:mot_de_passe@hote:5432/nom_base
+```
+
+Puis installez les dépendances et lancez les migrations :
+
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+```
 
 ---
 

@@ -27,7 +27,10 @@
       <p>Vue globale de la performance et de l’activité du site.</p>
     </div>
 
-    <div class="dashboard-filters" data-aos="fade-up">
+    <div id="react-dashboard"></div>
+
+    <noscript>
+    <div class="dashboard-filters">
       <a href="?period=7d" class="filter-btn {% if period == '7d' %}active{% endif %}">7 derniers jours</a>
       <a href="?period=30d" class="filter-btn {% if period == '30d' %}active{% endif %}">30 derniers jours</a>
       <a href="?period=12m" class="filter-btn {% if period == '12m' %}active{% endif %}">12 derniers mois</a>
@@ -127,6 +130,7 @@
         </div>
       </div>
     </div>
+    </noscript>
   </div>
 </section>
 {% endblock %}

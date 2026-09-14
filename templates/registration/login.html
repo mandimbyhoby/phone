@@ -6,7 +6,16 @@
 {% block content %}
 <section class="page-section auth-page">
     <div class="container">
-        <div class="auth-box" data-aos="zoom-in">
+        <!-- ===== CONNEXION DYNAMIQUE (React) ===== -->
+        <div id="react-auth" data-mode="connexion" data-next="{{ request.GET.next|default:'' }}">
+            <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Chargement…
+            </p>
+        </div>
+
+        <!-- Fallback sans JavaScript : formulaire rendu côté serveur -->
+        <noscript>
+        <div class="auth-box">
             <div class="auth-head">
                 <div class="auth-logo"><i class="fa-solid fa-user-lock"></i></div>
                 <h1>Connexion</h1>
@@ -35,6 +44,7 @@
                 <p>Pas encore de compte ? <a href="{% url 'inscription' %}">Créer un compte</a></p>
             </div>
         </div>
+        </noscript>
     </div>
 </section>
 {% endblock %}

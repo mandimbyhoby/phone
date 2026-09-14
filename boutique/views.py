@@ -40,11 +40,13 @@ def est_pilote_principal(user):
     return bool(profil and profil.est_pilote_principal)
 
 
-@login_required(login_url='connexion')
-@user_passes_test(est_pilote_principal, login_url='connexion')
-def admin_dashboard(request):
+def _calculer_stats_dashboard(period='30d'):
+    """Calcule les statistiques du dashboard et retourne un dict JSON-sérialisable.
+
+    Partagée entre la vue Django (rendu serveur, fallback sans JS) et l'API
+    JSON consommée par le composant React.
+    """
     now = timezone.now()
-    period = request.GET.get('period', '30d')
     period_map = {'7d': 7, '30d': 30, '12m': 365}
     days = period_map.get(period, 30)
     start_date = now - timedelta(days=days)
@@ -93,10 +95,14 @@ def admin_dashboard(request):
     for point in revenus_jour:
         point['label'] = point['jour'].strftime('%d/%m')
         point['value'] = float(point['total'] or 0)
+        point.pop('jour', None)
+        point.pop('total', None)
 
     for point in revenus_mois:
         point['label'] = point['mois'].strftime('%b %Y')
         point['value'] = float(point['total'] or 0)
+        point.pop('mois', None)
+        point.pop('total', None)
 
     if revenus_jour:
         max_jour = max(item['value'] for item in revenus_jour) or 1
@@ -115,19 +121,21 @@ def admin_dashboard(request):
     for produit in produits_populaires:
         produit['nom'] = produit['produit__nom']
         produit['quantite'] = int(produit['quantite'] or 0)
+        produit.pop('produit__nom', None)
+        produit.pop('produit__id', None)
 
-    context = {
+    return {
         'page_title': 'Dashboard administrateur',
         'period': period,
-        'ca_total': total_ca,
-        'ca_selectionne': ca_selectionne,
+        'ca_total': float(total_ca),
+        'ca_selectionne': float(ca_selectionne),
         'ca_30_jours': sum(item['value'] for item in revenus_jour),
         'tempo_label': '7 derniers jours' if period == '7d' else '30 derniers jours' if period == '30d' else '12 derniers mois',
         'nb_commandes': nb_commandes,
         'produits_vendus': produits_vendus,
         'produits_vendus_selectionnes': produits_vendus_selectionnes,
-        'panier_moyen': panier_moyen,
-        'panier_moyen_selectionne': panier_moyen_selectionne,
+        'panier_moyen': float(panier_moyen),
+        'panier_moyen_selectionne': float(panier_moyen_selectionne),
         'nouveaux_clients': nouveaux_clients,
         'stock_total': stock_total,
         'revenue_by_day': revenus_jour,
@@ -136,7 +144,23 @@ def admin_dashboard(request):
         'commandes_en_attente': Commande.objects.filter(statut='en_attente').count(),
         'commandes_confirmees': Commande.objects.filter(statut='confirmee').count(),
     }
+
+
+@login_required(login_url='connexion')
+@user_passes_test(est_pilote_principal, login_url='connexion')
+def admin_dashboard(request):
+    period = request.GET.get('period', '30d')
+    context = _calculer_stats_dashboard(period)
     return render(request, 'boutique/dashboard_admin.html', context)
+
+
+@login_required
+def dashboard_stats_api(request):
+    """API JSON du dashboard (consommée par le composant React)."""
+    if not est_pilote_principal(request.user):
+        return JsonResponse({'error': 'Accès refusé.'}, status=403)
+    period = request.GET.get('period', '30d')
+    return JsonResponse(_calculer_stats_dashboard(period))
 
 # ============================================================
 # A U T H E N T I F I C A T I O N

@@ -7069,3 +7069,283 @@ html[data-theme="light"] .page-section .bg-circle {
     .nav-user-greeting { display: none; }
 }
 
+/* ============================================================
+   I L O T S   R E A C T   —   transitions & champs
+   ============================================================ */
+
+/* Tiroir panier piloté par React (bascule via la classe .is-open) */
+.drawer-overlay.react-drawer {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.drawer-overlay.react-drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-drawer.react-cart-drawer {
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.3s ease, visibility 0.3s ease;
+}
+
+.cart-drawer.react-cart-drawer.is-open {
+    transform: translateX(0);
+    visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cart-drawer.react-cart-drawer,
+    .drawer-overlay.react-drawer { transition: none; }
+}
+
+/* Quantité : champ numérique compact dans le panier */
+input.qty-num {
+    width: 46px;
+    min-width: 46px;
+    height: 34px;
+    padding: 0 4px;
+    background: transparent;
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+    color: var(--ps-text);
+    font: 800 14px/1 var(--ps-font-body);
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input.qty-num::-webkit-outer-spin-button,
+input.qty-num::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Boutons de quantité désactivés (bornes min/max atteintes) */
+.qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Champs invalides marqués par la validation AJAX */
+.form-input.is-invalid {
+    border-color: var(--ps-danger) !important;
+    box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.14);
+}
+
+/* Message de succès (formulaire de contact) */
+.form-success-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: var(--ps-radius-sm);
+    background: rgba(61, 220, 132, 0.12);
+    border: 1px solid rgba(61, 220, 132, 0.35);
+    color: var(--ps-text);
+    font-weight: 600;
+}
+
+.form-success-box i { color: var(--ps-ok); }
+
+/* Suppression de la photo de profil (bouton React) */
+.photo-clear-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius-sm);
+    color: var(--ps-text-2);
+    font: 700 13px/1 var(--ps-font-body);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.photo-clear-btn:hover {
+    color: var(--ps-danger);
+    border-color: var(--ps-danger);
+}
+
+/* Lignes de commande : lien produit discret */
+.order-row-item a { color: var(--ps-text); }
+.order-row-item a:hover { color: var(--ps-accent); }
+
+/* ============================================================
+   S E C T I O N   P A N I E R   —   profondeur aplatie
+   ------------------------------------------------------------
+   La page panier empilait trois niveaux de relief : fond de
+   section + carte translucide avec flou (glassmorphism) + lignes
+   avec ombre portée. On aplatit la hiérarchie en distinguant les
+   niveaux par la TEINTE DE SURFACE et non par l'ombre — ce qui
+   respecte le principe « surfaces solides, zéro glassmorphism »
+   et aligne la page sur le tiroir panier de la navbar.
+   ============================================================ */
+
+/* 1. Moins d'espace vertical perdu en haut et en bas de page */
+.page-section.cart-page {
+    padding: 40px 0 52px;
+}
+
+.cart-page .section-header {
+    margin-bottom: 24px;
+}
+
+.cart-page .cart-layout {
+    gap: 18px;
+}
+
+/* 2. Les deux panneaux (table + récapitulatif) sont au MÊME niveau :
+      surfaces creuses en --ps-bg-2, sans flou ni ombre. */
+.cart-page .cart-table,
+.cart-page .cart-summary {
+    padding: 18px;
+    background: var(--ps-bg-2);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* 3. Les articles sont le seul niveau « en relief » : surface pleine,
+      séparée par la teinte (pas par une ombre). */
+.cart-page .cart-table .drawer-item {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    box-shadow: none;
+    padding: 12px;
+}
+
+.cart-page .cart-table .drawer-list {
+    gap: 10px;
+}
+
+.cart-page .cart-table .drawer-item-img {
+    width: 68px;
+    height: 68px;
+}
+
+/* 4. Densité resserrée dans le récapitulatif */
+.cart-page .cart-summary {
+    padding-top: 22px;
+}
+
+.cart-page .cart-summary::before {
+    margin-bottom: 14px;
+}
+
+.cart-page .cart-summary h3 {
+    margin-top: 2px;
+}
+
+.cart-page .drawer-total {
+    padding: 14px 2px 8px;
+}
+
+/* 5. En vue étroite, les deux panneaux sont empilés : on réduit
+      l'écart pour qu'ils se lisent comme une seule colonne. */
+@media (max-width: 900px) {
+    .page-section.cart-page { padding: 32px 0 44px; }
+    .cart-page .cart-layout { gap: 14px; }
+}
+
+/* ============================================================
+   B A N D E A U   D U   T I R O I R   P A N I E R
+   ------------------------------------------------------------
+   Design « barre utilitaire » : tout tient sur UNE ligne (54 px).
+
+   Choix de conception :
+   1. Le sur-titre « VOTRE SÉLECTION » a été retiré. Il coûtait
+      une ligne entière pour une information déjà évidente :
+      l'utilisateur vient de cliquer sur le panier, et le titre
+      annonce le contenu. Les deux autres textes (titre + compteur)
+      restent inchangés.
+   2. L'icône du panier garde sa taille de 24 px : le SVG embarque
+      son propre halo doré, il sert donc d'ancre visuelle — inutile
+      d'ajouter une pastille derrière (ce serait redondant).
+   3. Le compteur passe de texte gris flottant à PASTILLE accentuée :
+      c'est l'information la plus utile du bandeau, elle doit se
+      lire d'un coup d'œil.
+   4. La croix est repoussée à droite par `margin-left: auto`
+      (plutôt que par `justify-content: space-between`, qui
+      écarterait aussi le compteur du titre).
+   ============================================================ */
+
+.cart-drawer .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 11px 14px 11px 16px;
+    background: var(--ps-surface);
+    border-bottom: 1px solid var(--ps-line);
+}
+
+.cart-drawer .drawer-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 0 0 auto;
+    margin: 0;
+    color: var(--ps-text);
+    font-family: var(--ps-font-head);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.cart-drawer .drawer-cart-icon {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+}
+
+/* Compteur : pastille accentuée, immédiatement scannable */
+.cart-drawer .drawer-count {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 178, 36, 0.13);
+    border: 1px solid rgba(255, 178, 36, 0.3);
+    color: var(--ps-accent);
+    font-size: 11.5px;
+    font-weight: 800;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+html[data-theme="light"] .cart-drawer .drawer-count {
+    background: rgba(217, 119, 6, 0.1);
+    border-color: rgba(217, 119, 6, 0.28);
+}
+
+/* Croix : repoussée à droite, sobre, danger au survol */
+.cart-drawer .drawer-close {
+    flex: 0 0 auto;
+    margin-left: auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--ps-line);
+    color: var(--ps-text-2);
+    font-size: 15px;
+}
+
+.cart-drawer .drawer-close:hover {
+    background: rgba(255, 77, 109, 0.12);
+    border-color: var(--ps-danger);
+    color: var(--ps-danger);
+    transform: rotate(90deg);
+}
+
+/* Corps du tiroir : un peu plus d'air gagné sur les côtés */
+.cart-drawer .drawer-body { padding: 16px; }
+
+
+

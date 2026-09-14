@@ -11,9 +11,18 @@
             <p>Bonjour <strong>{{ request.user.username }}</strong>, gérez vos informations</p>
         </div>
 
+        <!-- ===== MON COMPTE DYNAMIQUE (React) ===== -->
+        <div id="react-profil">
+            <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Chargement de votre profil…
+            </p>
+        </div>
+
+        <!-- Fallback sans JavaScript : rendu côté serveur -->
+        <noscript>
         <div class="account-layout">
             <!-- MENU LATÉRAL -->
-            <aside class="account-menu" data-aos="fade-right">
+            <aside class="account-menu">
                 <div class="account-avatar">
                     {% if profil.photo %}
                     <img src="{{ profil.photo.url }}" alt="Photo de profil">
@@ -32,7 +41,7 @@
             </aside>
 
             <!-- CONTENU -->
-            <div class="account-content" data-aos="fade-left" data-aos-delay="100">
+            <div class="account-content">
                 <div class="account-card" id="infos">
                     <h3><i class="fa-solid fa-address-card"></i> Mes informations personnelles</h3>
                     <form method="post" enctype="multipart/form-data">
@@ -67,7 +76,6 @@
                             {% if form.adresse.errors %}<small class="form-error">{{ form.adresse.errors|striptags }}</small>{% endif %}
                         </div>
 
-                        <!-- ===== PHOTO DE PROFIL ===== -->
                         <div class="form-group photo-group">
                             <label>Photo de profil</label>
                             <div class="photo-upload">
@@ -97,6 +105,7 @@
                         </button>
                     </form>
                 </div>
+
                 <div class="account-card" id="factures">
                     <h3><i class="fa-solid fa-file-invoice"></i> Mes factures</h3>
                     {% if commandes %}
@@ -119,6 +128,7 @@
                 </div>
             </div>
         </div>
+        </noscript>
     </div>
 </section>
 {% endblock %}

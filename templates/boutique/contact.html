@@ -67,7 +67,16 @@
                 </div>
             </div>
 
-            <div class="contact-form-box" data-aos="fade-left" data-aos-delay="100">
+            <!-- ===== FORMULAIRE DE CONTACT DYNAMIQUE (React) ===== -->
+            <div id="react-contact">
+                <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Chargement du formulaire…
+                </p>
+            </div>
+
+            <!-- Fallback sans JavaScript : formulaire rendu côté serveur -->
+            <noscript>
+            <div class="contact-form-box">
                 <h3><i class="fa-solid fa-paper-plane"></i> Envoyez-nous un message</h3>
                 <form method="post">
                     {% csrf_token %}
@@ -98,6 +107,7 @@
                     </button>
                 </form>
             </div>
+            </noscript>
         </div>
     </div>
 </section>

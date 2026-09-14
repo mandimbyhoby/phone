@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=51">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=55">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -100,39 +100,7 @@
             </nav>
 
             <div class="nav-actions">
-                <form action="{% url 'accueil' %}" method="get" class="search-box" role="search"
-                    data-search-url="{% url 'recherche_suggestions' %}">
-                    <img src="{% static 'images/icons/recherche.svg' %}" alt="" width="18" height="18" class="search-prefix-icon">
-                    <input type="text" name="q" placeholder="Rechercher un téléphone..." value="{{ q|default:'' }}" aria-label="Rechercher un téléphone">
-                    <button type="submit" aria-label="Rechercher">
-                        <img src="{% static 'images/icons/recherche.svg' %}" alt="" width="20" height="20" class="search-icon">
-                    </button>
-                    {% if q %}
-                    <div class="search-results-preview" role="status" aria-live="polite">
-                        {% for produit in produits|slice:':4' %}
-                        <a href="{% url 'detail_produit' produit.id %}" class="search-result-item">
-                            <span class="search-result-image">
-                                {% if produit.image %}
-                                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
-                                {% else %}
-                                <img src="{% static 'images/iphone.jpg' %}" alt="{{ produit.nom }}">
-                                {% endif %}
-                            </span>
-                            <span class="search-result-copy">
-                                <strong>{{ produit.nom }}</strong>
-                                <small>{{ produit.marque }} · {{ produit.prix_actuel }} Ar</small>
-                            </span>
-                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-                        </a>
-                        {% empty %}
-                        <span class="search-result-empty">Aucun téléphone trouvé</span>
-                        {% endfor %}
-                        {% if produits|length > 4 %}
-                        <button type="submit" class="search-results-more">Voir tous les résultats</button>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </form>
+                <div id="react-search"></div>
 
                 <button type="button" class="theme-toggle" data-theme-toggle aria-label="Activer le mode clair">
                     <i class="fa-solid fa-sun"></i>
@@ -243,39 +211,8 @@
                     {% endif %}
                 </div>
 
-                <!-- PANIER -->
-                <div x-data="{ open: false }" class="cart-wrap">
-                    <button class="cart-btn" @click="open = true" aria-label="Ouvrir le panier">
-                        <img src="{% static 'images/icons/panier.svg' %}" alt="Panier" width="24" height="24" class="cart-icon">
-                        <span id="cart-badge" class="cart-badge">{{ nombre_articles_panier }}</span>
-                        <span class="cart-btn-label">Mon panier</span>
-                    </button>
-
-                    <!-- OVERLAY -->
-                    <div class="drawer-overlay" x-show="open" @click="open = false"
-                        x-transition.opacity.duration.200ms x-cloak></div>
-
-                    <!-- DRAWER -->
-                    <aside class="cart-drawer" x-show="open" x-cloak
-                        x-transition:enter="drawer-enter" x-transition:enter-start="drawer-enter-from"
-                        x-transition:enter-end="drawer-enter-to"
-                        x-transition:leave="drawer-leave" x-transition:leave-start="drawer-leave-from"
-                        x-transition:leave-end="drawer-leave-to">
-                        <header class="drawer-header">
-                            <div class="drawer-heading">
-                                <span class="drawer-eyebrow">VOTRE SÉLECTION</span>
-                                <h3><img src="{% static 'images/icons/panier.svg' %}" alt="" width="22" height="22" class="drawer-cart-icon"> Mon panier</h3>
-                            </div>
-                            <span class="drawer-count">{{ nombre_articles_panier }} article{{ nombre_articles_panier|pluralize }}</span>
-                            <button class="drawer-close" @click="open = false" aria-label="Fermer">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </header>
-                        <div id="cart-widget-items" class="drawer-body">
-                            {% include 'boutique/partials/cart_items.html' with items=panier_items total=panier_total %}
-                        </div>
-                    </aside>
-                </div>
+                <!-- PANIER (React) — bouton + badge + tiroir dynamiques -->
+                <div id="react-cart"></div>
 
                 <button class="menu-toggle" id="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
                     <i class="fa-solid fa-bars"></i>
@@ -386,6 +323,7 @@
     </footer>
 
     <script src="{% static 'js/app.js' %}?v=5"></script>
+    <script type="module" crossorigin src="{% static 'react/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 

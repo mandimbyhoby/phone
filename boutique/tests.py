@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase, override_settings
 from django.utils import timezone
+from rest_framework.test import APIClient
 
 from .forms import CommandeForm
 from .models import Avis, Categorie, Commande, LigneCommande, Paiement, Produit, Profil
@@ -37,6 +38,24 @@ class ProduitTests(TestCase):
 		Avis.objects.create(produit=self.produit, nom='A', note=5, commentaire='Très bien')
 		Avis.objects.create(produit=self.produit, nom='B', note=4, commentaire='Bien')
 		self.assertEqual(self.produit.note_moyenne, 4.5)
+
+	def test_api_produits_retourne_le_catalogue_public(self):
+		client = APIClient()
+
+		response = client.get('/api/produits/')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data['count'], 1)
+		self.assertEqual(response.data['results'][0]['nom'], 'Phone Test')
+		self.assertEqual(response.data['results'][0]['categorie']['slug'], 'telephones')
+
+	def test_api_produits_filtre_par_recherche(self):
+		client = APIClient()
+
+		response = client.get('/api/produits/?q=introuvable')
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.data['count'], 0)
 
 	def test_accueil_affiche_les_trois_avis_les_plus_recents(self):
 		for index in range(4):

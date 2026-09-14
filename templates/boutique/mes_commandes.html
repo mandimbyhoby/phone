@@ -11,8 +11,17 @@
             <p>Retrouvez l'historique de vos achats</p>
         </div>
 
+        <!-- ===== MES COMMANDES DYNAMIQUE (React) ===== -->
+        <div id="react-commandes">
+            <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Chargement de vos commandes…
+            </p>
+        </div>
+
+        <!-- Fallback sans JavaScript : rendu côté serveur -->
+        <noscript>
         <div class="account-layout">
-            <aside class="account-menu" data-aos="fade-right">
+            <aside class="account-menu">
                 <div class="account-avatar">{{ request.user.username|first|upper }}</div>
                 <h3>{{ request.user.username }}</h3>
                 <nav>
@@ -23,7 +32,7 @@
                 </nav>
             </aside>
 
-            <div class="account-content" data-aos="fade-left" data-aos-delay="100">
+            <div class="account-content">
                 <div class="account-card" id="orders">
                     <h3><i class="fa-solid fa-receipt"></i> Historique des commandes</h3>
 
@@ -83,6 +92,7 @@
                 </div>
             </div>
         </div>
+        </noscript>
     </div>
 </section>
 {% endblock %}

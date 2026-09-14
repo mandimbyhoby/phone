@@ -11,13 +11,22 @@
             <p class="cart-page-intro">Votre sélection, prête à rejoindre votre quotidien.</p>
         </div>
 
+        <!-- ===== PANIER DYNAMIQUE (React) ===== -->
+        <div id="react-panier">
+            <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Chargement de votre panier…
+            </p>
+        </div>
+
+        <!-- Fallback sans JavaScript : rendu côté serveur -->
+        <noscript>
         {% if items %}
         <div class="cart-layout">
-            <div class="cart-table" id="cart-page-items" data-aos="fade-right">
+            <div class="cart-table">
                 {% include 'boutique/partials/cart_items.html' %}
             </div>
 
-            <aside class="cart-summary" data-aos="fade-left" data-aos-delay="100">
+            <aside class="cart-summary">
                 <span class="summary-kicker">RÉCAPITULATIF</span>
                 <h3>Récapitulatif</h3>
                 <div class="summary-line">
@@ -50,13 +59,14 @@
             </aside>
         </div>
         {% else %}
-        <div class="empty-cart" data-aos="zoom-in">
+        <div class="empty-cart">
             <i class="fa-solid fa-cart-arrow-down"></i>
             <h3>Votre panier est vide</h3>
             <p>Découvrez notre sélection de téléphones au meilleur prix.</p>
             <a href="{% url 'accueil' %}#products" class="btn-primary">Découvrir les produits</a>
         </div>
         {% endif %}
+        </noscript>
     </div>
 </section>
 {% endblock %}

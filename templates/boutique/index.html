@@ -123,65 +123,19 @@
         <p>Choisissez le modèle qui vous convient</p>
     </div>
 
-    <!-- ===== BARRE DE FILTRES (HTMX) ===== -->
-    <div class="container" id="filters" data-aos="fade-up">
-        <div class="filters-bar">
-            <div class="filter-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input id="filter-search-input" type="text" name="q" value="{{ q }}"
-                    placeholder="Rechercher un téléphone..."
-                    hx-get="{% url 'accueil' %}"
-                    hx-target="#product-grid"
-                    hx-select="#product-grid"
-                    hx-swap="outerHTML"
-                    hx-trigger="input changed delay:400ms, search"
-                    hx-include="#sort-select"
-                    hx-push-url="true">
-            </div>
-
-            <div class="filter-pills">
-                <a href="{% url 'accueil' %}"
-                    class="filter-pill {% if not categorie_active %}active{% endif %}"
-                    hx-get="{% url 'accueil' %}"
-                    hx-target="#product-grid"
-                    hx-select="#product-grid"
-                    hx-swap="outerHTML"
-                    hx-include="#filter-search-input, #sort-select"
-                    hx-vals='{"categorie": ""}'
-                    hx-push-url="true">Tous</a>
-                {% for c in categories %}
-                <a href="{% url 'accueil' %}?categorie={{ c.slug }}"
-                    class="filter-pill {% if categorie_active == c.slug %}active{% endif %}"
-                    hx-get="{% url 'accueil' %}"
-                    hx-target="#product-grid"
-                    hx-select="#product-grid"
-                    hx-swap="outerHTML"
-                    hx-include="#filter-search-input, #sort-select"
-                    hx-vals='{"categorie": "{{ c.slug }}"}'
-                    hx-push-url="true">{{ c.nom }}</a>
-                {% endfor %}
-            </div>
-
-            <select id="sort-select" name="tri" class="filter-sort" aria-label="Trier les produits"
-                hx-get="{% url 'accueil' %}"
-                hx-target="#product-grid"
-                hx-select="#product-grid"
-                hx-swap="outerHTML"
-                hx-trigger="change"
-                hx-include="#filter-search-input"
-                hx-push-url="true">
-                <option value="nouveaute" {% if tri == 'nouveaute' %}selected{% endif %}>Nouveautés</option>
-                <option value="prix_asc" {% if tri == 'prix_asc' %}selected{% endif %}>Prix croissant</option>
-                <option value="prix_desc" {% if tri == 'prix_desc' %}selected{% endif %}>Prix décroissant</option>
-                <option value="promo" {% if tri == 'promo' %}selected{% endif %}>Promotions</option>
-                <option value="nom" {% if tri == 'nom' %}selected{% endif %}>Nom A → Z</option>
-            </select>
-        </div>
+    <!-- ===== CATALOGUE DYNAMIQUE (React) ===== -->
+    <div class="container" id="react-catalog">
+        <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+            <i class="fa-solid fa-spinner fa-spin"></i> Chargement du catalogue…
+        </p>
     </div>
 
-    <main class="container">
-        {% include 'boutique/partials/product_grid.html' %}
-    </main>
+    <!-- Fallback sans JavaScript : grille rendue côté serveur -->
+    <noscript>
+        <div class="container">
+            {% include 'boutique/partials/product_grid.html' %}
+        </div>
+    </noscript>
 </section>
 
 <!-- ============ PROMOTIONS ============ -->

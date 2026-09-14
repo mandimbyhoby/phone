@@ -76,7 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---- Raccourci clavier "/" : focus la barre de recherche ----
-    const searchInput = document.querySelector('.site-navbar .search-box input');
+    // Désactivé quand la recherche est gérée par React (évite le double binding).
+    const searchInput = document.getElementById('react-search')
+        ? null
+        : document.querySelector('.site-navbar .search-box input');
     if (searchInput) {
         const searchBox = searchInput.closest('.search-box');
         let searchTimer;

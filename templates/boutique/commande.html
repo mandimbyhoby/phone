@@ -11,8 +11,17 @@
             <p>Livraison partout à Madagascar</p>
         </div>
 
+        <!-- ===== CHECKOUT DYNAMIQUE (React) ===== -->
+        <div id="react-checkout">
+            <p style="text-align:center; padding: 48px 0; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Chargement de votre commande…
+            </p>
+        </div>
+
+        <!-- Fallback sans JavaScript : formulaire rendu côté serveur -->
+        <noscript>
         <div class="checkout-layout">
-            <div class="checkout-form" data-aos="fade-right">
+            <div class="checkout-form">
                 <h3><i class="fa-solid fa-user"></i> Informations de livraison</h3>
                 <form method="post" id="checkout-form">
                     {% csrf_token %}
@@ -44,24 +53,18 @@
                         {% if form.ville.errors %}<small class="form-error">{{ form.ville.errors|striptags }}</small>{% endif %}
                     </div>
 
-                    <!-- ============ MÉTHODE DE PAIEMENT ============ -->
                     <div class="payment-methods">
                         <h3><i class="fa-solid fa-wallet"></i> Méthode de paiement</h3>
                         <div class="payment-grid">
                             {% for value, label in form.methode_paiement.field.choices %}
                             <label class="payment-option" data-payment-method="{{ value }}">
                                 <input type="radio" name="methode_paiement" value="{{ value }}"
-                                    {% if form.methode_paiement.value == value %}checked{% endif %}
-                                    onchange="this.closest('form').querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected')); this.closest('.payment-option').classList.add('selected');">
+                                    {% if form.methode_paiement.value == value %}checked{% endif %}>
                                 <span class="payment-logo">
                                     {% if value == 'carte' %}
-                                    <img src="{% static 'images/stripe-logo.png' %}" alt="Stripe" class="payment-brand-img"
-                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-                                    <i class="fa-solid fa-credit-card payment-fallback"></i>
+                                    <i class="fa-solid fa-credit-card"></i>
                                     {% elif value == 'paypal' %}
-                                    <img src="{% static 'images/paypal-logo.png' %}" alt="PayPal" class="payment-brand-img"
-                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-                                    <i class="fa-brands fa-paypal payment-fallback"></i>
+                                    <i class="fa-brands fa-paypal"></i>
                                     {% elif value == 'orange_money' %}
                                     <i class="fa-solid fa-mobile-screen-button"></i>
                                     {% else %}
@@ -70,20 +73,10 @@
                                 </span>
                                 <span class="payment-text">
                                     <strong>{{ label }}</strong>
-                                    {% if value == 'carte' %}<small>Visa · Mastercard · Amex</small>
-                                    {% elif value == 'orange_money' %}<small>Paiement mobile Mvola/OM</small>
-                                    {% elif value == 'paypal' %}<small>Compte PayPal</small>
-                                    {% else %}<small>Payez à la réception</small>{% endif %}
                                 </span>
                             </label>
                             {% endfor %}
                         </div>
-                        {% if mode_demo %}
-                        <div class="demo-note">
-                            <i class="fa-solid fa-hand-holding-dollar"></i>
-                            <span>Le paiement en ligne est en attente de configuration.</span>
-                        </div>
-                        {% endif %}
                     </div>
 
                     <button type="submit" class="buy-btn submit-order">
@@ -92,7 +85,7 @@
                 </form>
             </div>
 
-            <aside class="checkout-summary" data-aos="fade-left" data-aos-delay="100">
+            <aside class="checkout-summary">
                 <h3>Ma commande ({{ items|length }})</h3>
                 <div class="order-items">
                     {% for item in items %}
@@ -115,17 +108,9 @@
                     <span>Total à payer</span>
                     <strong>{{ total }} Ar</strong>
                 </div>
-                <div class="summary-secure">
-                    {% if mode_demo %}
-                    <i class="fa-solid fa-hand-holding-dollar"></i> Paiement à la réception
-                    <span>Vous ne payez pas en ligne</span>
-                    {% else %}
-                    <i class="fa-solid fa-shield-halved"></i> Paiement sécurisé
-                    <span>Choisissez votre moyen de paiement</span>
-                    {% endif %}
-                </div>
             </aside>
         </div>
+        </noscript>
     </div>
 </section>
 {% endblock %}
