@@ -7908,6 +7908,200 @@ html[data-theme="light"] {
     }
 }
 
+/* ============================================================
+   P O L I S S A G E   D E S I G N
+   ------------------------------------------------------------
+   Lot d'améliorations transverses : bascule de thème fluide,
+   micro-interactions sur les cartes, focus clavier cohérent,
+   squelettes de chargement, badges d'état lisibles en clair et
+   états vides illustrés.
+   ============================================================ */
+
+/* --- 1. Bascule clair/sombre FLUIDE ---------------------------
+   La classe `theme-anim` est posée sur <html> par le JS au moment
+   de la bascule, puis retirée ~420 ms plus tard. Pendant ce court
+   instant elle force une transition douce sur les couleurs ; les
+   transitions au survol reprennent ensuite normalement. */
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+    transition:
+        background-color 0.35s ease,
+        color 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        fill 0.35s ease,
+        stroke 0.35s ease !important;
+}
+
+/* --- 2. Micro-interactions sur les cartes produit -------------
+   Au survol, la bordure s'illumine d'un liseré ambre et une ombre
+   douce soulève la carte, dans l'esprit du bouton panier. */
+.product-card:hover {
+    border-color: rgba(255, 178, 36, 0.45);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 178, 36, 0.12);
+}
+
+html[data-theme="light"] .product-card:hover {
+    border-color: rgba(217, 119, 6, 0.5);
+    box-shadow: 0 18px 44px rgba(17, 24, 39, 0.14), 0 0 0 1px rgba(217, 119, 6, 0.12);
+}
+
+/* Titre de carte : bascule douce vers l'accent au survol de la carte */
+.product-card .product-info h3 a { transition: color 0.2s ease; }
+.product-card:hover .product-info h3 a { color: var(--ps-accent); }
+
+/* --- 3. Focus clavier cohérent -------------------------------
+   `:where()` a une spécificité nulle : il fournit un contour ambre
+   par défaut à TOUT élément interactif qui n'en a pas déjà un plus
+   spécifique (la barre de recherche conserve son halo dédié). */
+:where(a, button, select, input, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--ps-accent);
+    outline-offset: 2px;
+}
+
+/* --- 4. Squelettes de chargement (shimmer) --------------------
+   Utilisés par le catalogue et le tiroir panier en remplacement du
+   simple « Chargement… ». */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--ps-bg-2);
+    border-radius: var(--ps-radius-sm);
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
+}
+
+html[data-theme="light"] .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgba(17, 24, 39, 0.06), transparent);
+}
+
+@keyframes skeletonShimmer {
+    100% { transform: translateX(100%); }
+}
+
+/* Carte squelette : reproduit la forme d'une carte produit */
+.skeleton-card {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+    border-radius: var(--ps-radius);
+    overflow: hidden;
+}
+
+.skeleton-card .skeleton-img {
+    height: 250px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--ps-line);
+}
+
+.skeleton-card .skeleton-body {
+    padding: 20px;
+    display: grid;
+    gap: 12px;
+}
+
+.skeleton-line { height: 14px; }
+.skeleton-line.is-titre { width: 70%; height: 18px; }
+.skeleton-line.is-prix { width: 40%; }
+.skeleton-btn { height: 44px; border-radius: var(--ps-radius-sm); margin-top: 6px; }
+
+/* --- 5. Badges d'état de commande lisibles en thème clair ------
+   Les statuts utilisaient des textes pâles (#ffd166, #7ee2ae…)
+   calibrés pour le fond sombre : illisibles sur les surfaces claires.
+   On leur substitue des teintes foncées, comme pour le menu latéral. */
+html[data-theme="light"] .status-en_attente {
+    background: rgba(217, 119, 6, 0.12);
+    color: #92400e;
+}
+
+html[data-theme="light"] .status-confirmee,
+html[data-theme="light"] .status-livree {
+    background: rgba(21, 128, 61, 0.12);
+    color: #15803d;
+}
+
+html[data-theme="light"] .status-expediee {
+    background: rgba(29, 92, 244, 0.12);
+    color: #1d4ed8;
+}
+
+html[data-theme="light"] .status-annulee {
+    background: rgba(220, 38, 38, 0.12);
+    color: #dc2626;
+}
+
+html[data-theme="light"] .order-total,
+html[data-theme="light"] .order-row-pay i,
+html[data-theme="light"] .account-card h3 i {
+    color: #b45309;
+}
+
+/* --- 6. États vides illustrés ---------------------------------
+   L'icône centrale gagne une pastille circulaire ambre pour
+   humaniser les écrans « vide ». */
+.drawer-empty > i,
+.empty-cart > i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: rgba(255, 178, 36, 0.12);
+    border: 1px solid rgba(255, 178, 36, 0.3);
+    color: var(--ps-accent);
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+html[data-theme="light"] .drawer-empty > i,
+html[data-theme="light"] .empty-cart > i {
+    background: rgba(217, 119, 6, 0.1);
+    border-color: rgba(217, 119, 6, 0.28);
+    color: #b45309;
+}
+
+/* --- 7. Tiroir panier : surface de fermeture au swipe ----------
+   Une poignée discrète en haut du tiroir suggère le glissement. */
+.cart-drawer .drawer-grabber {
+    display: none;
+    margin: 0 auto 6px;
+    width: 44px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--ps-line-2);
+}
+
+@media (max-width: 600px) {
+    .cart-drawer .drawer-grabber { display: block; }
+}
+
+/* --- 8. Mouvements réduits : les nouveaux effets s'y plient ----- */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton::after { animation: none; }
+    .skeleton::after { background: transparent; }
+    html.theme-anim *,
+    html.theme-anim *::before,
+    html.theme-anim *::after { transition: none !important; }
+}
+
+/* --- 9. Retour visuel « ajouté au panier » ---------------------
+   Quand l'ajout réussit, le bouton vire brièvement au vert avec une
+   coche (l'état est piloté par React via la classe `is-added`). */
+.add-cart-btn.is-added {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+}
+
+
 
 
 

@@ -19,6 +19,15 @@ function CarteProduit({ produit, onAjouter }) {
   const enPromo = produit.prix_promo != null;
   const image = produit.image_url || '/static/images/iphone.jpg';
   const url = '/produit/' + produit.id + '/';
+  const [ajoute, setAjoute] = useState(false);
+
+  // Retour visuel immédiat : l'icône devient une coche pendant ~1,2 s.
+  async function ajouter() {
+    if (ajoute) return;
+    await onAjouter(produit);
+    setAjoute(true);
+    setTimeout(() => setAjoute(false), 1200);
+  }
 
   return (
     <div className="product-card">
@@ -70,14 +79,31 @@ function CarteProduit({ produit, onAjouter }) {
           <a href={url} className="product-btn">Voir détails</a>
           {enStock && (
             <button
-              className="add-cart-btn"
-              title="Ajouter au panier"
-              onClick={() => onAjouter(produit)}
+              className={'add-cart-btn' + (ajoute ? ' is-added' : '')}
+              title={ajoute ? 'Ajouté !' : 'Ajouter au panier'}
+              onClick={ajouter}
+              aria-label={ajoute ? 'Ajouté au panier' : 'Ajouter au panier'}
             >
-              <i className="fa-solid fa-cart-plus"></i>
+              <i className={ajoute ? 'fa-solid fa-check' : 'fa-solid fa-cart-plus'}></i>
             </button>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Squelette de chargement : reproduit la silhouette d'une carte produit
+// avec un effet « shimmer », plus engageant qu'un simple spinner.
+function CarteSquelette() {
+  return (
+    <div className="skeleton-card">
+      <div className="skeleton skeleton-img"></div>
+      <div className="skeleton-body">
+        <div className="skeleton skeleton-line is-titre"></div>
+        <div className="skeleton skeleton-line"></div>
+        <div className="skeleton skeleton-line is-prix"></div>
+        <div className="skeleton skeleton-btn"></div>
       </div>
     </div>
   );
@@ -158,9 +184,11 @@ export default function Catalog() {
 
   if (chargement) {
     return (
-      <p style={{ textAlign: 'center', padding: '48px 0', color: '#94a3b8' }}>
-        <i className="fa-solid fa-spinner fa-spin"></i> Chargement du catalogue…
-      </p>
+      <div className="products-grid">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <CarteSquelette key={i} />
+        ))}
+      </div>
     );
   }
 

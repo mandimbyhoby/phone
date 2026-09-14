@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { formatPrix } from '../api.js';
 import { usePanier } from '../panierStore.js';
@@ -28,6 +28,19 @@ export default function CartDrawer() {
   }, [ouvert]);
 
   const fermer = () => setOuvert(false);
+
+  // Fermeture par glissement vers la droite (mobile) : on compare la position
+  // du doigt au début et à la fin du toucher.
+  const toucheX = useRef(null);
+  function onTouchStart(e) {
+    toucheX.current = e.touches[0].clientX;
+  }
+  function onTouchEnd(e) {
+    if (toucheX.current === null) return;
+    const delta = e.changedTouches[0].clientX - toucheX.current;
+    if (delta > 60) fermer();
+    toucheX.current = null;
+  }
 
   // Le bouton reste dans la barre de navigation.
   const boutonPanier = (
@@ -60,6 +73,8 @@ export default function CartDrawer() {
         role="dialog"
         aria-label="Mon panier"
         aria-hidden={!ouvert}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
         <header className="drawer-header">
           <h3 className="drawer-title">
@@ -85,6 +100,7 @@ export default function CartDrawer() {
         </header>
 
         <div className="drawer-body">
+          <div className="drawer-grabber" aria-hidden="true"></div>
           {!pret && chargement ? (
             <p style={{ textAlign: 'center', padding: '30px 0', color: '#94a3b8' }}>
               <i className="fa-solid fa-spinner fa-spin"></i> Chargement…

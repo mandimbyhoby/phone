@@ -55,6 +55,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---- Mode clair / sombre ----
+    // Pendant ~400 ms on ajoute la classe `theme-anim` : elle active une
+    // transition douce sur les couleurs de tous les éléments (voir CSS), puis
+    // on la retire pour ne pas ralentir les animations au survol.
+    var themeTimer = null;
+
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         try { localStorage.setItem('ps-theme', theme); } catch (e) { /* ignore */ }
@@ -66,6 +71,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (label) label.textContent = isDark ? 'Mode clair' : 'Mode sombre';
             btn.setAttribute('aria-label', isDark ? 'Activer le mode clair' : 'Activer le mode sombre');
         });
+
+        // Transition douce de bascule : ajoutée APRÈS le changement d'attribut
+        // pour que la couleur cible soit déjà appliquée.
+        document.documentElement.classList.add('theme-anim');
+        if (themeTimer) clearTimeout(themeTimer);
+        themeTimer = setTimeout(function () {
+            document.documentElement.classList.remove('theme-anim');
+        }, 420);
     }
 
     document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
