@@ -201,15 +201,8 @@
                 <span class="promo-badge">-{{ produit.reduction_pourcentage }}%</span>
                 {% endif %}
 
-                {# Réaction « cœur » : l'attribut data-actif indique la réaction
-                   déjà posée par le visiteur, pour que le cœur soit rempli
-                   dès l'affichage, avant même l'hydratation par React. #}
-                <span class="react-heart-slot" data-react-reaction="{{ produit.id }}" data-total="{{ produit.nb_reactions|default:0 }}"{% if produit.ma_reaction %} data-actif="{{ produit.ma_reaction }}"{% endif %}>
-                    <span class="react-heart{% if produit.ma_reaction %} is-active is-{{ produit.ma_reaction }}{% endif %} is-static" title="Réactions">
-                        <i class="fa-{% if produit.ma_reaction %}solid{% else %}regular{% endif %} fa-heart"></i>
-                        <span class="react-heart-count">{{ produit.nb_reactions|default:0 }}</span>
-                    </span>
-                </span>
+                <!-- Réaction « cœur » : montée en îlot React sur [data-react-reaction]. -->
+                <span class="react-heart-slot" data-react-reaction="{{ produit.id }}" data-total="{{ produit.nb_reactions|default:0 }}"{% if produit.ma_reaction %} data-actif="{{ produit.ma_reaction }}"{% endif %}></span>
 
                 <a href="{% url 'detail_produit' produit.id %}" class="product-image">
                     {% if produit.image %}
