@@ -7521,6 +7521,66 @@ html[data-theme="light"] .cart-page .drawer-total strong {
     color: #f2f5f9;
 }
 
+/* ============================================================
+   M E N U   D U   C O M P T E   C L I E N T   (barre latérale)
+   ------------------------------------------------------------
+   Le menu latéral des pages « Mon compte », « Mes commandes » et
+   « Changer mon mot de passe » avait été écrit pour l'ancien fond
+   sombre et n'a jamais été adapté :
+
+     - les liens étaient en `rgba(255,255,255,0.85)` → blanc sur le
+       fond clair du thème Light Luxe, soit 1,07:1 (invisibles) ;
+     - l'état actif utilisait un fond `white` codé en dur → pastille
+       blanche sur panneau quasi blanc (indicateur invisible), et
+       pastille blanche sur fond sombre en thème nuit ;
+     - le panneau et le séparateur étaient en blanc translucide, donc
+       leurs bordures disparaissaient en thème clair.
+
+   On les exprime avec les variables de thème, comme le reste du
+   design system.
+   ============================================================ */
+
+.account-menu {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+}
+
+/* Nom du client : reprend la couleur de titre du thème */
+.account-menu h3 { color: var(--ps-text); }
+
+.account-email { color: var(--ps-muted); opacity: 1; }
+
+/* Liens : le texte principal était blanc en dur */
+.account-menu nav a {
+    color: var(--ps-text-2);
+}
+
+.account-menu nav a:hover {
+    background: var(--ps-bg-2);
+    color: var(--ps-text);
+}
+
+/* Élément actif : on reprend exactement le motif « accent + texte
+   sombre » déjà utilisé par .filter-pill.active, pour l'uniformité. */
+.account-menu nav a.active {
+    background: var(--ps-accent);
+    color: #171207;
+}
+
+/* Avatar : teinte identique à .author-avatar et .nav-user-photo-placeholder
+   (l'ancien violet #5d16df n'était presque plus lisible sur l'ambre) */
+.account-avatar {
+    color: #171207;
+}
+
+/* Cartes de contenu de ces mêmes pages (informations, factures) :
+   même correctif de surface, leurs bordures étaient invisibles en clair. */
+.account-card {
+    background: var(--ps-surface);
+    border: 1px solid var(--ps-line);
+}
+
+
 
 
 
