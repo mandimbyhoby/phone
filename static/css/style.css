@@ -7820,6 +7820,95 @@ html[data-theme="light"] {
     .reaction-choice.is-active i { animation: none; }
 }
 
+/* ============================================================
+   N A V B A R   —   fin du débordement à droite
+   ------------------------------------------------------------
+   PROBLÈME OBSERVÉ
+   Sur un compte gérant, la navbar dépassait d'environ 130 px : le
+   bouton panier sortait ENTIÈREMENT de l'écran et le bouton de compte
+   était rogné. Constaté sur un écran de 1366 px, très répandu.
+
+   CAUSE 1 — la barre de recherche ne pouvait pas se réduire.
+   Les règles de dimensionnement visaient `.search-box`, mais l'élément
+   qui participe réellement à la mise en page est son CONTENEUR
+   `#react-search` (un <div> monté par React). Sa largeur restait donc
+   figée à 261 px, non compressible : il poussait tout le reste dehors.
+
+   CAUSE 2 — les éléments propres au gérant s'ajoutent à la barre.
+   Un compte gérant affiche en plus un lien « Dashboard » dans le menu
+   et une cloche de notifications dans les actions, soit ~110 px de plus
+   qu'un visiteur : d'où le fait que seul l'admin voyait le problème.
+
+   Correctifs : le conteneur de recherche devient réellement flexible,
+   sa largeur est plafonnée par paliers, et le lien « Dashboard » se
+   compacte en icône sur les écrans courants. Aucun élément n'est
+   supprimé du parcours client.
+   ============================================================ */
+
+/* 1. Le conteneur React de la recherche devient l'élément flexible.
+      `min-width: 0` est indispensable : sans lui, un élément flex refuse
+      de descendre sous la largeur de son contenu — c'était le blocage. */
+.nav-actions > #react-search {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 360px;
+}
+
+/* La boîte interne remplit alors ce conteneur (elle n'est plus la
+   référence de largeur dans la barre). */
+.nav-actions > #react-search .search-box {
+    width: 100%;
+    max-width: none;
+}
+
+/* 2. Paliers de compactage : plus l'écran est étroit, plus la recherche
+      cède de la place aux commandes (compte, panier), qui ne doivent
+      jamais être rognées. */
+@media (max-width: 1500px) {
+    .nav-actions > #react-search { max-width: 230px; }
+}
+
+@media (max-width: 1366px) {
+    .nav-actions > #react-search { max-width: 180px; }
+}
+
+/* 3. Le lien « Dashboard » n'existe que pour le gérant : on masque son
+      libellé sur les écrans courants plutôt que de toucher au parcours
+      client. L'icône reste, et `data-label` permet de savoir de quoi il
+      s'agit ; le lien garde son libellé complet dans le menu mobile. */
+@media (max-width: 1500px) and (min-width: 921px) {
+    .nav-menu .dashboard-link .nav-label {
+        display: none;
+    }
+
+    .nav-menu .dashboard-link {
+        padding: 9px 12px;
+    }
+}
+
+/* 4. Sur grand écran, le conteneur de la navbar s'élargit : la recherche
+      retrouve de la place au lieu d'être comprimée par les commandes.
+      Au-dessous de ce seuil on garde la largeur d'origine — le
+      compactage du point 3 suffit alors à tout faire tenir. */
+@media (min-width: 1501px) {
+    .site-navbar .nav-inner {
+        max-width: 1440px;
+    }
+}
+
+/* 5. Sous 1180 px la barre de recherche est masquée (règle existante du
+      design system). Comme le conteneur React est devenu l'élément
+      flexible, il continuait de réserver jusqu'à 180 px de vide : on le
+      retire aussi, sinon l'espace est perdu et la barre déborde encore
+      au seuil de 921 px. */
+@media (max-width: 1180px) {
+    .nav-actions > #react-search {
+        display: none;
+    }
+}
+
+
 
 
 

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=62">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=65">
     <script>
         // Mode clair/sombre : appliqué avant le rendu pour éviter le flash
         (function () {
@@ -92,7 +92,8 @@
                 </a>
                 {% endif %}
                 {% if user.is_authenticated and user.is_staff and user.profil.est_pilote_principal or user.is_superuser %}
-                <a href="{% url 'admin_dashboard' %}" class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}">
+                <a href="{% url 'admin_dashboard' %}" class="nav-link dashboard-link {% if request.path == '/dashboard/' %}active{% endif %}"
+                    title="Dashboard" aria-label="Tableau de bord">
                     <span class="nav-icon"><i class="fa-solid fa-chart-column"></i></span>
                     <span class="nav-label">Dashboard</span>
                 </a>
