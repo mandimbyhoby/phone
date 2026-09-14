@@ -2991,7 +2991,8 @@ textarea.form-input { resize: vertical; }
 
 .about-badge i { font-size: 26px; color: #ffd000; }
 .about-badge strong { display: block; font-size: 15px; }
-.about-badge span { font-size: 12.5px; color: #777; }
+/* #777 sur fond blanc ne donnait que 4,48:1 (seuil AA = 4,5:1). */
+.about-badge span { font-size: 12.5px; color: #6b7280; }
 
 .values-grid {
     display: grid;
@@ -4350,7 +4351,10 @@ html[data-theme="light"] .password-toggle:focus-visible {
     --ps-line-2: rgba(255, 255, 255, 0.15);
     --ps-text: #f2f5f9;
     --ps-text-2: #b7c0cf;
-    --ps-muted: #7d8799;
+    /* Éclairci depuis #7d8799 : sur --ps-surface-2 (cartes de profil,
+       notes sous les champs) l'ancienne valeur tombait à 3,4:1, sous
+       le seuil AA de 4,5:1. Cette valeur atteint 5,2:1. */
+    --ps-muted: #8b95a8;
     --ps-accent: #ffb224;
     --ps-accent-2: #ff7a18;
     --ps-ok: #3ddc84;
@@ -6617,7 +6621,10 @@ html[data-theme="light"] {
     --ps-line-2: rgba(17, 24, 39, 0.17);
     --ps-text: #111827;
     --ps-text-2: #3d4757;
-    --ps-muted: #67707f;
+    /* Légèrement assombri depuis #67707f : sur --ps-bg-2 (#eceef2) la
+       valeur précédente tombait à 4,3:1, sous le seuil AA de 4,5:1.
+       Cette valeur atteint 4,8:1. */
+    --ps-muted: #5b6472;
     --ps-accent: #d97706;
     --ps-accent-2: #ea580c;
     --ps-navbar-bg: rgba(255, 255, 255, 0.9);
@@ -7346,6 +7353,177 @@ html[data-theme="light"] .cart-drawer .drawer-count {
 
 /* Corps du tiroir : un peu plus d'air gagné sur les côtés */
 .cart-drawer .drawer-body { padding: 16px; }
+
+/* ============================================================
+   C O R R E C T I O N S   D E   C O N T R A S T E   (thème sombre)
+   ------------------------------------------------------------
+   Le thème sombre a été ajouté après coup, en surcouche. Plusieurs
+   sélecteurs écrits pour l'ancien design « cartes blanches » ont
+   conservé leurs couleurs en dur (#222, #6d19ff, #888).
+   Résultat : du texte quasi noir sur fond sombre, donc illisible
+   (contraste mesuré 1,07:1 — le seuil AA est de 4,5:1).
+
+   Ces règles utilisent les variables de thème : elles restent donc
+   correctes dans les DEUX modes (clair et sombre).
+   ============================================================ */
+
+/* --- Cause racine ---------------------------------------------------
+   Les panneaux récapitulatifs portaient `color: #222` (écrit quand ils
+   étaient toujours blancs). Tout enfant sans couleur explicite héritait
+   donc de ce noir, y compris le prix à droite des lignes de commande. */
+.cart-summary,
+.checkout-summary {
+    color: var(--ps-text-2);
+}
+
+/* --- Lignes d'article du panier -------------------------------------
+   Attention : le nom du produit est un <a>, PAS un <strong>. L'ancien
+   sélecteur `.drawer-item-info strong` ne correspondait pas au balisage
+   réellement produit, d'où le texte resté en #222. */
+.drawer-item-info a {
+    color: var(--ps-text);
+}
+
+.drawer-item-info a:hover {
+    color: var(--ps-accent);
+}
+
+/* Prix unitaire de la ligne (ancien violet #6d19ff du thème clair) */
+.drawer-item-price {
+    color: var(--ps-accent);
+}
+
+/* --- Récapitulatif : valeurs numériques ----------------------------
+   `.summary-line strong` était encore en #222 (le conteneur, lui, avait
+   bien été migré vers var(--ps-text-2)). */
+.summary-line strong {
+    color: var(--ps-text);
+}
+
+/* --- Page commande : prix à droite de chaque ligne d'article -------- */
+.order-item > strong {
+    color: var(--ps-text);
+}
+
+/* --- Aide sous les champs ------------------------------------------
+   `--ps-muted` tombe à 3,4:1 sur `--ps-surface-2` (cartes de profil).
+   Une aide de saisie doit rester lisible : on utilise la variable de
+   texte secondaire, dont c'est le rôle sémantique. */
+.form-hint {
+    color: var(--ps-text-2);
+}
+
+/* ============================================================
+   C A R T E S   P R O D U I T   —   thème clair
+   ------------------------------------------------------------
+   Ces règles venaient du design d'origine, pensé pour des cartes
+   SOMBRES, et n'ont jamais été adaptées au thème clair :
+     - `.product-info h3 a { color: white }`  → nom du produit
+       blanc sur carte blanche : invisible (contraste 1:1 !)
+     - `.product-cat` : texte blanc translucide sur fond blanc
+       translucide → invisible également.
+
+   On les exprime avec les variables de thème pour qu'elles restent
+   correctes dans les deux modes, conformément au principe du design
+   system : « surfaces solides, zéro glassmorphism ».
+   ============================================================ */
+
+.product-info h3 a {
+    color: var(--ps-text);
+}
+
+.product-info h3 a:hover {
+    color: var(--ps-accent);
+}
+
+.product-cat {
+    background: var(--ps-surface-2);
+    color: var(--ps-text-2);
+}
+
+.product-rating {
+    color: var(--ps-accent);
+}
+
+.product-rating small {
+    color: var(--ps-muted);
+}
+
+/* --- Prix de ligne du panier ---------------------------------------
+   Le doré `--ps-accent` convient sur fond sombre (#ffb224 → 9:1) mais
+   ne donne que 3,2:1 sur blanc, insuffisant pour du texte de 14 px.
+   En thème clair on utilise une teinte ambre plus foncée (5,0:1). */
+.drawer-item-price {
+    color: var(--ps-accent);
+}
+
+html[data-theme="light"] .drawer-item-price {
+    color: #b45309;
+}
+
+/* ============================================================
+   T H È M E   C L A I R   —   couleurs d'état en usage textuel
+   ------------------------------------------------------------
+   `--ps-accent`, `--ps-ok` et `--ps-danger` sont calibrés pour
+   servir de COULEUR DE FOND (boutons, badges) surmontés d'un texte
+   sombre. Employés comme couleur de TEXTE sur les surfaces claires,
+   ils passent nettement sous le seuil AA de 4,5:1 :
+
+       --ps-accent  #d97706  →  2,7:1   (prix, totaux, étoiles)
+       --ps-ok      #3ddc84  →  1,8:1   (« En stock »)
+       --ps-danger  #ff4d6d  →  3,2:1   (« Rupture de stock », erreurs)
+
+   Ces règles leur substituent, pour le seul usage textuel, des
+   variantes foncées qui atteignent 4,9 à 5,0:1.
+   ============================================================ */
+
+html[data-theme="light"] .in-stock,
+html[data-theme="light"] .form-success-box i {
+    color: #15803d; /* vert foncé — 5,0:1 sur blanc */
+}
+
+html[data-theme="light"] .out-stock,
+html[data-theme="light"] .form-error,
+html[data-theme="light"] .form-error-box,
+html[data-theme="light"] .drawer-close:hover,
+html[data-theme="light"] .drawer-remove:hover {
+    color: #dc2626; /* rouge foncé — 4,9:1 sur blanc */
+}
+
+html[data-theme="light"] .product-rating,
+html[data-theme="light"] .review-stars,
+html[data-theme="light"] .avis-stars,
+html[data-theme="light"] .testimonial-stars,
+html[data-theme="light"] .detail-price,
+html[data-theme="light"] .promo-prices strong,
+html[data-theme="light"] .promo-cta,
+html[data-theme="light"] .about-stat strong,
+html[data-theme="light"] .auth-links a,
+html[data-theme="light"] .drawer-item-price {
+    color: #b45309; /* ambre foncé — 5,0:1 sur blanc */
+}
+
+/* Même correctif, mais pour les éléments posés sur `--ps-bg-2`
+   (#eceef2, panneaux du panier) où #b45309 ne donne que 4,3:1 :
+   on descend d'un cran de plus pour atteindre 5,7:1. */
+html[data-theme="light"] .summary-kicker,
+html[data-theme="light"] .total-line strong,
+html[data-theme="light"] .cart-page .drawer-total strong {
+    color: #92400e;
+}
+
+/* Le lecteur vidéo conserve un fond sombre dans les DEUX thèmes
+   (letterboxing, rgb(13,5,48)) : son texte de repli — « Votre
+   navigateur ne supporte pas la lecture vidéo » — doit donc rester
+   clair. Utiliser var(--ps-text) le rendait invisible en thème clair. */
+.video-frame video,
+#ad-video {
+    color: #f2f5f9;
+}
+
+
+
+
 
 
 
